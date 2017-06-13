@@ -43,7 +43,7 @@ class AuthController extends FrontControlller {
             Yii::error('Ошибка при регистрации');
         }
 
-        return $this->render(
+        return $this->renderPartial(
                         'reg', ['model' => $model]
         );
     }

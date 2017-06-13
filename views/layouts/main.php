@@ -40,6 +40,7 @@ AppAsset::register($this);
             <?= $this->render('_elements/footer'); ?>
             
             <?= $this->render('@app/modules/user/views/auth/login'); ?>
+            <?= $this->render('@app/modules/user/views/auth/reg'); ?>
             
         </div>
         <img class="nk-page-background-top" src="/img/site/top-bg2.png" alt="">
