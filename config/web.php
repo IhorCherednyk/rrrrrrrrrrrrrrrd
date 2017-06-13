@@ -24,8 +24,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-//            'loginUrl' => ['auth/login']*
-        ],
+            'loginUrl' => ['user/auth/login']        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -48,6 +47,11 @@ $config = [
             'showScriptName' => false,
             'rules' => [
             ],
+        ],
+    ],
+    'modules' => [
+        'user' => [
+            'class' => 'app\modules\user\Module',
         ],
     ],
     'params' => $params,

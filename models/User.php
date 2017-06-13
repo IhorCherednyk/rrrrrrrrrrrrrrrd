@@ -2,103 +2,142 @@
 
 namespace app\models;
 
-class User extends \yii\base\Object implements \yii\web\IdentityInterface
-{
-    public $id;
-    public $username;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
+
+class User extends ActiveRecord implements IdentityInterface {
+
+    const STATUS_DELETED = 0;
+    const STATUS_NOT_ACTIVE = 1;
+    const STATUS_ACTIVE = 10;
+    const ROLE_ADMIN = 2;
+    const ROLE_USER = 3;
+
     public $password;
-    public $authKey;
-    public $accessToken;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
+    public function rules() {
+        return [
+                [['username', 'email', 'password'], 'filter', 'filter' => 'trim'],
+                [['username', 'email', 'status','password_hash'], 'required'],
+                ['email', 'email'],
+                ['username', 'string', 'min' => 2, 'max' => 255],
+                ['password', 'required', 'on' => 'create'],
+                ['username', 'unique', 'message' => 'this name already exist'],
+                ['email', 'unique', 'message' => 'this email already exist.'],
 
-
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentity($id)
-    {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
 
-        return null;
+    public function getProfile() {
+        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+    public function getToken() {
+        return $this->hasOne(Token::className(), ['user_id' => 'id']);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
+    public function getMessages() {
+        return $this->hasMany(Message::className(), ['recipient_id' => 'id']);
+    }
+
+    public function getMessagesSender() {
+        return $this->hasMany(Message::className(), ['sender_id' => 'id']);
+    }
+
+    public function getCountMessages() {
+        return $this->hasMany(Message::className(), ['sender_id' => 'id'])->count();
+    }
+
+    public function getCountNotReadMessage() {
+        return $this->hasMany(Message::className(), ['recipient_id' => 'id'])->count();
+    }
+
+    /* Поведения */
+
+    public function behaviors() {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
+//    HELPERS
+    public function setPassword($password) {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function generateAuthKey() {
+        $this->auth_key = \Yii::$app->security->generateRandomString();
+    }
+
+    public function generateEmailActivationKey() {
+        $this->email_activation_key = \Yii::$app->security->generateRandomString($length = 6);
+    }
+
+    public function validatePassword($password) {
+
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+    }
+
+    public function init() {
+        parent::init();
+        Yii::$app->user->on(\yii\web\User::EVENT_AFTER_LOGIN, [$this, 'addLastLogin']);
+    }
+
+    public function addLastLogin() {
+        $this->touch('last_login_date'); // last login db field
+    }
+
+// Search 
+    public static function findByUsername($username) {
+        return static::findOne([
+                    'username' => $username
+        ]);
+    }
+
+    public static function findById($id) {
+        return static::findOne([
+                    'id' => $id
+        ]);
+    }
+
+    public static function findByEmailKey($key) {
+        return static::findOne([
+                    'email_activation_key' => $key,
+        ]);
+    }
+
+// IdentityInterface
+
+
+    public function getAuthKey() {
+        return $this->auth_key;
+    }
+
+    public function validateAuthKey($authKey) {
+        return $this->auth_key === $authKey;
+    }
+
+    public function getId() {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
+    public static function findIdentity($id) {
+        return static::findOne([
+                    'id' => $id,
+                    'status' => self::STATUS_ACTIVE
+        ]);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
+    public static function findIdentityByAccessToken($token, $type = null) {
+        //используется если у нас не потдерживаются сесии
     }
 
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return $this->password === $password;
+    public static function tableName() {
+        return 'user';
     }
+
 }
