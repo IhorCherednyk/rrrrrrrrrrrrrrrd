@@ -32,6 +32,7 @@ class AuthController extends FrontControlller {
         
         $model = new RegForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            D('123');
             $user = $model->reg();
             if ($user) {
                 $email = ($email = Email::findByUserEmail($user->email)) ? $email : new Email();
@@ -43,7 +44,7 @@ class AuthController extends FrontControlller {
             Yii::error('Ошибка при регистрации');
         }
 
-        return $this->renderPartial(
+        return $this->renderAjax(
                         'reg', ['model' => $model]
         );
     }

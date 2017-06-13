@@ -13,11 +13,7 @@ use yii\widgets\Pjax;
 use app\models\RegForm;
 
 $this->title = 'Login';
-$model = new RegForm();
-Modal::begin([
-    'id' => 'reg',
-    'header' => '<div class="page-name"><h3>Вход</h3></div>'
-]);
+
 ?>
 
 <div class="row">
@@ -29,7 +25,6 @@ Modal::begin([
                     'options' => ['data-pjax' => true],
                     'method' => 'post',
                     'id' => 'reg-form',
-                    'action' => '/user/auth/reg',
                     'layout' => 'horizontal',
                     'fieldConfig' => [
                         'template' => "{label}\n{input}\n{error}",
@@ -46,7 +41,7 @@ Modal::begin([
 
 
         <div class="form-group">
-            <?= Html::submitButton('Sign Up', ['class' => 'btn btn-primary custom-btn', 'name' => 'login-button']) ?>
+            <?= Html::submitButton('Sign Up', ['class' => 'btn btn-primary custom-btn btnnn', 'name' => 'login-button']) ?>
         </div>
 
 
@@ -55,6 +50,3 @@ Modal::begin([
 
     </div>
 </div>
-<?php
-Modal::end();
-?>
