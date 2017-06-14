@@ -15,7 +15,7 @@ $this->title = 'Login';
 $model = new LoginForm();
 Modal::begin([
     'id' => 'log',
-    'header' => '<div class="page-name"><h3>Вход</h3></div>'
+    'header' => '<h3>Вход</h3>'
 ]);
 ?>
 
@@ -32,25 +32,25 @@ Modal::begin([
                     'layout' => 'horizontal',
                     'fieldConfig' => [
                         'template' => "{label}\n{input}\n{error}",
-                        'labelOptions' => ['class' => 'col-lg-1 control-label'],
+                        'labelOptions' => ['class' => 'col-sm-12 control-label'],
                     ],
         ]);
         ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'username')->textInput()->label('Имя пользователя') ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
 
         <?=
         $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div>{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ])
+            'template' => "<div class=\"remember\">{input}{label}</div>\n<div class=\"col-lg-8\">{error}</div>",
+        ])->label('Запомнить меня')
         ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-success login-btn', 'name' => 'login-button']) ?>
-            <a href="<?= Url::to(['/user/auth/reg']) ?>" data-toggle="modal" data-target="#reg" class="btn btn-primary">Register</a>
-            <?= Html::a('Забыли пароль?', ['/auth/send-email'], ['class' => 'btn']) ?>
+            <?= Html::submitButton('Войти', ['class' => 'btn btn-reg login-button', 'name' => 'login-button']) ?>
+            <a href="<?= Url::to(['/user/auth/reg']) ?>" data-toggle="modal" data-target="#reg" class="btn btn-reg">Зарегестрироваться</a>
+            <?= Html::a('Забыли пароль?', ['/auth/send-email'], ['class' => 'forgot-password']) ?>
         </div>
 
         <?php ActiveForm::end();

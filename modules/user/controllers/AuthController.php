@@ -29,24 +29,25 @@ use app\controllers\FrontControlller;
 class AuthController extends FrontControlller {
 
     public function actionReg() {
-        
-        $model = new RegForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            D('123');
-            $user = $model->reg();
-            if ($user) {
-                $email = ($email = Email::findByUserEmail($user->email)) ? $email : new Email();
-                $email->createEmail($user, Email::EMAIL_ACTIVATE);
-                Yii::$app->session->setFlash('confirm-email', 'На ваш email отправлено письмо для подтверждения email');
-                return $this->redirect(['auth/login']);
+        if (Yii::$app->request->isAjax) {
+            $model = new RegForm();
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $user = $model->reg();
+                if ($user) {
+                    $email = ($email = Email::findByUserEmail($user->email)) ? $email : new Email();
+                    $email->createEmail($user, Email::EMAIL_ACTIVATE);
+                    Yii::$app->session->setFlash('confirm-email', 'На ваш email отправлено письмо для подтверждения email');
+                    return $this->redirect(['auth/login']);
+                }
+                Yii::$app->session->setFlash('error', 'Возникла ошибка при регистрации.');
+                Yii::error('Ошибка при регистрации');
             }
-            Yii::$app->session->setFlash('error', 'Возникла ошибка при регистрации.');
-            Yii::error('Ошибка при регистрации');
-        }
 
-        return $this->renderAjax(
-                        'reg', ['model' => $model]
-        );
+            return $this->renderPartial(
+                            'reg', ['model' => $model]
+            );
+        }
+        return $this->redirect(['/site/index']);
     }
 
     public function actionActivateEmail($key) {
@@ -59,7 +60,7 @@ class AuthController extends FrontControlller {
                 $email->delete();
             }
             if (Yii::$app->getUser()->login($user, 3600 * 24 * 30)) {
-                 Yii::$app->session->setFlash('success', 'Поздравляем вы подтвердили свой email, здесь вы можете заполнить данные о себе!');
+                Yii::$app->session->setFlash('success', 'Поздравляем вы подтвердили свой email, здесь вы можете заполнить данные о себе!');
                 return $this->redirect(['auth/profile']);
             }
         }
@@ -106,23 +107,26 @@ class AuthController extends FrontControlller {
     }
 
     public function actionLogin() {
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax) {
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post())) {
 
-            if ($model->login()) {
-                if ($model->user->role == User::IS_ADMIN) {
-                    return $this->redirect(['/admin']);
+                if ($model->login()) {
+                    if ($model->user->role == User::IS_ADMIN) {
+                        return $this->redirect(['/admin']);
+                    } else {
+                        return $this->redirect(['user/index', 'username' => Yii::$app->user->identity->username]);
+                    }
                 } else {
-                    return $this->redirect(['user/index', 'username' => Yii::$app->user->identity->username]);
+                    Yii::$app->session->setFlash('error', 'Возможно вы не активировали свой email');
+                    return $this->refresh();
                 }
-            } else {
-                Yii::$app->session->setFlash('error', 'Возможно вы не активировали свой email');
-                return $this->refresh();
             }
+            return $this->renderPartial('login', [
+                        'model' => $model,
+            ]);
         }
-        return $this->renderPartial('login', [
-                    'model' => $model,
-        ]);
+        return $this->redirect(['/site/index']);
     }
 
     public function actionLogout() {
@@ -132,7 +136,7 @@ class AuthController extends FrontControlller {
 
     public function actionProfile() {
         $model = ($model = Profile::findOne(['user_id' => Yii::$app->user->id])) ? $model : new Profile();
-        
+
         if ($model->load(Yii::$app->request->post())) {
 
             $model->file = UploadedFile::getInstance($model, 'file');
@@ -153,7 +157,5 @@ class AuthController extends FrontControlller {
         }
         return $this->render('profile', ['model' => $model]);
     }
-    
- 
 
 }

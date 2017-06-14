@@ -8,7 +8,6 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\widgets\Menu;
-use yii\bootstrap\Modal;
 
 AppAsset::register($this);
 ?>
@@ -30,34 +29,26 @@ AppAsset::register($this);
 
             <?= $this->render('_elements/header'); ?>
 
-            <button id="register" data-toggle="modal" data-target="#my-modal" class="btn btn-primary">Register</button>
 
             <div class="main-content-wrapper">
                 <div class="container">
                     <?= $content ?>
                 </div>
             </div>
-
-
-            <?= $this->render('_elements/footer') ?>
-
-
-            <?php //$this->render('@app/modules/user/views/auth/login') ?>
-            <?php //$this->render('@app/modules/user/views/auth/reg') ?>
-
+            
+            
+            <?= $this->render('_elements/footer'); ?>
+            
+            <?php if(\Yii::$app->user->isGuest):?>
+                <?= $this->render('@app/modules/user/views/auth/login'); ?>
+                <?= $this->render('@app/modules/user/views/auth/reg'); ?>
+            <?php endif;?>
+            
+            
         </div>
-        <?php
-        Modal::begin([
-            'id' => 'my-modal',
-        ]);
-        ?>
-        <?php
-        Modal::end();
-        ?>
         <img class="nk-page-background-top" src="/img/site/top-bg2.png" alt="">
         <img class="nk-page-background-bottom" src="/img/site/bg-bottom.png" alt="">
         <?php $this->endBody() ?>
     </body>
-
 </html>
 <?php $this->endPage() ?>

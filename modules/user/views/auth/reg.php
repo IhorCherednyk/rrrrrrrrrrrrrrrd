@@ -13,7 +13,11 @@ use yii\widgets\Pjax;
 use app\models\RegForm;
 
 $this->title = 'Login';
-
+$model = new RegForm();
+Modal::begin([
+    'id' => 'reg',
+    'header' => '<h3>Регистрация</h3>'
+]);
 ?>
 
 <div class="row">
@@ -25,23 +29,24 @@ $this->title = 'Login';
                     'options' => ['data-pjax' => true],
                     'method' => 'post',
                     'id' => 'reg-form',
+                    'action' => '/user/auth/reg',
                     'layout' => 'horizontal',
                     'fieldConfig' => [
                         'template' => "{label}\n{input}\n{error}",
-                        'labelOptions' => ['class' => 'col-lg-1 control-label'],
+                        'labelOptions' => ['class' => 'col-sm-12 control-label'],
                     ],
         ]);
         ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-        <?= $form->field($model, 'password')->passwordInput() ?>
-        <?= $form->field($model, 'password_repeat')->passwordInput() ?>
+        <?= $form->field($model, 'username')->textInput()->label('Имя пользователя') ?>
+        <?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
+        <?= $form->field($model, 'password_repeat')->passwordInput()->label('Повторите пароль') ?>
         <?= $form->field($model, 'email')->input('email') ?> 
 
 
 
         <div class="form-group">
-            <?= Html::submitButton('Sign Up', ['class' => 'btn btn-primary custom-btn btnnn', 'name' => 'login-button']) ?>
+            <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-reg mt50', 'name' => 'login-button']) ?>
         </div>
 
 
@@ -50,3 +55,6 @@ $this->title = 'Login';
 
     </div>
 </div>
+<?php
+Modal::end();
+?>
