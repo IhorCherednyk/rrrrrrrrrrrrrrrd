@@ -64,7 +64,6 @@ class AuthController extends FrontControlller {
                 $email->delete();
             }
             if (Yii::$app->getUser()->login($user, 3600 * 24 * 30)) {
-                Yii::$app->session->setFlash('success', 'Поздравляем вы подтвердили свой email, здесь вы можете заполнить данные о себе!');
                 return $this->redirect(['auth/profile']);
             }
         }
@@ -136,6 +135,10 @@ class AuthController extends FrontControlller {
         return $this->redirect(['/site/index']);
     }
 
+    
+    
+    
+    
     public function actionLogout() {
         Yii::$app->user->logout();
         return $this->redirect(['auth/login']);
