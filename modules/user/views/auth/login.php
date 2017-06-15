@@ -12,7 +12,9 @@ use yii\web\View;
 use yii\widgets\Pjax;
 
 $this->title = 'Login';
-$model = new LoginForm();
+if(!isset($model)){
+    $model = new LoginForm();
+}
 Modal::begin([
     'id' => 'log',
     'header' => '<h3>Вход</h3>'
@@ -50,7 +52,7 @@ Modal::begin([
         <div class="form-group">
             <?= Html::submitButton('Войти', ['class' => 'btn btn-reg login-button', 'name' => 'login-button']) ?>
             <a href="<?= Url::to(['/user/auth/reg']) ?>" data-toggle="modal" data-target="#reg" class="btn btn-reg">Зарегестрироваться</a>
-            <?= Html::a('Забыли пароль?', ['/auth/send-email'], ['class' => 'forgot-password']) ?>
+            <?= Html::a('Забыли пароль?', ['/user/auth/send-email'], ['class' => 'forgot-password','data-toggle' => 'modal', 'data-target' => '#mail']) ?>
         </div>
 
         <?php ActiveForm::end();

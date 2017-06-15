@@ -42,6 +42,7 @@ AppAsset::register($this);
             <?php if(\Yii::$app->user->isGuest):?>
                 <?= $this->render('@app/modules/user/views/auth/login'); ?>
                 <?= $this->render('@app/modules/user/views/auth/reg'); ?>
+                <?= $this->render('@app/modules/user/views/auth/send-email'); ?>
             <?php endif;?>
             
             

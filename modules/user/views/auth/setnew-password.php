@@ -6,10 +6,30 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Profile */
 /* @var $form ActiveForm */
+Modal::begin([
+    'id' => 'mail',
+    'header' => '<h3 class="modal-email">Введите новый пароль</p>'
+]);
+if(!isset($model)){
+    $model = new ResetPasswordForm();
+}
 ?>
 <div class="auth-profile">
-    <h3 class="mt25">Введите новый пароль</h3>
-    <?php $form = ActiveForm::begin(); ?>
+    
+    <?php
+        Pjax::begin(['enablePushState' => false, 'id' => 'setpassword']);
+        $form = ActiveForm::begin([
+                'options' => ['data-pjax' => true],
+                'method' => 'post',
+                'id' => 'set-password',
+                'action' => '/user/auth/setnew-password',
+                'layout' => 'horizontal',
+                'fieldConfig' => [
+                    'template' => "{label}\n{input}\n{error}",
+                    'labelOptions' => ['class' => 'col-sm-12 control-label'],
+                ],
+    ]);
+    ?>
 
     <?= $form->field($model, 'password')->passwordInput() ?>
     <?= $form->field($model, 'password_repeat')->passwordInput() ?>
@@ -19,4 +39,6 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div><!-- auth-profile -->
-
+<?php
+Modal::end();
+?>

@@ -13,7 +13,9 @@ use yii\widgets\Pjax;
 use app\models\RegForm;
 
 $this->title = 'Login';
-$model = new RegForm();
+if (!isset($model)) {
+    $model = new RegForm();
+}
 Modal::begin([
     'id' => 'reg',
     'header' => '<h3>Регистрация</h3>'
@@ -24,7 +26,14 @@ Modal::begin([
     <div class="col-md-12">
 
         <?php
+        
         Pjax::begin(['enablePushState' => false, 'id' => 'regform']);
+        if (Yii::$app->session->getFlash('success')) {
+            echo Html::tag('p', Yii::$app->session->getFlash('success'), ['class' => 'bg-success']);
+        }
+        if (Yii::$app->session->getFlash('error')) {
+            echo Html::tag('p', Yii::$app->session->getFlash('error'), ['class' => 'bg-danger']);
+        }
         $form = ActiveForm::begin([
                     'options' => ['data-pjax' => true],
                     'method' => 'post',
@@ -51,7 +60,8 @@ Modal::begin([
 
 
         <?php ActiveForm::end();
-        Pjax::end(); ?>
+        Pjax::end();
+        ?>
 
     </div>
 </div>

@@ -33,21 +33,25 @@ class AuthController extends FrontControlller {
             $model = new RegForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 $user = $model->reg();
+                $model = new RegForm();
                 if ($user) {
                     $email = ($email = Email::findByUserEmail($user->email)) ? $email : new Email();
                     $email->createEmail($user, Email::EMAIL_ACTIVATE);
-                    Yii::$app->session->setFlash('confirm-email', 'На ваш email отправлено письмо для подтверждения email');
-                    return $this->redirect(['auth/login']);
+                    Yii::$app->session->setFlash('success', 'На ваш email отправлено письмо для подтверждения email');
+                    return $this->renderPartial(
+                        'reg', ['model' => $model]
+                    );
                 }
                 Yii::$app->session->setFlash('error', 'Возникла ошибка при регистрации.');
-                Yii::error('Ошибка при регистрации');
+                return $this->renderPartial(
+                    'reg', ['model' => $model]
+                );
             }
-
             return $this->renderPartial(
-                            'reg', ['model' => $model]
+                'reg', ['model' => $model]
             );
         }
-        return $this->redirect(['/site/index']);
+        return $this->redirect(['site/index']);
     }
 
     public function actionActivateEmail($key) {
@@ -70,17 +74,20 @@ class AuthController extends FrontControlller {
     }
 
     public function actionSendEmail() {
-        $model = new SendEmailForm();
+        if (Yii::$app->request->isAjax) {
+            $model = new SendEmailForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'На вашу почту выслано подтверждение на изменения пароля');
-                return $this->redirect(['auth/login']);
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                if ($model->sendEmail()) {
+                    Yii::$app->session->setFlash('success', 'На вашу почту выслано подтверждение на изменения пароля');
+                    return $this->redirect(['auth/login']);
+                }
             }
+            return $this->renderPartial('send-email', [
+                        'model' => $model,
+            ]);
         }
-        return $this->render('send-email', [
-                    'model' => $model,
-        ]);
+         return $this->redirect(['/site/index']);
     }
 
     public function actionSetnewPassword($key) {
@@ -98,12 +105,12 @@ class AuthController extends FrontControlller {
                     return $this->redirect(['auth/login']);
                 }
             }
-            return $this->render('setnew-password', [
+            return $this->renderPartial('setnew-password', [
                         'model' => $model,
             ]);
         }
         Yii::$app->session->setFlash('warn', 'Либо неверно указан ключи или срок ссылки на изменение пароля истек, отправьте новй запрос на востановление пароля');
-        return $this->redirect(['auth/send-email']);
+        return $this->redirect(['/site/index']);
     }
 
     public function actionLogin() {

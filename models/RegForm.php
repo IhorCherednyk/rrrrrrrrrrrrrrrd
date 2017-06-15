@@ -22,10 +22,10 @@ class RegForm extends Model {
             [['username', 'email', 'password'], 'required'], // обязательны
             ['username', 'string', 'min' => 2, 'max' => 15],
             ['password', 'string', 'min' => 2, 'max' => 255], // содержать 2-255
-            [['email'], 'unique', 'targetClass' => User::className(), 'message' => 'this email already exist'], //уникальность
+            [['email'], 'unique', 'targetClass' => User::className(), 'message' => 'Такой email уже существует'], //уникальность
             ['email', 'email'], //
             ['username','checkUserName'],
-            [['username'], 'unique', 'targetClass' => User::className(), 'message' => 'this username already exist'], //уникальность
+            [['username'], 'unique', 'targetClass' => User::className(), 'message' => 'Такое имя пользователя уже существует'], //уникальность
             ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE], //говорит что если в поле null то по умолчанию применяется Value 'on' => указывает на состояние
 
 
@@ -39,7 +39,9 @@ class RegForm extends Model {
         $user->generateAuthKey();
         $user->generateEmailActivationKey();
         $user->setAttributes($this->attributes);
-        return $user->save();
+        if($user->save()){
+            return $user;
+        }
 
     }
     

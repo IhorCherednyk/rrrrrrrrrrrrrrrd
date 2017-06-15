@@ -1005,3 +1005,23 @@ button.btn-watch, button.btn-reg{
 .modal .btn-reg.mt50{
     margin-top: 50px;
 }
+
+body{
+    padding: 0!important;
+}
+.modal-email{
+    font-size: 24px;
+}
+.modal-email-descr{
+    color: #fff;
+    text-align: center;
+}
+#mail .btn-reg{
+    margin-top: 40px;
+}
+.bg-success {
+    color: #3c763d;
+    background-color: transparent;
+    text-align: center;
+    margin: 0;
+}
