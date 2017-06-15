@@ -117,11 +117,12 @@ class AuthController extends FrontControlller {
             if ($model->load(Yii::$app->request->post())) {
 
                 if ($model->login()) {
-                    if ($model->user->role == User::IS_ADMIN) {
-                        return $this->redirect(['/admin']);
-                    } else {
-                        return $this->redirect(['user/index', 'username' => Yii::$app->user->identity->username]);
-                    }
+//                    if ($model->user->role == User::IS_ADMIN) {
+//                        return $this->redirect(['/admin']);
+//                    } else {
+//                        return $this->redirect(['user/index', 'username' => Yii::$app->user->identity->username]);
+//                    }
+                    return $this->refresh();
                 } else {
                     Yii::$app->session->setFlash('error', 'Возможно вы не активировали свой email');
                     return $this->refresh();

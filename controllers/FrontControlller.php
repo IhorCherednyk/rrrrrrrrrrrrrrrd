@@ -17,14 +17,13 @@ class FrontControlller extends BaseController {
     public $layout = '/main';
 
     public function behaviors() {
-        
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin']
+                        'roles' => ['USER', 'admin'],
                     ],
                 ],
             ],

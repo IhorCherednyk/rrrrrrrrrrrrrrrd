@@ -9,11 +9,28 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 
 
 class SiteController extends BackController 
 {
 
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
 
     /**
      * Displays homepage.
@@ -22,6 +39,7 @@ class SiteController extends BackController
      */
     public function actionIndex()
     {
+//        throw new ForbiddenHttpException();
         return $this->render('index');
     }
 
