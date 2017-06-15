@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
  */
 class BackController extends BaseController {
 
-    public $layout = '/admin';
+    public $layout = '/main';
     
     public function behaviors() {
         return [
@@ -29,5 +29,4 @@ class BackController extends BaseController {
         ];
     }
     
-
 }

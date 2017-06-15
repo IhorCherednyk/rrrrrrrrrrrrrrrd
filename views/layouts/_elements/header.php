@@ -57,7 +57,7 @@ AppAsset::register($this);
                             ],
                                 [
                                 'label' => \Yii::t('app', 'Выход'),
-                                'url' => ['/auth/logout'],
+                                'url' => ['/user/auth/logout'],
                                 'visible' => !\Yii::$app->user->isGuest
                             ],
                         ],

@@ -51,7 +51,7 @@ class AuthController extends FrontControlller {
                 'reg', ['model' => $model]
             );
         }
-        return $this->redirect(['site/index']);
+        return $this->redirect(['/site/index']);
     }
 
     public function actionActivateEmail($key) {
@@ -64,12 +64,11 @@ class AuthController extends FrontControlller {
                 $email->delete();
             }
             if (Yii::$app->getUser()->login($user, 3600 * 24 * 30)) {
-                return $this->redirect(['auth/profile']);
+                return $this->redirect(['/site/index']);
             }
         }
-        Yii::$app->session->setFlash('error', 'Возникла ошибка при подтверждении пароля попробуйте зарегистрироваться заново');
 
-        return $this->redirect(['auth/reg']);
+        return $this->redirect(['site/index']);
     }
 
     public function actionSendEmail() {
@@ -141,7 +140,7 @@ class AuthController extends FrontControlller {
     
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->redirect(['auth/login']);
+        return $this->redirect(['/site/index']);
     }
 
     public function actionProfile() {
