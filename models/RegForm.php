@@ -18,8 +18,8 @@ class RegForm extends Model {
     public function rules() {
         return [
             [['username', 'email', 'password'], 'filter', 'filter' => 'trim'], // удаляем пробелы вокруг
-            ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't equal" ],
-            [['username', 'email', 'password'], 'required'], // обязательны
+            ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
+            [['username', 'email', 'password'], 'required', 'message' => "Обязательны к заполнению"], // обязательны
             ['username', 'string', 'min' => 2, 'max' => 15],
             ['password', 'string', 'min' => 2, 'max' => 255], // содержать 2-255
             [['email'], 'unique', 'targetClass' => User::className(), 'message' => 'Такой email уже существует'], //уникальность

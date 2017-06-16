@@ -28,12 +28,7 @@ Modal::begin([
         <?php
         
         Pjax::begin(['enablePushState' => false, 'id' => 'regform']);
-        if (Yii::$app->session->getFlash('success')) {
-            echo Html::tag('p', Yii::$app->session->getFlash('success'), ['class' => 'bg-success']);
-        }
-        if (Yii::$app->session->getFlash('error')) {
-            echo Html::tag('p', Yii::$app->session->getFlash('error'), ['class' => 'bg-danger']);
-        }
+
         $form = ActiveForm::begin([
                     'options' => ['data-pjax' => true],
                     'method' => 'post',

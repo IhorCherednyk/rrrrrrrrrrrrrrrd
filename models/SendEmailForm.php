@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\models\Email;
 
 class SendEmailForm extends Model
 {
@@ -13,14 +14,14 @@ class SendEmailForm extends Model
     {
         return [
             ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'required'],
+            ['email', 'required', 'message' => "Обязательны к заполнению"],
             ['email', 'email'],
             ['email', 'exist',
                 'targetClass' => User::className(),
                 'filter' => [
                     'status' => User::STATUS_ACTIVE
                 ],
-                'message' => 'Данный емайл не зарегистрирован.'
+                'message' => 'Данный емайл не зарегистрирован или не активирован.'
             ],
         ];
     }
@@ -40,17 +41,10 @@ class SendEmailForm extends Model
             $token->generateSecretKey();
             $token->user_id = $user->id;
             if($token->save()){
-                $email = ($email = Email::findByUserToken($token->secret_key)) ? $email : new Email();
-                $email->createEmail($user,Email::EMAIL_RESETPASSWORD,$token->secret_key);
-                
+                $email = ($email = Email::findByUserEmailForToken($user->email)) ? $email : new Email();
+                $email->createEmail($user,Email::EMAIL_RESETPASSWORD,$token->secret_key);              
                 return true;
-                
-                
-//                return Yii::$app->mailer->compose('resetPassword', ['token' => $token, 'user' => $user])
-//                    ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом)'])
-//                    ->setTo($this->email)
-//                    ->setSubject('Сброс пароля для '.Yii::$app->name)
-//                    ->send();
+
             }
         }
 

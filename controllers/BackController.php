@@ -22,20 +22,8 @@ class BackController extends BaseController {
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index'],
-                        'roles' => ['USER'],
-                    ],
-                        [
-                        'allow' => true,
-                        'actions' => ['about'],
                         'roles' => ['admin'],
                     ],
-                    [
-                        'actions' => ['error'],
-                        'allow' => true,
-                    ],
-                    
-                    
                 ],
             ],
         ];

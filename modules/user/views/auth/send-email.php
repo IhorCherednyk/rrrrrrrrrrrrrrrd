@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /* @var $form ActiveForm */
 Modal::begin([
     'id' => 'mail',
-    'header' => '<h3 class="modal-email">Восстановление пароля</h3><p class="modal-email-descr">Введите ваш email и мы вышлем вам письмо с подтверждением о смене пароля на почту</p>'
+    'header' => '<h3 class="modal-email">Восстановление <br> пароля</h3>'
 ]);
 if(!isset($model)){
     $model = new SendEmailForm();

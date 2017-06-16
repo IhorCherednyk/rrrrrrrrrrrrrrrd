@@ -9,18 +9,30 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use yii\web\ForbiddenHttpException;
 
-
-class SiteController extends BackController 
-{
-
+class SiteController extends BaseController {
 
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function behaviors() {
+        return [
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['USER', 'admin', '?'],
+                        ],
+                    ],
+                ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -37,9 +49,7 @@ class SiteController extends BackController
      *
      * @return string
      */
-    public function actionIndex()
-    {
-//        throw new ForbiddenHttpException();
+    public function actionIndex() {
         return $this->render('index');
     }
 
@@ -48,8 +58,7 @@ class SiteController extends BackController
      *
      * @return Response|string
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -59,7 +68,7 @@ class SiteController extends BackController
             return $this->goBack();
         }
         return $this->render('login', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -68,8 +77,7 @@ class SiteController extends BackController
      *
      * @return Response
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
@@ -80,8 +88,7 @@ class SiteController extends BackController
      *
      * @return Response|string
      */
-    public function actionContact()
-    {
+    public function actionContact() {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
@@ -89,7 +96,7 @@ class SiteController extends BackController
             return $this->refresh();
         }
         return $this->render('contact', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -98,8 +105,8 @@ class SiteController extends BackController
      *
      * @return string
      */
-    public function actionAbout()
-    {
+    public function actionAbout() {
         return $this->render('about');
     }
+
 }

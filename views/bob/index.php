@@ -1,11 +1,11 @@
 <?php
 
 /* @var $this yii\web\View */
-
+use yii\helpers\Html;
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-
+    
     <div class="jumbotron">
         <h1>Congratulations!</h1>
 
@@ -13,7 +13,7 @@ $this->title = 'My Yii Application';
 
         <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
     </div>
-
+    <?php echo Html::a('Для смены пароля перейдите по этой ссылке.', \yii\helpers\Url::toRoute(['/user/auth/setnew-password', 'key' => 55, '#' => 'pasform'], true))?>
     <div class="body-content">
 
         <div class="row">

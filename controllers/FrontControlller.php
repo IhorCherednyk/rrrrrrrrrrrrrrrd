@@ -23,7 +23,7 @@ class FrontControlller extends BaseController {
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['USER', 'admin'],
+                        'roles' => ['?'],
                     ],
                 ],
             ],

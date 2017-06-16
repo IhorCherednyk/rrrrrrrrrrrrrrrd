@@ -1,6 +1,10 @@
 $(function () {
     $(document).ready(function () {
         footerToBottom();
+        if (window.location.hash) {
+            var hash = window.location.hash;
+            $(hash).modal('toggle');
+        }
     });
 
     $('.read-more').click(function (event) {
@@ -19,8 +23,10 @@ $(function () {
 
     $('.modal').on('show.bs.modal', function (e) {
         $('.modal').modal('hide');
+//        $(".modal form").find("input[type=text], textarea, input[type=password],input[type=email]").val('');
+
     });
-    
+
 
 
 });

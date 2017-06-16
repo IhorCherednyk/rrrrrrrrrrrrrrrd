@@ -938,7 +938,7 @@ aside .stream .stream-info-wrapper .viewers {
 .modal-backdrop.in{
     opacity: 0.3;
 }
-.modal-body input, .modal-body label{
+.modal-body input, .modal-body label, .set-password input,.set-password label{
     color: #fff;
 }
 .remember label{ 
@@ -963,14 +963,14 @@ button.btn-watch, button.btn-reg{
 .modal .form-group {
     margin-bottom: 0px;
 }
-.modal .form-group label{
+.modal .form-group label, .set-password .form-group label{
     font-weight: 300;
 }
-.modal .form-control{
+.modal .form-control, .set-password .form-control{
     background-color: rgb(39, 43, 47);
     border: 1px solid #000;
 }
-.modal .btn-reg{
+.modal .btn-reg, .set-password .btn-reg{
     background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
     background-repeat: no-repeat;
     filter: none;
@@ -980,6 +980,17 @@ button.btn-watch, button.btn-reg{
     padding: 10px 20px;
     float: left;
     margin: 0;
+}
+.set-password .btn-reg {
+    margin-bottom: 20px;
+}
+
+.set-password{
+    width: 450px;
+    margin: 30px auto;
+    padding: 20px 40px 20px;
+    background-color: #2e3338;
+    overflow: hidden;
 }
 .btn-reg.login-button{
     margin-right: 10px;
@@ -1025,4 +1036,50 @@ body{
     background-color: transparent;
     text-align: center;
     margin: 0;
+}
+.nk-info-box {
+    display: block;
+    position: relative;
+    background-color: #273138;
+    color: #fff;
+    border: 1px solid #313d46;
+    border-radius: 4px;
+    padding: 30px 40px 30px 120px;
+    margin-bottom: 1.7rem;
+    overflow: hidden;
+}
+.text-danger {
+    color: #e2361f !important;
+}
+.nk-info-box .nk-info-box-icon {
+    display: block;
+    position: absolute;
+    text-align: center;
+    font-size: 25px;
+    width: 52px;
+    height: 52px;
+    line-height: 40px;
+    border-radius: 26px;
+    border: 4px solid;
+    left: 40px;
+    top:50%;
+    transform: translateY(-50%);
+}
+.nk-info-box .nk-info-box-icon i {
+    padding-left: 1px;
+}
+.nk-info-box h3{
+    color: #e2361f !important;
+    margin-top: 0;
+    margin-bottom: 0px;
+}
+.text-success {
+    color: #38a220 !important;
+}
+.nk-info-box.text-success h3{
+    color: #38a220 !important;
+}
+.help-block {
+    margin-top: 0px;
+    margin-bottom: 10px;
 }

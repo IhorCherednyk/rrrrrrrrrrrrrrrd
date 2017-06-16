@@ -76,6 +76,11 @@ class Email extends \yii\db\ActiveRecord {
                     'type' => self::EMAIL_ACTIVATE
         ]);
     }
+    public static function findByUserEmailForToken($email) {
+        return static::findOne([
+                    'recipient_email' => $email,
+        ]);
+    }
     public static function findByUserToken($key) {
         return static::findOne([
                     'data' => $key,

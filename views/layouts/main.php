@@ -32,20 +32,37 @@ AppAsset::register($this);
 
             <div class="main-content-wrapper">
                 <div class="container">
+                    <?php if (Yii::$app->session->getFlash('success')): ?>
+                        <div class="nk-info-box text-success">
+                            <div class="nk-info-box-icon">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </div>
+                                <?= Html::tag('h3', Yii::$app->session->getFlash('success'))?>
+                        </div>
+                    <?php endif;?>
+                    
+                    <?php if (Yii::$app->session->getFlash('error')):?>
+                        <div class="nk-info-box text-danger">
+                            <div class="nk-info-box-icon">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </div>
+                            <?= Html::tag('h3', Yii::$app->session->getFlash('error'))?>
+                        </div>
+                    <?php endif;?>
                     <?= $content ?>
                 </div>
             </div>
-            
-            
+
+
             <?= $this->render('_elements/footer'); ?>
-            
-            <?php if(\Yii::$app->user->isGuest):?>
+
+            <?php if (\Yii::$app->user->isGuest): ?>
                 <?= $this->render('@app/modules/user/views/auth/login'); ?>
                 <?= $this->render('@app/modules/user/views/auth/reg'); ?>
                 <?= $this->render('@app/modules/user/views/auth/send-email'); ?>
-            <?php endif;?>
-            
-            
+            <?php endif; ?>
+
+
         </div>
         <img class="nk-page-background-top" src="/img/site/top-bg2.png" alt="">
         <img class="nk-page-background-bottom" src="/img/site/bg-bottom.png" alt="">

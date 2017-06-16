@@ -16,7 +16,7 @@ class LoginForm extends Model {
     public function rules() {
 
         return [
-                [['username', 'password'], 'required', 'on' => 'default'],
+                [['username', 'password'], 'required', 'on' => 'default','message' => "Обязательны к заполнению"],
                 ['rememberMe', 'boolean'],
                 ['password', 'validatePassword']
         ];

@@ -22,6 +22,6 @@ class UserGroupRule extends Rule
                 return $role == User::ROLE_ADMIN || $role == User::ROLE_USER;
             }
         }
-        return true;
+        return false;
     }
 }
