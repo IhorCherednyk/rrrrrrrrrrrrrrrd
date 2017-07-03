@@ -3,14 +3,13 @@
 /* @var $form ActiveForm */
 /* @var $model LoginForm */
 
-use app\models\LoginForm;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\Pjax;
-use app\models\RegForm;
+use app\modules\user\forms\RegForm;
 
 $this->title = 'Login';
 if (!isset($model)) {

@@ -3,7 +3,7 @@ namespace app\rbac;
  
 use Yii;
 use yii\rbac\Rule;
-use app\models\User;
+use app\modules\user\models\User;
  
 class UserGroupRule extends Rule
 {

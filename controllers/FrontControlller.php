@@ -12,7 +12,7 @@ use app\modules\setting\helpers\SettingHelper;
  *
  * @author Stableflow
  */
-class FrontControlller extends BaseController {
+class FrontControlller extends \yii\web\Controller {
 
     public $layout = '/main';
 

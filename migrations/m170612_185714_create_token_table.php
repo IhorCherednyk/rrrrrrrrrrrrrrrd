@@ -15,7 +15,7 @@ class m170612_185714_create_token_table extends Migration
      */
     public function up()
     {
-        $this->createTable('token', [
+        $this->createTable('{{%token}}', [
             'id' => $this->primaryKey(),
             'secret_key' => $this->string(32)->notNull(),
             'user_id' => $this->integer()->notNull(),
@@ -57,6 +57,6 @@ class m170612_185714_create_token_table extends Migration
             'token'
         );
 
-        $this->dropTable('token');
+        $this->dropTable('{{%token}}');
     }
 }

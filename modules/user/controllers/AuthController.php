@@ -8,17 +8,17 @@
 
 namespace app\modules\user\controllers;
 
-use app\controllers\BaseController;
+use app\components\controllers\FrontControlller;
 use app\helpers\ImageHelper;
-use app\models\Email;
-use app\models\LoginForm;
-use app\models\Profile;
-use app\models\RegForm;
-use app\models\ResetPasswordForm;
-use app\models\SendEmailForm;
-use app\models\Token;
-use app\models\User;
+use app\modules\user\forms\LoginForm;
+use app\modules\user\forms\RegForm;
+use app\modules\user\forms\ResetPasswordForm;
+use app\modules\user\forms\SendEmailForm;
+use app\modules\user\models\Email;
+use app\modules\user\models\Token;
+use app\modules\user\models\User;
 use Yii;
+use yii\debug\models\search\Profile;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
@@ -27,9 +27,8 @@ use yii\web\UploadedFile;
  *
  * @author Anastasiya
  */
-class AuthController extends BaseController {
+class AuthController extends FrontControlller {
 
-    public $layout = '/main';
 
     public function behaviors() {
         return [
@@ -118,6 +117,7 @@ class AuthController extends BaseController {
             $model = new ResetPasswordForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->resetPassword($token)) {
+                    Yii::$app->session->setFlash('success', 'Ваш пароль успешно изменен');
                     $email = Email::findByUserToken($key);
                     if ($email) {
                         $email->delete();

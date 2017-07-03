@@ -12,20 +12,20 @@ class m170612_185713_create_user_table extends Migration
      */
     public function up()
     {
-        $this->createTable('user', [
+        $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(),
             'username' => $this->string(100)->notNull(),
-            'email' => $this->string(255)->notNull(),
-            'password_hash' => $this->string(255)->notNull(),
+            'email' => $this->string(250)->notNull(),
+            'password_hash' => $this->string(250)->notNull(),
             'status' => $this->integer(11)->notNull(),
-            'auth_key' => $this->integer(11)->notNull(),
+            'auth_key' => $this->string(32)->notNull(),
             'created_at' => $this->integer(11)->notNull(),
             'updated_at' => $this->integer(11)->notNull(),
-            'first_name' => $this->string(255),
-            'last_name' => $this->string(255),
+            'first_name' => $this->string(250),
+            'last_name' => $this->string(250),
             'role' => $this->integer(11)->defaultValue(3),
             'last_login_date' => $this->integer(11),
-            'email_activation_key' => $this->integer(11)->notNull(),
+            'email_activation_key' => $this->string(6)->notNull(),
             'note' => $this->text(),
             'skype' => $this->string(100),
         ]);

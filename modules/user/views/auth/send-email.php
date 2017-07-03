@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
-use app\models\SendEmailForm;
+use app\modules\user\forms\SendEmailForm;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */

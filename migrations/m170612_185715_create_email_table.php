@@ -12,7 +12,7 @@ class m170612_185715_create_email_table extends Migration
      */
     public function up()
     {
-        $this->createTable('email', [
+        $this->createTable('{{%email}}', [
             'id' => $this->primaryKey(),
             'status' => $this->integer()->defaultValue(0),
             'type' => $this->integer()->notNull(),
@@ -28,6 +28,6 @@ class m170612_185715_create_email_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('email');
+        $this->dropTable('{{%email}}');
     }
 }

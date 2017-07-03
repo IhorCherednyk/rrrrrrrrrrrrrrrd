@@ -22,7 +22,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\modules\user\models\User',
             'enableAutoLogin' => true,
             'loginUrl' => ['/user/auth/login']
          ],
@@ -47,12 +47,16 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<slug>' => 'pages/pages/show',
             ],
         ],
     ],
     'modules' => [
         'user' => [
             'class' => 'app\modules\user\Module',
+        ],
+        'pages' => [
+            'class' => 'app\modules\pages\Module',
         ],
     ],
     'params' => $params,

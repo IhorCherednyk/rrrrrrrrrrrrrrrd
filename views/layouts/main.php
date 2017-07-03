@@ -37,19 +37,197 @@ AppAsset::register($this);
                             <div class="nk-info-box-icon">
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
-                                <?= Html::tag('h3', Yii::$app->session->getFlash('success'))?>
+                            <?= Html::tag('h3', Yii::$app->session->getFlash('success')) ?>
                         </div>
-                    <?php endif;?>
-                    
-                    <?php if (Yii::$app->session->getFlash('error')):?>
+                    <?php endif; ?>
+
+                    <?php if (Yii::$app->session->getFlash('error')): ?>
                         <div class="nk-info-box text-danger">
                             <div class="nk-info-box-icon">
                                 <i class="fa fa-check" aria-hidden="true"></i>
                             </div>
-                            <?= Html::tag('h3', Yii::$app->session->getFlash('error'))?>
+                            <?= Html::tag('h3', Yii::$app->session->getFlash('error')) ?>
                         </div>
-                    <?php endif;?>
-                    <?= $content ?>
+                    <?php endif; ?>
+                    <div class="page-name">
+                        <h3>Букмекерские термены</h3>
+                    </div>
+                    <div class="row">
+                        <!--КОНТЕНТ-->
+                        <?= $content ?>
+                        <!--КОНТЕНТ-->
+                        <!--CСАЙДБАР-->
+                        <div class="col-md-4">
+                            <aside>
+                                <div class="top-expert sidebar-block">
+                                    <h4 class="sidebar-header">
+                                        <span><span class="text-main-1">Топ</span> прогнозистов</span>
+                                    </h4>
+
+                                    <ul class="sidebar-content">
+                                        <li class="header-expert">
+                                            <span class="expert-name-title text-left">Имя</span>
+                                            <span class="expert-procent-title text-right">% прохода</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+                                        <li class="item">
+                                            <span class="expert-name"><a href="#">Boris12345</a></span>
+                                            <span class="expert-procent">35%</span>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+
+                                <div class="best-sale sidebar-block">
+                                    <h4 class="sidebar-header">
+                                        <span><span class="text-main-1">Бонусы</span> букмекеров</span>
+                                    </h4>
+                                    <ul class="sidebar-content">
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/pari_match.png" alt=""></span>
+                                                <span class="bonus dc va text-right">50$</span>
+                                            </a>
+                                        </li>
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/williamhill_original.png" alt=""></span>
+                                                <span class="bonus dc va text-right">10$</span>
+                                            </a>
+                                        </li>
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/pinnacle.png" alt=""></span>
+                                                <span class="bonus dc va text-right">100$</span>
+                                            </a>
+                                        </li>
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/pari_match.png" alt=""></span>
+                                                <span class="bonus dc va text-right">50$</span>
+                                            </a>
+                                        </li>
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/williamhill_original.png" alt=""></span>
+                                                <span class="bonus dc va text-right">10$</span>
+                                            </a>
+                                        </li>
+                                        <li class="book-bonus">
+                                            <a href="" class="tbl">
+                                                <span class="bonus-img dc"><img src="img/pinnacle.png" alt=""></span>
+                                                <span class="bonus dc va text-right">100$</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
+                                <div class="sidebar-block closest-match">
+                                    <h4 class="sidebar-header">
+                                        <span><span class="text-main-1">Ближайшие</span> игры</span>
+                                    </h4>
+
+                                    <ul>
+                                        <li class="match sidebar-content">
+                                            <a href="" class="tbl">
+                                                <div class="team-1-wrap dc">
+                                                    <span class="team-img team-img-featurue"><img src="img/lgd.png" alt=""></span>
+                                                    <span class="team-name team-name-featurue">Lgd</span>
+                                                </div>
+                                                <div class="vs dc">
+                                                    <span><img src="img/vs1.png" alt=""></span>
+                                                    <span class="match-time"> 02 июня, 17:00 </span>
+                                                </div>
+                                                <div class="team-2-wrap dc">
+                                                    <span class="team-img team-img-featurue"><img src="img/og.png" alt=""></span>
+                                                    <span class="team-name team-name-featurue">og</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="match sidebar-content">
+                                            <a href="" class="tbl">
+                                                <div class="team-1-wrap dc">
+                                                    <span class="team-img team-img-featurue"><img src="img/vp.png" alt=""></span>
+                                                    <span class="team-name team-name-featurue">Danish Bears</span>
+                                                </div>
+                                                <div class="vs dc">
+                                                    <span><img src="img/vs1.png" alt=""></span>
+                                                    <span class="match-time"> 02 июня, 17:00 </span>
+                                                </div>
+                                                <div class="team-2-wrap dc">
+                                                    <span class="team-img team-img-featurue"><img src="img/bb.png" alt=""></span>
+                                                    <span class="team-name team-name-featurue">Planet Odd</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="sidebar-block popular-video ">
+                                    <h4 class="sidebar-header">
+                                        <span><span class="text-main-1">Лучшие </span> стримы</span>
+                                    </h4>
+                                    <ul class="stream-ul">
+                                        <li class="stream sidebar-content">
+
+                                            <a href="#" class="stram-img-wrapper">
+                                                <span class="stream-info-wrapper">
+                                                    <span class="stream-from"><i class="fa fa-video-camera"></i> RuHub</span>
+                                                    <span class="viewers"><i class="fa fa-eye"></i> 2900</span>
+                                                </span>
+                                                <img src="img/stream.png" alt="">
+                                                <span class="fa fa-play"></span>
+                                            </a>
+
+                                        </li>
+                                        <li class="stream sidebar-content">
+
+                                            <a href="#" class="stram-img-wrapper">
+                                                <span class="stream-info-wrapper">
+                                                    <span class="stream-from"><i class="fa fa-video-camera"></i> RuHub</span>
+                                                    <span class="viewers"><i class="fa fa-eye"></i> 2900</span>
+                                                </span>
+                                                <img src="img/stream.png" alt="">
+                                                <span class="fa fa-play"></span>
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </aside>
+                        </div> 
+                        <!--CСАЙДБАР-->
+                    </div>
+
                 </div>
             </div>
 
