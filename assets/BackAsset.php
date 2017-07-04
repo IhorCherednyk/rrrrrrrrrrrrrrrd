@@ -16,49 +16,50 @@ class BackAsset extends AssetBundle {
     public $css = [
         /* Begin global mandatory styles */
         'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
-        'back/assets/plugins/font-awesome/css/font-awesome.min.css',
-        'back/assets/plugins/bootstrap/css/bootstrap.min.css',
-        'back/assets/plugins/uniform/css/uniform.default.css',
-        'back/assets/plugins/select2/select2.css',
-        'back/assets/plugins/select2/select2-metronic.css',
-        'back/assets/plugins/data-tables/DT_bootstrap.css',
-        'back/assets/plugins/bootstrap-datepicker/css/datepicker.css',
-        'back/assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css',
-        'back/assets/plugins/bootstrap-colorpicker/css/colorpicker.css',
-        
-        'back/assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css',
-        
-        'back/assets/css/custom.css',
-
-
-        /* End global mandatory styles */
-        /* Begin theme styles */
-        'back/assets/css/style-metronic.css',
-        'back/assets/css/style.css',
-        'back/assets/css/style-responsive.css',
-        'back/assets/css/plugins.css',
-        'back/assets/css/themes/default.css',
-        /* End theme styles */
+        'http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic',
+        'back/assets/css/bootstrap.min.css',
+        'back/assets/css/bootstrap-extend.min.css',
+        'back/assets/css/site.min.css',
+        'back/assets/vendor/animsition/animsition.css',
+        'back/assets/vendor/asscrollable/asScrollable.css',
+        'back/assets/vendor/switchery/switchery.css',
+        'back/assets/vendor/intro-js/introjs.css',
+        'back/assets/vendor/slidepanel/slidePanel.css',
+        'back/assets/vendor/flag-icon-css/flag-icon.css',
+        /* Fonts */
+        'back/assets/fonts/web-icons/web-icons.min.css',
+        'back/assets/fonts/brand-icons/brand-icons.min.css',
+            /* End fonts styles */
     ];
     public $js = [
-        'back/assets/plugins/bootstrap/js/bootstrap.min.js',
-        'back/assets/plugins/animistion/jquery.animsition.js',
-        'back/assets/plugins/animistion/jquery.animsition.js',
-        'back/assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
-        'back/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
-        'back/assets/plugins/jquery.blockui.min.js',
-        'back/assets/plugins/jquery.cokie.min.js',
-        'back/assets/plugins/uniform/jquery.uniform.min.js',
-        'back/assets/plugins/jquery-validation/dist/jquery.validate.min.js',
-        'back/assets/plugins/select2/select2.min.js',
-        'back/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js',
-        'back/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js',
-        'back/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js',
-        
-        'back/assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js',
-        'back/assets/plugins/jquery.sortable.min.js',
-
-        'back/assets/scripts/core/app.js',
+        'back/assets/vendor/bootstrap/bootstrap.min.js',
+        'back/assets/vendor/animsition/jquery.animsition.min.js',
+        'back/assets/vendor/asscroll/jquery-asScroll.js',
+        'back/assets/vendor/mousewheel/jquery.mousewheel.js',
+        'back/assets/vendor/asscrollable/jquery.asScrollable.all.js',
+        'back/assets/vendor/ashoverscroll/jquery-asHoverScroll.js',
+        'back/assets/vendor/switchery/switchery.min.js',
+        'back/assets/vendor/intro-js/intro.js',
+        'back/assets/vendor/screenfull/screenfull.js',
+        'back/assets/vendor/slidepanel/jquery-slidePanel.js',
+        'back/assets/js/core.js',
+        'back/assets/js/site.js',
+        'back/assets/js/sections/menu.js',
+        'back/assets/js/sections/menubar.js',
+        'back/assets/js/sections/gridmenu.js',
+        'back/assets/js/sections/sidebar.js',
+        'back/assets/js/configs/config-tour.js',
+        'back/assets/js/components/asscrollable.js',
+        'back/assets/js/components/animsition.js',
+        'back/assets/js/components/slidepanel.js',
+//        'back/assets/js/components/switchery.js',
+        'lt IE 9' => [
+            'back/assets/vendor/html5shiv/html5shiv.min.js',
+        ],
+        'lt IE 10' => [
+            'back/assets/vendor/media-match/media.match.min.js',
+            'back/assets/vendor/respond/respond.min.js',
+        ],
     ];
     public $depends = [
         'yii\web\YiiAsset',
