@@ -46,7 +46,7 @@ AppAsset::register($this);
                             ],
                                 [
                                 'label' => \Yii::t('app', 'Термины'),
-                                'url' => ['/auth/profile'],
+                                'url' => ['/faq'],
                                 'visible' => \Yii::$app->user->isGuest
                             ],
                                 [

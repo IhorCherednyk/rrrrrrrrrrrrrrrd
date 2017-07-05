@@ -39,14 +39,14 @@ class Pages extends \yii\db\ActiveRecord
     
 
     public function behaviors() {
+        
         return [
                 TimestampBehavior::className(),
                 [
                 'class' => SluggableBehavior::className(),
-                'attribute' => 'title',
                 'slugAttribute' => 'slug',
                 'value' => function ($event) {
-                    return str_replace(' ', '-', $this->slug);
+                    return TextHelper::transliteration($event->sender->title_short);
                 }
             ],
         ];
@@ -58,11 +58,12 @@ class Pages extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['slug', 'title', 'title_short', 'created_at', 'updated_at'], 'required'],
+            [['slug', 'title', 'title_short'], 'required'],
             [['body'], 'string'],
             [['created_at', 'updated_at', 'status', 'is_protected'], 'integer'],
             [['slug', 'title', 'keywords', 'description'], 'string', 'max' => 250],
             [['title_short'], 'string', 'max' => 150],
+            ['is_protected', 'default', 'value' => 0]
         ];
     }
 
@@ -86,13 +87,11 @@ class Pages extends \yii\db\ActiveRecord
         ];
     }
     
-    public function beforeSave($insert) {
-        if (null === $this->slug) {
-            $this->slug = TextHelper::translit($this->title);
-        }
+    public static function findBySlug($slug) {
+        return static::findOne([
+                    'slug' => $slug
+        ]);
     }
-    public function bySlug($slug) {
-        return $this->andWhere('slug = :slug', [':slug' => trim($slug)]);
-    }
+
 
 }

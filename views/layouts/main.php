@@ -50,7 +50,7 @@ AppAsset::register($this);
                         </div>
                     <?php endif; ?>
                     <div class="page-name">
-                        <h3>Букмекерские термены</h3>
+                        <h3><?= $this->title ?></h3>
                     </div>
                     <div class="row">
                         <!--КОНТЕНТ-->

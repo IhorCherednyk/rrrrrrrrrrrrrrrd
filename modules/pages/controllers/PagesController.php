@@ -15,16 +15,15 @@ class PagesController extends FrontControlller {
         return parent::behaviors();
     }
 
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
+
+    
     public function actionShow($slug) {
-        if (null === $model = Pages::find()->bySlug($slug)->one()) {
+        
+        if (null === $model = Pages::findbySlug($slug)) {
             throw new NotFoundHttpException('Page not found');
         };
-        return $this->renderPartial(
-                        'show', ['model' => $model]
+        return $this->render(
+            'show', ['model' => $model]
         );
     }
 

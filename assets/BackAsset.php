@@ -14,52 +14,70 @@ class BackAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        /* Begin global mandatory styles */
+        /*stylesheet*/
+        
+        'back/css/bootstrap.min.css',
+        'back/css/bootstrap-extend.min.css',
+        'back/css/site.min.css',
+        'back/css/custom.css',
+        
+        /*plugins*/
+        'back/vendor/animsition/animsition.css',
+        'back/vendor/asscrollable/asScrollable.css',
+        'back/vendor/switchery/switchery.css',
+        'back/vendor/intro-js/introjs.css',
+        'back/vendor/slidepanel/slidePanel.css',
+        'back/vendor/flag-icon-css/flag-icon.css',
+        
+        /*fonts*/
+        'back/fonts/web-icons/web-icons.min.css',
+        'back/fonts/brand-icons/brand-icons.min.css',
         'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
         'http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic',
-        'back/assets/css/bootstrap.min.css',
-        'back/assets/css/bootstrap-extend.min.css',
-        'back/assets/css/site.min.css',
-        'back/assets/vendor/animsition/animsition.css',
-        'back/assets/vendor/asscrollable/asScrollable.css',
-        'back/assets/vendor/switchery/switchery.css',
-        'back/assets/vendor/intro-js/introjs.css',
-        'back/assets/vendor/slidepanel/slidePanel.css',
-        'back/assets/vendor/flag-icon-css/flag-icon.css',
-        /* Fonts */
-        'back/assets/fonts/web-icons/web-icons.min.css',
-        'back/assets/fonts/brand-icons/brand-icons.min.css',
-            /* End fonts styles */
     ];
     public $js = [
-        'back/assets/vendor/bootstrap/bootstrap.min.js',
-        'back/assets/vendor/animsition/jquery.animsition.min.js',
-        'back/assets/vendor/asscroll/jquery-asScroll.js',
-        'back/assets/vendor/mousewheel/jquery.mousewheel.js',
-        'back/assets/vendor/asscrollable/jquery.asScrollable.all.js',
-        'back/assets/vendor/ashoverscroll/jquery-asHoverScroll.js',
-        'back/assets/vendor/switchery/switchery.min.js',
-        'back/assets/vendor/intro-js/intro.js',
-        'back/assets/vendor/screenfull/screenfull.js',
-        'back/assets/vendor/slidepanel/jquery-slidePanel.js',
-        'back/assets/js/core.js',
-        'back/assets/js/site.js',
-        'back/assets/js/sections/menu.js',
-        'back/assets/js/sections/menubar.js',
-        'back/assets/js/sections/gridmenu.js',
-        'back/assets/js/sections/sidebar.js',
-        'back/assets/js/configs/config-tour.js',
-        'back/assets/js/components/asscrollable.js',
-        'back/assets/js/components/animsition.js',
-        'back/assets/js/components/slidepanel.js',
-//        'back/assets/js/components/switchery.js',
+        /*Core*/
+        'back/vendor/bootstrap/bootstrap.min.js',
+        'back/vendor/animsition/jquery.animsition.js',
+        'back/vendor/asscroll/jquery-asScroll.js',
+        'back/vendor/mousewheel/jquery.mousewheel.js',
+        'back/vendor/asscrollable/jquery.asScrollable.all.js',
+        'back/vendor/ashoverscroll/jquery-asHoverScroll.js',
+        
+        /*Plugins*/
+        'back/vendor/intro-js/intro.js',
+        'back/vendor/slidepanel/jquery-slidePanel.js',
+        
+        
+        /*Scripts*/
+        
+        'back/js/core.js',
+        'back/js/site.js',
+        
+        'back/js/sections/menu.js',
+        'back/js/sections/menubar.js',
+        'back/js/sections/gridmenu.js',
+        'back/js/sections/sidebar.js',
+        
+        
+        'back/js/configs/config-colors.js',
+        'back/js/configs/config-tour.js',
+        
+        
+        'back/js/components/asscrollable.js',
+        'back/js/components/animsition.js',
+        'back/js/components/slidepanel.js',
+        'back/js/components/switchery.js',
+        
+        
         'lt IE 9' => [
-            'back/assets/vendor/html5shiv/html5shiv.min.js',
-        ],
+            'back/vendor/html5shiv/html5shiv.min.js',
+         ],
         'lt IE 10' => [
-            'back/assets/vendor/media-match/media.match.min.js',
-            'back/assets/vendor/respond/respond.min.js',
-        ],
+            'back/vendor/media-match/media.match.min.js',
+            'back/vendor/respond/respond.min.js',
+         ],
+
     ];
     public $depends = [
         'yii\web\YiiAsset',

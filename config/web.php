@@ -47,7 +47,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'admin' => 'pages/pages-back/index',
                 '<slug>' => 'pages/pages/show',
+                
             ],
         ],
     ],
@@ -57,6 +59,9 @@ $config = [
         ],
         'pages' => [
             'class' => 'app\modules\pages\Module',
+        ],
+        'bookmekers' => [
+            'class' => 'app\modules\bookmekers\Module',
         ],
     ],
     'params' => $params,

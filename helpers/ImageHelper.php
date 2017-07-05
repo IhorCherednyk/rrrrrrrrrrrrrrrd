@@ -10,20 +10,22 @@ class ImageHelper {
     const NEW_IMAGE_MAX_WIDTH = 200;
     const NEW_IMAGE_MAX_HEIGHT = 200;
 
-    public static function saveImage($model) {
+    public static function saveImage($model, $attr, $delattr = null) {
 
 
         // проверяем является ли $file экземплояром класса UploadedFile
-        if ($model->file instanceof UploadedFile) {
+        if ($model->{$attr} instanceof UploadedFile) {
 
-            $model->file = self::resizeImage($model->file);
-
-            self::deleteCurentImage($model->avatar_path);
+//            $model->{$attr} = self::resizeImage($model->{$attr});
+            if(!is_null($delattr)){
+                self::deleteCurentImage($model->{$delattr});
+            }
+            
 
 
             $basePath = Yii::getAlias('@webroot');
             //Берем нашу картинку добовляем к ней время и переводим ее в вид md5 
-            $baseName = md5($model->file->baseName . time());
+            $baseName = md5($model->{$attr}->baseName . time());
 
             // Создаем путь к нашей картинке 
             $dir = '/' . 'img' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
@@ -36,13 +38,15 @@ class ImageHelper {
 
             // И сохраняем наш файл на сервер и возвращаем этот путь что бы записать его в базу 
 
-            if ($model->file->saveAs($basePath . $dir . '/' . $baseName . '.' . $model->file->extension)) {
+            if ($model->{$attr}->saveAs($basePath . $dir . '/' . $baseName . '.' . $model->{$attr}->extension)) {
 
-                return $dir . '/' . $baseName . '.' . $model->file->extension;
+                return $dir . '/' . $baseName . '.' . $model->{$attr}->extension;
             }
         }
         return false;
     }
+
+    
 
     public static function resizeImage($image) {
 
@@ -84,7 +88,7 @@ class ImageHelper {
         //Output image to file
         switch ($image->extension) {
             case 'png':
-                
+
                 imagealphablending($newImage, false);
                 imagesavealpha($newImage, true);
                 $transparentindex = imagecolorallocatealpha($newImage, 255, 255, 255, 127);

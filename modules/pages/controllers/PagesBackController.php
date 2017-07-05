@@ -20,13 +20,7 @@ class PagesBackController extends \app\components\controllers\BackController
      */
     public function actionIndex()
     {
-        $searchModel = new PagesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->renderList();
     }
 
     /**
@@ -49,7 +43,6 @@ class PagesBackController extends \app\components\controllers\BackController
     public function actionCreate()
     {
         $model = new Pages();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -68,7 +61,6 @@ class PagesBackController extends \app\components\controllers\BackController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -88,7 +80,7 @@ class PagesBackController extends \app\components\controllers\BackController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->renderList();
     }
 
     /**
@@ -105,5 +97,15 @@ class PagesBackController extends \app\components\controllers\BackController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    public function renderList(){
+        $searchModel = new BookmekerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
     }
 }

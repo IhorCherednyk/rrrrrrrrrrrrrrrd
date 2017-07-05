@@ -1,0 +1,12 @@
+.adm-btn{
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+.btn-green {
+    color: green;
+}
+.btn-red {
+    color: #ff0000;
+}
