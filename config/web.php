@@ -48,6 +48,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'admin' => 'pages/pages-back/index',
+                'booklist' => 'bookmekers/bookmeker/book-list',
                 '<slug>' => 'pages/pages/show',
                 
             ],

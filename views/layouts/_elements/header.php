@@ -33,7 +33,7 @@ AppAsset::register($this);
                             ],
                                 [
                                 'label' => Yii::t('app', 'Букмекеры'),
-                                'url' => ['/user/index'],
+                                'url' => ['/booklist'],
                             ],
                                 [
                                 'label' => Yii::t('app', 'Команды'),

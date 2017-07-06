@@ -54,7 +54,9 @@ AppAsset::register($this);
                     </div>
                     <div class="row">
                         <!--КОНТЕНТ-->
+                        <div class="col-md-8">
                         <?= $content ?>
+                        </div>
                         <!--КОНТЕНТ-->
                         <!--CСАЙДБАР-->
                         <div class="col-md-4">

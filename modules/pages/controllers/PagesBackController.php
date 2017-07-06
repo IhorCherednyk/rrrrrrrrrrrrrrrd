@@ -82,6 +82,15 @@ class PagesBackController extends \app\components\controllers\BackController
 
         return $this->renderList();
     }
+    public function renderList() {
+        $searchModel = new PagesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Finds the Pages model based on its primary key value.
@@ -97,15 +106,5 @@ class PagesBackController extends \app\components\controllers\BackController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    
-    public function renderList(){
-        $searchModel = new BookmekerSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
     }
 }
