@@ -17,7 +17,7 @@ use dosamigos\ckeditor\CKEditor;
 
     <?=
     $form->field($model, 'body')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
+        'options' => ['rows' => 6,'ignoreEmptyParagraph' => false],// Попросить Жеку показать как искать
         'preset' => 'custom',
         'clientOptions' => [
             'filebrowserImageUploadUrl' => '/file/image'

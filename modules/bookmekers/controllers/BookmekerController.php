@@ -24,5 +24,14 @@ class BookmekerController extends FrontControlller {
         
         return $this->render('book-list', ['listDataProvider' => $dataProvider]);
     }
+    
+    public function actionBookSingle($id){
+        $model = Bookmeker::find($id)->one();
+        if (!is_null($model)) {
+            return $this->render('book-single', ['model' => $model]);
+        } else {
+            throw new \yii\web\NotFoundHttpException();
+        }
+    }
 
 }
