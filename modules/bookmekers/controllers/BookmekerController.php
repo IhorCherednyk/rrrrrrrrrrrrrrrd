@@ -26,7 +26,8 @@ class BookmekerController extends FrontControlller {
     }
     
     public function actionBookSingle($id){
-        $model = Bookmeker::find($id)->one();
+        
+        $model = Bookmeker::findOne($id);
         if (!is_null($model)) {
             return $this->render('book-single', ['model' => $model]);
         } else {
