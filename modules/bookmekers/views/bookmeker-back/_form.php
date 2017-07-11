@@ -17,10 +17,11 @@ use dosamigos\ckeditor\CKEditor;
 
     <?=
     $form->field($model, 'body')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6,'ignoreEmptyParagraph' => false],
+        'options' => ['rows' => 6],
         'preset' => 'custom',
         'clientOptions' => [
             'filebrowserImageUploadUrl' => '/file/image',
+            'allowedContent' => true,
         ]
     ])
     ?>
