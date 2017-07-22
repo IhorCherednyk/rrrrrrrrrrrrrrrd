@@ -22,6 +22,11 @@ use dosamigos\ckeditor\CKEditor;
         'clientOptions' => [
             'filebrowserImageUploadUrl' => '/file/image',
             'allowedContent' => true,
+            'dtd' => [
+                'removeEmpty' => [
+                    'i' => false
+                ]
+            ]
         ]
     ])
     ?>
