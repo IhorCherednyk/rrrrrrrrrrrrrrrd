@@ -1,53 +1,63 @@
 <?php
-
 /* @var $this yii\web\View */
+
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
+    <?php
+    $table = $html->find('#teams-all table', 0);
+    $rowData = array();
+    foreach ($table->find('tr') as $key => $row) {
+        if($key >= 2){
+            $flight = array();
+            foreach ($row->find('td') as $key => $cell) {
+                $teamAttr = array();
+                if ($key == 0){
+                    foreach($cell->find('img') as $attr){
+                        $teamAttr['image_path'] = $attr->src;
+                    }
+                    foreach($cell->find('a') as $attr){
+                        $teamAttr['dotabuf_link'] = $attr->href;
+                        $teamAttr['dotabuf_id'] = preg_replace('/[^0-9]/', '', $attr->href);
+                    }
+                    $flight[] = $teamAttr;
+                }else {
+                    $flight[] = $cell->plaintext;
+                }
+            }
+            $rowData[] = $flight;
+        }
+    }
+    echo '<pre>';
+//    print_r($rowData);    
     
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
+    
+    $teamData = array();
+    foreach ($rowData as $key => $team) {
+       $teamData[$key]['img'] = $team[0]['image_path'];
+       $teamData[$key]['dotabuf_link'] = $team[0]['dotabuf_link'];
+       $teamData[$key]['dotabuf_id'] = $team[0]['dotabuf_id'];
+       $teamData[$key]['team_name'] = substr($team[1],0,-21);
+       $teamData[$key]['popularity'] = substr($team[2],0,-2);
+       $teamData[$key]['total_match'] = $team[3];
+       
+    }
+    print_r($teamData);
+    ?> 
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-    <?php echo Html::a('Для смены пароля перейдите по этой ссылке.', \yii\helpers\Url::toRoute(['/user/auth/setnew-password', 'key' => 55, '#' => 'pasform'], true))?>
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
 </div>
+
+
+
+
+
+<!--echo '<table>';
+foreach ($rowData as $row => $tr) {
+    echo '<tr>'; 
+    foreach ($tr as $td)
+        echo '<td>' . $td .'</td>';
+    echo '</tr>';-->
+}
