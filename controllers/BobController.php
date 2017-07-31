@@ -24,6 +24,5 @@ class BobController extends FrontControlller
     public function actionIndex()
     {
         return $this->render('index');
-        
     }
 }
