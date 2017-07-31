@@ -12,6 +12,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\modules\setting\helpers\SettingHelper;
+use darkdrim\simplehtmldom\SimpleHTMLDom;
 
 /**
  * Description of BobController

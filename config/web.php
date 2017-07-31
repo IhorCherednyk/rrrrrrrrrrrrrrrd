@@ -49,6 +49,7 @@ $config = [
             'rules' => [
                 'admin' => 'pages/pages-back/index',
                 'booklist' => 'bookmekers/bookmeker/book-list',
+                'team' => 'team/team/index',
                 '<slug>' => 'pages/pages/show',
                 
             ],
@@ -63,6 +64,9 @@ $config = [
         ],
         'bookmekers' => [
             'class' => 'app\modules\bookmekers\Module',
+        ],
+        'team' => [
+            'class' => 'app\modules\team\Module',
         ],
     ],
     'params' => $params,

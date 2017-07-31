@@ -46,7 +46,28 @@ class ImageHelper {
         return false;
     }
 
-    
+    public static function saveCurlImg($imgpath){
+        
+        $img = file_get_contents($imgpath);
+        
+        $size = getimagesize($imgpath);
+        $extension = image_type_to_extension($size[2]);
+        
+        $basePath = Yii::getAlias('@webroot');
+        
+        $baseName = md5($imgpath . time());
+        $dir = '/' . 'img' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
+        if (!is_dir($basePath . $dir)) {
+                $oldmask = umask(0);
+                mkdir($basePath . $dir, 0777, true);
+                umask($oldmask);
+            }
+            
+        $finalPath = $basePath . $dir . '/' . $baseName . $extension;
+        file_put_contents($finalPath,$img);
+        
+        return $finalPath;
+    }
 
     public static function resizeImage($image) {
 
