@@ -38,6 +38,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
+                    'logFile' => '@app/runtime/logs/curl.txt',
                     'levels' => ['error', 'warning'],
                 ],
             ],
