@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'second_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'img')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'imgfile')->fileInput()->label('Изменить аватар') ?>
 
     <?= $form->field($model, 'dotabuff_id')->textInput() ?>
 

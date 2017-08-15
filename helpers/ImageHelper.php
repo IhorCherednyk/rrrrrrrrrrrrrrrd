@@ -22,7 +22,7 @@ class ImageHelper {
             }
             
 
-
+            
             $basePath = Yii::getAlias('@webroot');
             //Берем нашу картинку добовляем к ней время и переводим ее в вид md5 
             $baseName = md5($model->{$attr}->baseName . time());
@@ -52,9 +52,8 @@ class ImageHelper {
         
         $size = getimagesize($imgpath);
         $extension = image_type_to_extension($size[2]);
-        
+       
         $basePath = Yii::getAlias('@webroot');
-        
         $baseName = md5($imgpath . time());
         $dir = '/' . 'img' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
         if (!is_dir($basePath . $dir)) {
@@ -66,7 +65,7 @@ class ImageHelper {
         $finalPath = $basePath . $dir . '/' . $baseName . $extension;
         file_put_contents($finalPath,$img);
         
-        return $finalPath;
+        return $dir . '/' . $baseName . $extension;
     }
 
     public static function resizeImage($image) {

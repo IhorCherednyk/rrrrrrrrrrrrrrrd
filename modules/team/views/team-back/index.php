@@ -22,19 +22,55 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
+            'total_place',
             'name',
             'second_name',
-            'img',
-            'dotabuff_id',
+            [
+            'attribute' => 'img',
+            'format' => 'raw',
+            'value' => function($model) {
+                return Html::img($model->img);
+            }
+        ],
+        'dotabuff_id',
             // 'dotabuff_link',
-            // 'total_place',
             // 'game_count',
             // 'winrate',
 
-            ['class' => 'yii\grid\ActionColumn'],
+             [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => Yii::t('app', 'Actions'),
+                'headerOptions' => [
+                    'width' => '50',
+                ],
+                'buttons' => [
+                    'delete' => function($url, $model) {
+                        return Html::a('<i class="icon wb-close"></i> ', ['delete', 'id' => $model->id], [
+                                    'class' => 'btn-red adm-btn',
+                                    'title' => Yii::t('app', 'Delete'),
+                                    'data-pjax' => 1,
+                                    'data-method' => 'post',
+                        ]);
+                    },
+                    'edit' => function($url, $model) {
+                        return Html::a('<i class="icon wb-pencil"></i> ', ['update', 'id' => $model->id], [
+                                    'class' => 'btn-green adm-btn',
+                                    'title' => Yii::t('app', 'Edit'),
+                                    'data-pjax' => 0
+                        ]);
+                    },
+                    'view' => function($url, $model) {
+                        return Html::a('<i class="icon wb-eye"></i> ', ['view', 'id' => $model->id], [
+                                    'class' => 'btn-green adm-btn',
+                                    'title' => Yii::t('app', 'View'),
+                                    'data-pjax' => 0
+                        ]);
+                    }
+                ],
+                'template' => '{edit} {delete} {view}',
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

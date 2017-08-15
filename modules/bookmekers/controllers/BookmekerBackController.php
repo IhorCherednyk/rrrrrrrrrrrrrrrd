@@ -70,6 +70,7 @@ class BookmekerBackController extends BackController {
         $model = $this->findModel($id);
         
         if ($model->load(Yii::$app->request->post())) {
+            
             $model->filemedium_img = UploadedFile::getInstance($model, 'filemedium_img');
             $model->filesmall_img = UploadedFile::getInstance($model, 'filesmall_img');
             if ($model->validate()) {

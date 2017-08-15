@@ -22,6 +22,9 @@ class Teams extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    
+    public $imgfile;
+    
     public static function tableName()
     {
         return '{{%teams}}';
@@ -36,6 +39,7 @@ class Teams extends \yii\db\ActiveRecord
             [['name', 'img', 'dotabuff_id', 'dotabuff_link', 'total_place', 'game_count', 'winrate'], 'required'],
             [['dotabuff_id', 'total_place', 'game_count', 'winrate'], 'integer'],
             [['name', 'second_name', 'img', 'dotabuff_link'], 'string', 'max' => 255],
+            [['imgfile'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true],
         ];
     }
 
