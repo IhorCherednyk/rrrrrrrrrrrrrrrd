@@ -37,11 +37,11 @@ AppAsset::register($this);
                             ],
                                 [
                                 'label' => Yii::t('app', 'Команды'),
-                                'url' => ['/user-messages/incoming-message'],
+                                'url' => ['/team/team/index'],
                             ],
                                 [
                                 'label' => Yii::t('app', 'Стримы'),
-                                'url' => ['/auth/reg'],
+                                'url' => ['/streams/stream/index'],
                                 'visible' => \Yii::$app->user->isGuest
                             ],
                                 [

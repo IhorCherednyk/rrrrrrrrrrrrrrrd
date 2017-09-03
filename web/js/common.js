@@ -18,8 +18,7 @@ $(function () {
         $('.main-content-wrapper').css({
             'min-height': browserHeight - footerOuterHeight - mainHeightMarginPaddingBorder,
         });
-    }
-    ;
+    };
 
     $('.modal').on('show.bs.modal', function (e) {
         $('.modal').modal('hide');
@@ -27,6 +26,19 @@ $(function () {
 
     });
 
+    $('.dotabuff').on('click',function(e){
+        if($(window).width() > 768){
+            e.preventDefault();
+            var width = $(window).width() / 2;
+            var height = $(window).height() / 2;
+            openWindow($(this).attr('href'), 'hi', "width=" + width + ",height=" + height + "left=0,right=0");
+        }
+        
+    })
+    
+    function openWindow(href,name,params){
+        var newWin = window.open(href, name, params);
 
-
+    }
+    
 });

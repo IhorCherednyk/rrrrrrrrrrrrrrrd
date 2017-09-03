@@ -51,7 +51,8 @@ $config = [
                 'admin' => 'pages/pages-back/index',
                 'booklist' => 'bookmekers/bookmeker/book-list',
                 'team' => 'team/team/index',
-                '<slug>' => 'pages/pages/show',
+                'streams' => 'streams/stream/index',
+                '<slug>' => 'pages/pages/show'
                 
             ],
         ],
@@ -68,6 +69,9 @@ $config = [
         ],
         'team' => [
             'class' => 'app\modules\team\Module',
+        ],
+        'streams' => [
+            'class' => 'app\modules\streams\Module',
         ],
     ],
     'params' => $params,

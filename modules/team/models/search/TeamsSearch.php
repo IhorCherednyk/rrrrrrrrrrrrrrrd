@@ -47,6 +47,7 @@ class TeamsSearch extends Teams
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [ 'pageSize' => 30 ],
         ]);
 
         $this->load($params);
