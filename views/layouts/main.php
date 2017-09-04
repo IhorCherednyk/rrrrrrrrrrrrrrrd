@@ -1,13 +1,11 @@
 <?php
-/* @var $this \yii\web\View */
+/* @var $this View */
 /* @var $content string */
 
-use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use yii\widgets\Menu;
+use app\components\widgets\TwitchStreamsWidget;
+use yii\helpers\Html;
+use yii\web\View;
 
 AppAsset::register($this);
 ?>
@@ -193,38 +191,12 @@ AppAsset::register($this);
                                         </li>
                                     </ul>
                                 </div>
-                                <div class="sidebar-block popular-video ">
-                                    <h4 class="sidebar-header">
-                                        <span><span class="text-main-1">Лучшие </span> стримы</span>
-                                    </h4>
-                                    <ul class="stream-ul">
-                                        <li class="stream sidebar-content">
-
-                                            <a href="#" class="stram-img-wrapper">
-                                                <span class="stream-info-wrapper">
-                                                    <span class="stream-from"><i class="fa fa-video-camera"></i> RuHub</span>
-                                                    <span class="viewers"><i class="fa fa-eye"></i> 2900</span>
-                                                </span>
-                                                <img src="img/stream.png" alt="">
-                                                <span class="fa fa-play"></span>
-                                            </a>
-
-                                        </li>
-                                        <li class="stream sidebar-content">
-
-                                            <a href="#" class="stram-img-wrapper">
-                                                <span class="stream-info-wrapper">
-                                                    <span class="stream-from"><i class="fa fa-video-camera"></i> RuHub</span>
-                                                    <span class="viewers"><i class="fa fa-eye"></i> 2900</span>
-                                                </span>
-                                                <img src="img/stream.png" alt="">
-                                                <span class="fa fa-play"></span>
-                                            </a>
-
-                                        </li>
-
-                                    </ul>
-                                </div>
+                                
+                                <?php 
+                                if(empty($this->params['ShowStreamWidget'])){
+                                   echo TwitchStreamsWidget::widget();
+                                }
+                                ?>
                             </aside>
                         </div> 
                         <!--CСАЙДБАР-->
@@ -236,7 +208,7 @@ AppAsset::register($this);
 
             <?= $this->render('_elements/footer'); ?>
 
-            <?php if (\Yii::$app->user->isGuest): ?>
+            <?php if (Yii::$app->user->isGuest): ?>
                 <?= $this->render('@app/modules/user/views/auth/login'); ?>
                 <?= $this->render('@app/modules/user/views/auth/reg'); ?>
                 <?= $this->render('@app/modules/user/views/auth/send-email'); ?>

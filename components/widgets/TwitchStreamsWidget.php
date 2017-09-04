@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\video\widgets;
+namespace app\components\widgets;
 
 use app\components\twitch\Twitch,
     Yii,
@@ -26,7 +26,7 @@ class TwitchStreamsWidget extends Widget {
         
         $streams = Yii::$app->cache->get('widget.twitch.streams');
         if($streams === false) {
-            $streams = $twitch->streamSearch('dota 2', 5);
+            $streams = $twitch->streamSearch('dota 2', 2);
             Yii::$app->cache->set('widget.twitch.streams', $streams, 60);
         }
         

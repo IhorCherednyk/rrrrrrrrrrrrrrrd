@@ -1,28 +1,35 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
+<?php $this->title = 'Стримы'?>
 <?php if (count($data)): ?>
-    <div class="large-12 medium-12 columns">
-        <div class="widgetBox">
-            <div class="widgetContent">
-                <ul class="accordion">
-                    <li class="accordion-item is-active">
-                        <span class="accordion-title"><i class="fa fa-video-camera"></i>&nbsp;<?= Yii::t('app', 'Top Dota 2 Live Streams') ?></span>
-                        <div class="accordion-content">
-                            <ul>
-                                <?php foreach ($data as $stream) : ?>
-                                    <li>
-                                        <?= Html::a(
-                                                '<i class="fa fa-video-camera"></i>'.$stream->channel->display_name.'<span><i class="fa fa-eye"></i>'.$stream->viewers.'</span>', 
-                                                ['/video/index/stream', 'name' => $stream->channel->name, 'id' => $stream->channel->_id]) ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+    
+    <section class="main-section streams">\
+            
+        <div class="row">
+            <?php foreach ($data as $stream) : ?>
+                <div class="col-md-6">
+                    <a href="<?= Url::to(['/video/index/stream', 'name' => $stream->channel->name, 'id' => $stream->channel->_id]) ?>" class="box-stream-wrapper" style="background-image: url(<?= $stream->preview->medium ?>)">
+                        <div class="box-stream-overlay">
+                            <span class="box-stream-content">
+                                <span class="channel">
+                                    <?= $stream->channel->display_name ?>               
+                                </span>
+                                <span class="language">
+                                    Язык: <?= $stream->channel->broadcaster_language ?>              
+                                </span> 
+                                <span class="viewers"><i class="fa fa-eye fa-fw"></i><?= $stream->viewers ?></span>
+                            </span>
+                            <span class="twitch-logo">
+                                        <?= Html::img($stream->channel->logo) ?>
+                                    </span>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </a>
+                </div>
+            <?php endforeach; ?>
         </div>
-    </div>
+    </section>
+
 <?php endif; ?>

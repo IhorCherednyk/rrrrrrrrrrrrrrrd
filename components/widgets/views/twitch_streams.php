@@ -3,28 +3,31 @@
 use yii\helpers\Html;
 ?>
 <?php if (count($data)): ?>
-    <div class="large-12 medium-12 columns">
-        <div class="widgetBox">
-            <div class="widgetContent">
-                <ul class="accordion">
-                    <li class="accordion-item is-active">
-                        <span class="accordion-title"><i class="fa fa-video-camera"></i>&nbsp;<?= Yii::t('app', 'Top Dota 2 Live Streams') ?></span>
-                        <div class="accordion-content">
-                            <ul>
-                                <?php foreach ($data as $stream) : ?>
-                                    <li>
-                                        <?= Html::a(
-                                                '<i class="fa fa-video-camera"></i>'.$stream->channel->display_name.'<span><i class="fa fa-eye"></i>'.$stream->viewers.'</span>', 
-                                                ['/video/index/stream', 'name' => $stream->channel->name, 'id' => $stream->channel->_id]) ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="sidebar-block popular-video ">
+        <h4 class="sidebar-header">
+            <span><span class="text-main-1">Лучшие </span> стримы</span>
+        </h4>
+
+        <ul class="stream-ul">
+            <?php foreach ($data as $stream) : ?> 
+                <li class="stream sidebar-content">
+
+                    <a href="#" class="stram-img-wrapper">
+                        <span class="stream-info-wrapper">
+                            <span class="stream-from"><i class="fa fa-video-camera"></i> <?= $stream->channel->display_name ?></span>
+                            <span class="viewers"><i class="fa fa-eye"></i> <?= $stream->viewers ?></span>
+                        </span>
+                        <?= Html::img($stream->preview->medium) ?>
+                        <span class="fa fa-play"></span>
+                    </a>
+
+                </li>
+            <?php endforeach; ?>
+        </ul>
     </div>
+
+
+
 <?php endif; ?>
 
 

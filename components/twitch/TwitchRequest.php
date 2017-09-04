@@ -10,10 +10,6 @@ namespace app\components\twitch;
  * @author Nikadimas
  */
 class TwitchRequest {
-    // Вопросы 
-    // что делает и зачем curl_setopt($crl, CURLOPT_HEADERFUNCTION, [$this, 'getHeader']);
-    // public $throwCurlErrors = true; зачем нужен если мы его не переопределяем
-    
     
     /** @var integer Set connect timeout */
     public $connectTimeout = 30;
@@ -94,7 +90,6 @@ class TwitchRequest {
         //Получаем информацию о выполнении курла
         $this->httpInfo = array_merge($this->httpInfo, curl_getinfo($crl));
         
-        D(json_decode($response));
         if (curl_errno($crl) && $this->throwCurlErrors === true) {
             throw new TwitchException(curl_error($crl), curl_errno($crl));
         }

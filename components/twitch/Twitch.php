@@ -60,7 +60,7 @@ class Twitch {
             'limit' => $limit, //Максимальное количество возвращаемых объектов, отсортированных по количеству подписчиков. По умолчанию: 25. Максимум: 100.
             'offset' => $offset, //Смещение объекта для разбивки на страницы результатов. По умолчанию: 0.
             'hls' => $hls, // поотоковая передача
-            'language' => 'ru'
+//            'language' => 'ru'
         ));
         
         // Возвращаем результат поиска перд этим передавая в него строку с параметрами поиска
@@ -83,19 +83,19 @@ class Twitch {
      * @return \stdClass
      * @throws TwitchSDKException
      */
-    public function liveStreamsGet() {
-        
-        $queryString = $this->buildQueryString(array(
-            'channel' => [51435464, 52215959],
+ //   public function liveStreamsGet() {
+ //       
+ //       $queryString = $this->buildQueryString(array(
+ //           'channel' => [51435464, 52215959],
 //            'channel' => ['a1taoda', 'followkudes'],
 //            'channel' => ['A1taOda', 'followKudes'],
-            'game' => 'Dota 2', // Название игры
+ //           'game' => 'Dota 2', // Название игры
 //            'language' => 'en'
-            'stream_type' => 'live',
+//            'stream_type' => 'live',
     //        'limit' => 5, //Максимальное количество возвращаемых объектов, отсортированных по количеству подписчиков. По умолчанию: 25. Максимум: 100.
-        ));
-        return $this->request->request('streams/' . $queryString);
-    }
+//        ));
+//        return $this->request->request('streams/' . $queryString);
+//    }
 
     /**
      * Build query string
