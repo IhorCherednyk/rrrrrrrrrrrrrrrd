@@ -19,7 +19,8 @@ class StreamController extends Controller
     
     public function actionIndex()
     {  
-        $this->view->params['ShowStreamWidget'] = true;
+        $this->view->params['DisableStreamWidget'] = true;
+        
         // Создаем экземпляр твича и передаем в него client_id котороый определяем в __construct
         $twitch = new Twitch([
             'client_id' => $this->clientId
@@ -42,5 +43,11 @@ class StreamController extends Controller
             return $this->render('index', ['data' => $streams->streams]);
         }
         return null;
+    }
+    
+    public function actionViewStream($name,$id){
+        $this->view->params['DisableStreamWidget'] = true;
+        
+        return $this->render('view-stream', ['name' => $name,'id' => $id]);
     }
 }

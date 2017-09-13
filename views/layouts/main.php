@@ -193,7 +193,7 @@ AppAsset::register($this);
                                 </div>
                                 
                                 <?php 
-                                if(empty($this->params['ShowStreamWidget'])){
+                                if(empty($this->params['DisableStreamWidget'])){
                                    echo TwitchStreamsWidget::widget();
                                 }
                                 ?>
