@@ -12,7 +12,7 @@ class m170727_121711_create_teams_table extends Migration
      */
     public function up()
     {
-        $this->createTable('teams', [
+        $this->createTable('{{%teams}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
             'second_name' => $this->string(255),
@@ -30,6 +30,6 @@ class m170727_121711_create_teams_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('teams');
+        $this->dropTable('{{%teams}}');
     }
 }

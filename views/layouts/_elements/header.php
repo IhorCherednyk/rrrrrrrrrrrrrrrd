@@ -29,7 +29,7 @@ AppAsset::register($this);
                         'items' => [
                                 [
                                 'label' => Yii::t('app', 'Прогнозы'),
-                                'url' => ['/admin/user/index'],
+                                'url' => ['/forecasts'],
                             ],
                                 [
                                 'label' => Yii::t('app', 'Букмекеры'),

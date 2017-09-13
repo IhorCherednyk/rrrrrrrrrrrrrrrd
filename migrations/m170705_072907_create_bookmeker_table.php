@@ -12,7 +12,7 @@ class m170705_072907_create_bookmeker_table extends Migration
      */
     public function up()
     {
-        $this->createTable('bookmeker', [
+        $this->createTable('{{%bookmeker}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(250),
             'img_medium' => $this->string(250),
@@ -30,6 +30,6 @@ class m170705_072907_create_bookmeker_table extends Migration
      */
     public function down()
     {
-        $this->dropTable('bookmeker');
+        $this->dropTable('{{%bookmeker}}');
     }
 }

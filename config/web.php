@@ -52,6 +52,7 @@ $config = [
                 'booklist' => 'bookmekers/bookmeker/book-list',
                 'team' => 'team/team/index',
                 'streams' => 'streams/stream/index',
+                'forecasts' => 'forecasts/forecast/index',
                 '<slug>' => 'pages/pages/show'
                 
             ],
@@ -72,6 +73,9 @@ $config = [
         ],
         'streams' => [
             'class' => 'app\modules\streams\Module',
+        ],
+        'forecasts' => [
+            'class' => 'app\modules\forecasts\Module',
         ],
     ],
     'params' => $params,
