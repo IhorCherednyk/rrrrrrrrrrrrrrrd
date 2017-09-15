@@ -20,7 +20,7 @@ class ForecastController extends Controller
     public $dotaUrl = 'http://game-tournaments.com/dota-2';
     public $userAgent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0';
     
-    public $linkArray = [];
+    public $matchArray = [];
     
     
     public function actionIndex()
@@ -34,7 +34,7 @@ class ForecastController extends Controller
 //        fclose($file);
         $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/match.html');
         
-        $this->generateLinksArray($html);
+        $this->generateMatchArray($html);
         
         return $this->render('index');
     }
@@ -57,12 +57,24 @@ class ForecastController extends Controller
 
     }
     
-    function generateLinksArray($html){
+    function generateMatchArray($html){
         $table = $html->find('#block_matches_current .matches', 0);
         if (!empty($table)) {
             foreach ($table->find('tr') as $key => $row) {
                 if(empty($row->class)) {
+                    $matchArray['id'] = null;
+                    $matchArray['id_dt2'] = (int)$row->rel;
+                    $matchArray['name_team1'] = $row->find('td', 1)->find('a',0)->children(0)->children(0)->plaintext;
+                    $matchArray['name_team2'] = $row->find('td', 1)->find('a',0)->children(2)->children(1)->plaintext;
+                    $matchArray['team1_idt2'] = (int)$row->find('td', 1)->find('a',0)->children(0)->children(0)->rel;
+                    $matchArray['team2_idt2'] = (int)$row->find('td', 1)->find('a',0)->children(2)->children(1)->rel;
+                    $matchArray['start_time'] = (int)$row->find('td', 2)->children(1)->children(0)->time;
+
+                    $matchArray['tournamentInfo']['name'] = null;
+                    $matchArray['tournamentInfo']['img'] = null;
                     
+                    $matchArray['link_for_bets'] = 'http://www.dota-prognoz.web' . $row->find('td', 1)->find('a',0)->href;
+
                 }
                 
 //                try {

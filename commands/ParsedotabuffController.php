@@ -87,6 +87,7 @@ class ParsedotabuffController extends Controller {
                         $flight['id'] = null;
                         $flight['name'] = substr($row->find('td', 1)->plaintext, 0, -21);
                         $flight['second_name'] = null;
+                        $flight['d2teamid'] = null;
                         $flight['img'] = $row->find('td', 0)->find('img', 0)->src;
                         $flight['dotabuff_id'] = preg_replace('/[^0-9]/', '', $row->find('td', 0)->find('a', 0)->href);
                         $flight['dotabuff_link'] = $row->find('td', 0)->find('a', 0)->href;
