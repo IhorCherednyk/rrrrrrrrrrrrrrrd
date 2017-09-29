@@ -19,7 +19,7 @@ class TeamsSearch extends Teams
     {
         return [
             [['id', 'dotabuff_id', 'total_place', 'game_count', 'winrate'], 'integer'],
-            [['name', 'second_name', 'img', 'dotabuff_link'], 'safe'],
+            [['name','img', 'dotabuff_link'], 'safe'],
         ];
     }
 
@@ -68,7 +68,6 @@ class TeamsSearch extends Teams
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'second_name', $this->second_name])
             ->andFilterWhere(['like', 'img', $this->img])
             ->andFilterWhere(['like', 'dotabuff_link', $this->dotabuff_link]);
 

@@ -2,7 +2,8 @@
 
 namespace app\modules\team\models;
 
-use Yii;
+use app\modules\forecasts\models\TeamAlias;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%teams}}".
@@ -17,7 +18,7 @@ use Yii;
  * @property integer $game_count
  * @property integer $winrate
  */
-class Teams extends \yii\db\ActiveRecord
+class Teams extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -36,9 +37,9 @@ class Teams extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'img', 'dotabuff_id', 'dotabuff_link', 'total_place', 'game_count', 'winrate'], 'required'],
-            [['dotabuff_id', 'total_place', 'game_count', 'winrate'], 'integer'],
-            [['name', 'second_name', 'img', 'dotabuff_link'], 'string', 'max' => 255],
+            [['name', 'img'], 'required'],
+            [['dotabuff_id', 'total_place', 'game_count', 'winrate', 'gametournament_id'], 'integer'],
+            [['name', 'img', 'dotabuff_link'], 'string', 'max' => 255],
             [['imgfile'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true],
         ];
     }
@@ -51,7 +52,6 @@ class Teams extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'second_name' => 'Second Name',
             'img' => 'Img',
             'dotabuff_id' => 'Dotabuff ID',
             'dotabuff_link' => 'Dotabuff Link',
@@ -60,4 +60,23 @@ class Teams extends \yii\db\ActiveRecord
             'winrate' => 'Winrate',
         ];
     }
+    
+    public static function findByAttributes($id,$name,$alias){
+        $query = static::find()->alias('t');
+        $query->select('t.*,at.alias');
+        
+        $query->leftJoin(['at' => TeamAlias::tableName()], 'at.team_id = t.id');
+        
+        $query->where(['t.gametournament_id' => $id])
+                ->orWhere('LOWER(t.name) = "' . strtolower($name) . '"')
+                ->orWhere('LOWER(t.name) = "' . strtolower($alias) . '"')
+                ->orWhere('LOWER(at.alias) = "' . strtolower($alias) . '"');
+
+//        echo  $query->createCommand()->getRawSql();die();
+        
+        return $query->one();
+    }
+    
+    
+
 }

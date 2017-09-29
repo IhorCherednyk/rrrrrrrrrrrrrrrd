@@ -60,7 +60,8 @@ class ParsedotabuffController extends Controller {
         $teams = new Teams();
         $batchArray = [];
         foreach ($this->rowData as $teamSingle) {
-            $team = $teams->findOne(['dotabuff_id' => $teamSingle['dotabuff_id']]);
+            $team = $teams->find()->where(['dotabuff_id' => $teamSingle['dotabuff_id']])
+                                  ->orWhere(['name' =>  $teamSingle['name']])->one();
             
             if (!is_null($team)) {
                 unset($teamSingle['id']);
@@ -86,14 +87,13 @@ class ParsedotabuffController extends Controller {
                         $flight = array();
                         $flight['id'] = null;
                         $flight['name'] = substr($row->find('td', 1)->plaintext, 0, -21);
-                        $flight['second_name'] = null;
-                        $flight['d2teamid'] = null;
                         $flight['img'] = $row->find('td', 0)->find('img', 0)->src;
                         $flight['dotabuff_id'] = preg_replace('/[^0-9]/', '', $row->find('td', 0)->find('a', 0)->href);
                         $flight['dotabuff_link'] = $row->find('td', 0)->find('a', 0)->href;
                         $flight['total_place'] = substr($row->find('td', 2)->plaintext, 0, -2);
                         $flight['game_count'] = str_replace(',','',$row->find('td', 3)->plaintext);
                         $flight['winrate'] = rtrim($row->find('td', 4)->plaintext, '%');
+                        $flight['gametournament_id'] = null;
                         //write main array
                         $this->rowData[] = $flight;
                     }

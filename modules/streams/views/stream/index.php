@@ -16,6 +16,9 @@ use yii\helpers\Url;
                                 <span class="channel">
                                     <?= $stream->channel->display_name ?>               
                                 </span>
+                                <span class="channel-descr">
+                                    <?= $stream->channel->status ?>               
+                                </span>
                                 <span class="language">
                                     Язык: <?= $stream->channel->broadcaster_language ?>              
                                 </span> 

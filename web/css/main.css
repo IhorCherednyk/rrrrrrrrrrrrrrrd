@@ -683,8 +683,15 @@ aside .stream .stream-info-wrapper .viewers {
     float: left; 
 }
 .box-stream-wrapper .box-stream-overlay .box-stream-content .channel {
-    font-size: 18px;
+    font-size: 16px;
     color: #fff; 
+}
+.box-stream-wrapper .box-stream-overlay .box-stream-content .channel-descr {
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    color: #999;
 }
 .box-stream-wrapper .box-stream-overlay .box-stream-content .viewers {
     float: right;

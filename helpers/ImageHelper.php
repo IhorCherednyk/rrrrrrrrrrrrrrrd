@@ -67,6 +67,8 @@ class ImageHelper {
         
         return $dir . '/' . $baseName . $extension;
     }
+    
+
 
     public static function resizeImage($image) {
 

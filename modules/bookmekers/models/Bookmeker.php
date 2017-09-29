@@ -24,6 +24,8 @@ class Bookmeker extends \yii\db\ActiveRecord
     public $filemedium_img;
     public $filesmall_img;
     
+    
+    
     public static function tableName()
     {
         return '{{%bookmeker}}';
@@ -35,8 +37,7 @@ class Bookmeker extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['body'], 'required'],
-            [['body'], 'string'],
+            [['body','gametournament_alias'], 'string'],
             [['bonus'], 'integer'],
             [['img_medium', 'img_small', 'referal_token', 'bonus_link', 'site_link', 'name'], 'string', 'max' => 250],
             [['filemedium_img','filesmall_img'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true], 
@@ -58,6 +59,11 @@ class Bookmeker extends \yii\db\ActiveRecord
             'bonus' => 'Bonus',
             'bonus_link' => 'Bonus Link',
             'site_link' => 'Site Link',
+            'gametournament_alias' => 'gametournament_alias'
         ];
+    }
+    
+    public static function findByAliasName($alias){
+        return static::find()->where('LOWER(gametournament_alias) = "' . strtolower($alias) . '"')->one();
     }
 }

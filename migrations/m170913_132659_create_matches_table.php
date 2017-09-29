@@ -14,13 +14,16 @@ class m170913_132659_create_matches_table extends Migration
     {
         $this->createTable('{{%matches}}', [
             'id' => $this->primaryKey(),
-            'id_dt2' => $this->integer(11)->notNull(),
-            'id_team1' => $this->integer(11)->notNull(),
-            'id_team2' => $this->integer(11)->notNull(),
+            'gametournament_id' => $this->integer(11)->notNull(),
+            'team1_id' => $this->integer(11),
+            'team2_id' => $this->integer(11),
             'tournament_id' => $this->integer(11)->notNull(),
             'start_time' => $this->integer()->notNull(),
-            'team1_koff' => $this->integer()->notNull(),
-            'team2_koff' => $this->integer()->notNull(),
+            'team1_result' => $this->integer()->defaultValue(0),
+            'team2_result' => $this->integer()->defaultValue(0),
+            'status' => $this->integer()->defaultValue(0),
+            'koff_counter' => $this->integer()->defaultValue(0)
+            
         ]);
         
         // creates index for column `match_id`

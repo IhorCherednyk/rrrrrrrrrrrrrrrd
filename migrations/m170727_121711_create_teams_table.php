@@ -15,13 +15,13 @@ class m170727_121711_create_teams_table extends Migration
         $this->createTable('{{%teams}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(255)->notNull(),
-            'second_name' => $this->string(255),
             'img' => $this->string(255)->notNull(),
-            'dotabuff_id' => $this->integer(11)->notNull(),
-            'dotabuff_link' => $this->string(255)->notNull(),
-            'total_place' => $this->integer(11)->notNull(),
-            'game_count' => $this->integer(11)->notNull(),
-            'winrate' => $this->integer(11)->notNull(),
+            'dotabuff_id' => $this->integer(11)->defaultValue(null),
+            'dotabuff_link' => $this->string(255)->defaultValue(null),
+            'total_place' => $this->integer(11)->notNull()->defaultValue(0),
+            'game_count' => $this->integer(11)->notNull()->defaultValue(0),
+            'winrate' => $this->integer(11)->notNull()->defaultValue(0),
+            'gametournament_id' => $this->integer()->defaultValue(null)
         ]);
     }
 
