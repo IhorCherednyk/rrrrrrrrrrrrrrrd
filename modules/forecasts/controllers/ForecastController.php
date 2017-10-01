@@ -28,17 +28,17 @@ class ForecastController extends Controller {
     public $matchGlobalArray = [];
 
     public function getAfterTwoDateTime() {
-        return time();
-//        return time() + (2 * 24 * 60 * 60);
+        return time() + (6 * 60 * 60);
     }
 
     public function actionIndex() {
-//        $dotaPage = $this->curlInit($this->dotaUrl . '/dota-2');
+//        $dotaPage = $this->curlInit('http://game-tournaments.com/dota-2/perfect-world-masters/cis/tbd-vs-vega-55937');
 //        $html = SimpleHTMLDom::str_get_html($dotaPage);
 
-//        $file = fopen('match.html', 'w');
+//        $file = fopen('singlematch.html', 'w');
 //        fwrite($file,$dotaPage);
 //        fclose($file);
+//        die();
         $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/match.html');
 
         if ($html) {
@@ -92,7 +92,7 @@ class ForecastController extends Controller {
                     //Проверка на пустой класс проверка на время и проверка на существование в базе
 //                    if(empty($row->class) && (int)$row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne($id))){
                     
-                    if($key < 1 && (int)$row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne(['gametournament_id' => $id]))){
+                    if(empty($row->class) && $key == 9 && (int)$row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne(['gametournament_id' => $id]))){
                          
                         // Match Id in gametournament
                         $this->matchGlobalArray[$key]['gametournament_id'] = $id;
@@ -159,10 +159,10 @@ class ForecastController extends Controller {
     }
 
     function referToArrayLink() {
-
+       
         $link = &$this->matchGlobalArray;
         $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/singlematch.html');
-
+        
         if (!empty($link)) {
             foreach ($link as $key => $match) {
 //                $singleDotaPage = $this->curlInit($this->dotaUrl . $match['link_for_bets']);
@@ -176,7 +176,7 @@ class ForecastController extends Controller {
                     $this->matchGlobalArray[$key]['bets'] = $data['bets'];
                 }
             }
-            
+             
             return true;
             
         } else {
@@ -186,6 +186,7 @@ class ForecastController extends Controller {
 
     function getDataFromSinglePage($html) {
         if ($html) {
+            
             $singleTeamDataParent = $html->find('.match-info', 0)->children(0);
             $singleBetsDataParent = $html->find('#pastkef', 0);
             $data = [];
@@ -216,12 +217,15 @@ class ForecastController extends Controller {
     // Save or Create Team by Match Array end get Team id
     function identifyTeamInMatchArray() {
         $link = &$this->matchGlobalArray;
+        
         if (!empty($link)) {
             foreach ($link as $key => $match) {
                 $this->matchGlobalArray[$key]['team1_id'] = $this->setOrSaveTeam($match['team1']);
                 $this->matchGlobalArray[$key]['team2_id'] = $this->setOrSaveTeam($match['team2']);
             }
         }
+        
+        
     }
 
     function setOrSaveTeam($teamData) {
@@ -271,7 +275,7 @@ class ForecastController extends Controller {
                 $value['koff_counter'] = count($value['bets']);
             }
             $match = new Matches();
-            
+
             if($match->load($value, '') && $match->save() && !empty($value['bets'])){
                 if(!empty($value['bets'])){
                     foreach ($value['bets'] as $i => $bet) {

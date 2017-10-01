@@ -42,7 +42,7 @@ class Matches extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time'], 'required'],
+            [['gametournament_id', 'tournament_id', 'start_time'], 'required'],
             [['gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter'], 'integer'],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournaments::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];

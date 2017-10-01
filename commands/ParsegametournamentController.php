@@ -26,7 +26,7 @@ class ParsegametournamentController extends Controller{
     public $matchGlobalArray = [];
 
     public function getAfterTwoDateTime() {
-        return time() + (24 * 60 * 60);
+        return time() + (3 * 60 * 60);
     }
     
     public function init() {
@@ -70,6 +70,7 @@ class ParsegametournamentController extends Controller{
             curl_close($ch);
 
             return $str;
+            
         } else {
             throw new Exception(__METHOD__);
         }
@@ -79,7 +80,7 @@ class ParsegametournamentController extends Controller{
 
         $table = $html->find('#block_matches_current .matches', 0);
         $time = $this->getAfterTwoDateTime();
-
+        
         if (!empty($table)) {
             foreach ($table->find('tr') as $key => $row) {
                 $id = (int) $row->rel;
@@ -88,7 +89,7 @@ class ParsegametournamentController extends Controller{
 //                    if(empty($row->class) && (int)$row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne($id))){
 
                     if (empty($row->class) && (int) $row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne(['gametournament_id' => $id]))) {
-
+                        
                         // Match Id in gametournament
                         $this->matchGlobalArray[$key]['gametournament_id'] = $id;
 
