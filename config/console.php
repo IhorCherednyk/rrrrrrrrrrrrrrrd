@@ -13,10 +13,13 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                'db' => [
+                    'class' => 'yii\log\DbTarget',
+                    'levels' => ['warning'],
+                    'categories' => ['dotabuff','gametournament', 'gametournamentupdater'], // Если не указывать 'categories', то по умолчанию значение будет равно 'application' и к нашим сообщения будут добавлены многие другие. Например, подключение и запросы к базе данных.
+                    'logVars' => [] // не пишет данные из переменных $_GET, $_POST, $_FILES, $_COOKIE, $_SESSION и $_SERVER.
                 ],
             ],
         ],

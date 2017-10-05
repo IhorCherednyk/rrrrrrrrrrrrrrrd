@@ -39,7 +39,7 @@ class Teams extends ActiveRecord
         return [
             [['name', 'img'], 'required'],
             [['dotabuff_id', 'total_place', 'game_count', 'winrate', 'gametournament_id'], 'integer'],
-            [['name', 'img', 'dotabuff_link'], 'string', 'max' => 255],
+            [['name', 'img', 'dotabuff_link', 'search_name'], 'string', 'max' => 255],
             [['imgfile'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true],
         ];
     }
@@ -58,6 +58,7 @@ class Teams extends ActiveRecord
             'total_place' => 'Total Place',
             'game_count' => 'Game Count',
             'winrate' => 'Winrate',
+            'search_name' => 'Search Name'
         ];
     }
     
@@ -68,9 +69,9 @@ class Teams extends ActiveRecord
         $query->leftJoin(['at' => TeamAlias::tableName()], 'at.team_id = t.id');
         
         $query->where(['t.gametournament_id' => $id])
-                ->orWhere('LOWER(t.name) = "' . strtolower($name) . '"')
-                ->orWhere('LOWER(t.name) = "' . strtolower($alias) . '"')
-                ->orWhere('LOWER(at.alias) = "' . strtolower($alias) . '"');
+                ->orWhere(['t.search_name' => strtolower(preg_replace("/[^a-zA-ZА-Яа-я0-9]/", "", $name))])
+                ->orWhere(['t.search_name' => strtolower(preg_replace("/[^a-zA-ZА-Яа-я0-9]/", "", $alias))])
+                ->orWhere(['at.alias' => strtolower(preg_replace("/[^a-zA-ZА-Яа-я0-9]/", "", $alias))]);
 
 //        echo  $query->createCommand()->getRawSql();die();
         

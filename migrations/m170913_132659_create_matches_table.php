@@ -19,8 +19,8 @@ class m170913_132659_create_matches_table extends Migration
             'team2_id' => $this->integer(11),
             'tournament_id' => $this->integer(11)->notNull(),
             'start_time' => $this->integer()->notNull(),
-            'team1_result' => $this->integer()->defaultValue(0),
-            'team2_result' => $this->integer()->defaultValue(0),
+            'team1_result' => $this->integer()->defaultValue(NULL),
+            'team2_result' => $this->integer()->defaultValue(NULL),
             'status' => $this->integer()->defaultValue(0),
             'koff_counter' => $this->integer()->defaultValue(0)
             

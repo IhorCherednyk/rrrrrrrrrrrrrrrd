@@ -774,14 +774,18 @@ td.team img {
     width: 100%;
     overflow: hidden; 
 }
-.match-sect .match-sect-item a {
-    text-transform: uppercase; 
-}
+
 .match-sect .match-sect-item a.match-info {
     width: 70%;
-    float: left;
-    border-right: 1px solid #313d46; 
+    border-right: 1px solid #313d46;
+    padding: 13px 0;
 }
+.match-sect-item-wrapper {
+    display: table;
+}
+.match-sect .match-sect-item .team-name-featurue{
+    margin-top: 5px;
+}.match-sect .match-sect-item .vs span
 .match-sect .match-sect-item a:hover, .match-sect .match-sect-item a:focus, .match-sect .match-sect-item a:active {
     color: #fff; 
 }
@@ -805,13 +809,15 @@ td.team img {
     text-align: center; 
 }
 .match-sect .match-sect-item .tournament-img {
-    float: right;
     width: 30%;
     padding: 0 10px; 
 }
 .match-sect .match-sect-item .tournament-img img {
-    width: 100%;
-    height: auto; 
+    max-width: 100%;
+    max-height: 100%; 
+}
+.vam {
+    vertical-align: middle;
 }
 .match-sect .match-sect-item .team-1-wrap {
     width: 40%;
@@ -829,6 +835,7 @@ td.team img {
     display: block;
     text-transform: none; 
 }
+
 .match-sect .match-sect-item .team-2-wrap {
     width: 40%;
     text-align: right; 
@@ -836,6 +843,11 @@ td.team img {
 .match-sect .match-sect-item .team-2-wrap span {
     display: block;
     text-align: center; 
+}
+
+.match-sect .team-img img{
+    width: auto;
+    height: 60px;
 }
 
 .match-coff {
@@ -882,7 +894,9 @@ td.team img {
     width: 100%;
     overflow: hidden; 
 }
-
+.fl {
+    float: left;
+}
 .single-match-prognoz {
     margin-bottom: 30px; 
 }

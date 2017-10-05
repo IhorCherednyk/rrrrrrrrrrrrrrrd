@@ -3,7 +3,7 @@
 namespace app\modules\forecasts\models;
 
 use Yii;
-
+use app\modules\team\models\Teams;
 /**
  * This is the model class for table "{{%matches}}".
  *
@@ -27,6 +27,10 @@ class Matches extends \yii\db\ActiveRecord
     const TBD_MATCH = null;
     const SATISFY_KOFF = 2;
     
+    
+    const NOT_COMPLETE = 0;
+    const COMPLETE = 1;
+
     
     /**
      * @inheritdoc
@@ -83,8 +87,30 @@ class Matches extends \yii\db\ActiveRecord
         return $this->hasMany(MatchesKoff::className(), ['match_id' => 'id']);
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeam1() {
+        return $this->hasOne(Teams::className(), ['id' => 'team1_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeam2() {
+        return $this->hasOne(Teams::className(), ['id' => 'team2_id']);
+    }
+    
+    
+    public static function findMatchesWithoutResult(){
+        return static::find()->select('gametournament_id')->where(['status' => self::NOT_COMPLETE])->asArray()->column();
+    }
+
     public static function findUpdateConditions(){
-        return static::find()->select('gametournament_id')->where(['team1_id' => self::TBD_MATCH])->orWhere(['team2_id' => self::TBD_MATCH])->orWhere(['<', 'koff_counter', self::SATISFY_KOFF])->asArray()->column();
+        return static::find()->select('gametournament_id')->where(['team1_id' => self::TBD_MATCH])
+                                                          ->orWhere(['team2_id' => self::TBD_MATCH])
+                                                          ->orWhere(['<', 'koff_counter', self::SATISFY_KOFF])
+                                                          ->andWhere(['status' => self::NOT_COMPLETE])->asArray()->column();
     }
     
     public static function findByTournamentId($id){

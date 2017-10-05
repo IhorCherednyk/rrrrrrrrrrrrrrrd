@@ -15,7 +15,7 @@ class m170919_105228_create_team_alias_table extends Migration
      */
     public function up()
     {
-        $this->createTable('team_alias', [
+        $this->createTable('{{%team_alias}}', [
             'id' => $this->primaryKey(),
             'team_id' => $this->integer()->notNull(),
             'alias' => $this->text(),

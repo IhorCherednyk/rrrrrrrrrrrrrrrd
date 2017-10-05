@@ -32,7 +32,7 @@ class TeamAlias extends \yii\db\ActiveRecord
         return [
             [['team_id'], 'required'],
             [['team_id'], 'integer'],
-            [['alias'], 'string'],
+            [['alias','search_alias'], 'string'],
             [['team_id'], 'exist', 'skipOnError' => true, 'targetClass' => Teams::className(), 'targetAttribute' => ['team_id' => 'id']],
         ];
     }
