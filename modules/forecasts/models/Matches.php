@@ -30,7 +30,11 @@ class Matches extends \yii\db\ActiveRecord
     
     const NOT_COMPLETE = 0;
     const COMPLETE = 1;
+    const ERROR_WITH_PARSING = 3;
 
+    
+    
+    
     
     /**
      * @inheritdoc
@@ -116,6 +120,17 @@ class Matches extends \yii\db\ActiveRecord
     public static function findByTournamentId($id){
         
         return static::find()->where(['gametournament_id' => $id])->one();
+        
+    }
+    
+    public static function findErrorMatches(){
+        
+        $query = static::find()->select('id')->where(['team1_id' => self::TBD_MATCH])
+                             ->orWhere(['team2_id' => self::TBD_MATCH])
+                             ->orWhere(['status' => self::NOT_COMPLETE])
+                             ->andHaving(['<','SUM(start_time + (24 * 60 * 60))', time() ])->asArray()->column();
+        
+        return static::updateAll(['status' => self::ERROR_WITH_PARSING],['id' => $query] );
         
     }
 }

@@ -2,32 +2,18 @@
 
 namespace app\modules\forecasts\controllers;
 
-use Yii;
+use app\components\controllers\BackController;
 use app\modules\forecasts\models\Matches;
 use app\modules\forecasts\models\search\MatchesSearch;
-use yii\web\Controller;
+use Yii;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ForecastBackController implements the CRUD actions for Matches model.
  */
-class ForecastBackController extends Controller
+class ForecastBackController extends BackController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Lists all Matches models.

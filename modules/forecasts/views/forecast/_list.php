@@ -11,8 +11,8 @@ use yii\helpers\HtmlPurifier;
         <div class="match-sect-item-wrapper tbl">
             <a href="" class="dc match-info">
                 <div class="team-1-wrap fl">
-                    <span class="team-img team-img-featurue"><?php echo Html::img( ($model->team1->img)? $model->team1->img : '/img/site/tbd.png', ['alt' => $model->team1->name]); ?></span>
-                    <span class="team-name team-name-featurue"><?= ($model->team1->name)? $model->team1->name: 'TBD' ?></span>
+                    <span class="team-img team-img-featurue"><?php echo Html::img( (!is_null($model->team1))? $model->team1->img : '/img/site/tbd.png'); ?></span>
+                    <span class="team-name team-name-featurue"><?= (!is_null($model->team1))? $model->team1->name: 'TBD' ?></span>
                 </div>
                 <div class="vs fl">
                     <span><img src="/img/site/vs1.png" alt=""></span>
@@ -20,8 +20,8 @@ use yii\helpers\HtmlPurifier;
                     
                 </div>
                 <div class="team-2-wrap fl">
-                    <span class="team-img team-img-featurue"><?php echo Html::img( ($model->team2->img)? $model->team2->img : '/img/site/tbd.png', ['alt' => $model->team2->name]); ?></span>
-                    <span class="team-name team-name-featurue"><?= ($model->team2->name)? $model->team2->name: 'TBD' ?></span>
+                    <span class="team-img team-img-featurue"><?php echo Html::img( (!is_null($model->team2))? $model->team2->img : '/img/site/tbd.png'); ?></span>
+                    <span class="team-name team-name-featurue"><?= (!is_null($model->team2))? $model->team2->name: 'TBD' ?></span>
                 </div>
             </a>
             <div class="tournament-img dc vam">

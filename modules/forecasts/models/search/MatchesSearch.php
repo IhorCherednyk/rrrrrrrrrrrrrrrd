@@ -2,10 +2,10 @@
 
 namespace app\modules\forecasts\models\search;
 
-use Yii;
+use app\modules\forecasts\models\Matches;
+use app\modules\team\models\Teams;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\forecasts\models\Matches;
 
 /**
  * MatchesSearch represents the model behind the search form about `app\modules\forecasts\models\Matches`.
@@ -15,10 +15,15 @@ class MatchesSearch extends Matches
     /**
      * @inheritdoc
      */
+    
+    public $team1;
+    public $team2;
+    
     public function rules()
     {
         return [
             [['id', 'gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter'], 'integer'],
+            [['team1','team2'], 'safe']
         ];
     }
 
@@ -40,13 +45,17 @@ class MatchesSearch extends Matches
      */
     public function search($params)
     {
-        $query = Matches::find();
+        $query = Matches::find()->alias('m');
+        
+        $query->select(['m.*','t1.name as team1','t2.name as team2'])
+                ->leftJoin(Teams::tableName(). ' t1', 't1.id = m.team1_id')
+                ->leftJoin(Teams::tableName(). ' t2', 't2.id = m.team2_id');
 
-        // add conditions that should always apply here
+        $query->andFilterWhere(['like', 't1.name', $this->team1])
+                ->andFilterWhere(['like', 't2.name', $this->team2]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+
+       
 
         $this->load($params);
 
@@ -55,13 +64,52 @@ class MatchesSearch extends Matches
             // $query->where('0=1');
             return $dataProvider;
         }
+        
+        
 
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        
+
+//        
+//        $dataProvider->setSort([
+//            'attributes' => [
+//                'username' => [
+//                    'asc' => ['username' => SORT_ASC],
+//                    'desc' => ['username' => SORT_DESC],
+//                    'default' => SORT_DESC
+//                ],
+//                'userid' => [
+//                    'asc' => ['id' => SORT_ASC],
+//                    'desc' => ['id' => SORT_DESC],
+//                    'default' => SORT_DESC
+//                ],
+//                'email' => [
+//                    'asc' => ['email' => SORT_ASC],
+//                    'desc' => ['email' => SORT_DESC],
+//                    'default' => SORT_DESC
+//                ],
+//                'cMessages' => [
+//                    'asc' => ['cMessages' => SORT_ASC],
+//                    'desc' => ['cMessages' => SORT_DESC],
+//                    'default' => SORT_DESC
+//                ]
+//            ]
+//        ]);
+        
+        
+        
+        
+        
+        
+        
+        //$query->andFilterWhere(['like', 's.username', $this->username]);
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'gametournament_id' => $this->gametournament_id,
-            'team1_id' => $this->team1_id,
-            'team2_id' => $this->team2_id,
             'tournament_id' => $this->tournament_id,
             'start_time' => $this->start_time,
             'team1_result' => $this->team1_result,
@@ -69,7 +117,11 @@ class MatchesSearch extends Matches
             'status' => $this->status,
             'koff_counter' => $this->koff_counter,
         ]);
-
+        
+        
+        $query->andFilterWhere(['like', 't1.name', $this->team1])
+              ->andFilterWhere(['like', 't2.name', $this->team2]);
+        
         return $dataProvider;
     }
 }

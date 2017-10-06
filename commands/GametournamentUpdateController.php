@@ -72,11 +72,12 @@ class GametournamentUpdateController extends Controller{
             
         }
 
-        
+        Matches::findErrorMatches();
         
     }
 
     function curlInit($url) {
+        sleep(30);
         $ch = curl_init();  //Инициализация сеанса
         if ($ch) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -302,7 +303,6 @@ class GametournamentUpdateController extends Controller{
     
     function refreshFinishedMatches($html,$finishedMatches){
         
-        $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/match.html');
 
         $pastTable = $html->find('#block_matches_past .matches', 0);
 

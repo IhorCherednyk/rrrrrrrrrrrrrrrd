@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 class ForecastController extends FrontControlller {
 
     public function actionIndex() {
+        
         $query = Matches::find()->where(['status' => Matches::NOT_COMPLETE]);
         
         $dataProvider = new ActiveDataProvider([

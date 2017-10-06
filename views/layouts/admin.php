@@ -141,6 +141,11 @@ $this->registerJsFile('@web/back/vendor/breakpoints/breakpoints.js', ['position'
                                 'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Teams') . '</span>',
                                 'url' => ['/team/team-back/index'],
                                 'options' => ['class' => 'site-menu-item'], 
+                                ],
+                                [
+                                'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Matches') . '</span>',
+                                'url' => ['/forecasts/forecast-back/index'],
+                                'options' => ['class' => 'site-menu-item'], 
                                 ]
                             ],
                         ]);
