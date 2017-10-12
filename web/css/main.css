@@ -67,7 +67,7 @@ a:focus, a:active, a:hover, a:visited{
     color: #fff;
     font-size: 15px;
     position: relative;
-    padding: 6px 21px;
+    padding: 6px 15px;
     display: block;
     font-family: 'Roboto', sans-serif;
     font-weight: 800;
@@ -326,11 +326,17 @@ aside .sidebar-content .btn-center-wrap {
 aside .sidebar-content .book-bonus {
     text-align: left;
     overflow: hidden;
-    margin: 10px 0; 
+}
+aside .sidebar-content .book-bonus a {
+    padding: 10px 0; 
 }
 aside .sidebar-content .book-bonus .bonus-img {
-    width: 100px;
+    width: 120px;
     height: auto; 
+}
+aside .sidebar-content .book-bonus .bonus-img img {
+    width: 100%;
+    height: auto;
 }
 aside .sidebar-content .book-bonus .bonus {
     color: #ef9e2b !important; 
@@ -345,25 +351,27 @@ aside .match a {
 }
 
 aside .match .team-img-featurue {
-    max-width: 60px;
-    max-height: 60px;
     text-align: center;
     margin: 0 auto 10px;
-    display: block; 
+    display: block;
+    overflow: hidden;
 }
 
 aside .match .team-name-featurue {
     display: block;
-    margin: 0 auto; 
+    margin: 0 auto;
+    line-height: 1.2;
+    font-size: 13px;
 }
 
 aside .match .team-1-wrap {
     text-align: center;
-    width: 100px; 
+    width: 120px; 
 }
 
 aside .match .vs {
-    text-align: center; 
+    text-align: center;
+    vertical-align: middle;
 }
 aside .match .vs .match-time {
     font-size: 13px; 
@@ -374,7 +382,7 @@ aside .match .vs span {
 
 aside .match .team-2-wrap {
     text-align: center;
-    width: 100px; 
+    width: 120px; 
 }
 
 aside .stream .stram-img-wrapper {
@@ -768,17 +776,23 @@ td.team img {
 }
 
 .match-sect .match-sect-item {
-    background-color: #273138;
-    padding: 20px 0px 0px;
+    /*background-color: #273138;*/
     border: 1px solid #313d46;
     width: 100%;
-    overflow: hidden; 
+    overflow: hidden;
+    background: #273138;
+    background: -moz-linear-gradient(-45deg, #273138 56%, #000000 99%);
+    background: -webkit-linear-gradient(-45deg, #273138 56%,#000000 99%);
+    background: linear-gradient(97deg, #273138 56%,#000000 99%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#273138', endColorstr='#000000',GradientType=1 );
 }
 
 .match-sect .match-sect-item a.match-info {
-    width: 70%;
-    border-right: 1px solid #313d46;
-    padding: 13px 0;
+    width: 65%;
+    padding: 14px 0;
+}
+.match-sect .match-sect-item a.match-info:hover{
+    color: #fff;
 }
 .match-sect-item-wrapper {
     display: table;
@@ -797,7 +811,6 @@ td.team img {
     float: left;
     border-top: 1px solid #313d46;
     padding: 10px 20px;
-    margin-top: 10px;
     overflow: hidden; 
 }
 .match-sect .match-sect-item .match-bets .btn-watch {
@@ -809,12 +822,21 @@ td.team img {
     text-align: center; 
 }
 .match-sect .match-sect-item .tournament-img {
-    width: 30%;
-    padding: 0 10px; 
+    width: 25%;
+    padding: 0 10px;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.match-sect .match-sect-item .tournament-img {
+    text-align: center;
 }
 .match-sect .match-sect-item .tournament-img img {
+    height: 80px;
+    width: auto;
     max-width: 100%;
-    max-height: 100%; 
+    display: inline-block;
 }
 .vam {
     vertical-align: middle;
@@ -1149,4 +1171,11 @@ body{
 .help-block {
     margin-top: 0px;
     margin-bottom: 10px;
+}
+aside .match .team-img-featurue img{
+    height: 55px;
+    width: auto;
+}
+aside .sidebar-content.nearestmatches {
+    padding: 20px 15px;
 }

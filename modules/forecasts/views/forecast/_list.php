@@ -24,9 +24,7 @@ use yii\helpers\HtmlPurifier;
                     <span class="team-name team-name-featurue"><?= (!is_null($model->team2))? $model->team2->name: 'TBD' ?></span>
                 </div>
             </a>
-            <div class="tournament-img dc vam">
-                <?php echo Html::img( $model->tournament->img , ['alt' => $model->tournament->name]); ?>
-            </div>
+            <div class="tournament-img dc vam" style="background-image: url(<?= $model->tournament->img ?>)"></div>
         </div>
         <div class="match-bets">
             <span>Прогнозов на матч: 10 </span>

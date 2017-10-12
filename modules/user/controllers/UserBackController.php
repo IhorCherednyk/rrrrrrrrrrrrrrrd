@@ -1,29 +1,37 @@
 <?php
 
-namespace app\modules\pages\controllers;
+namespace app\modules\user\controllers;
 
 use app\components\controllers\BackController;
-use app\modules\pages\models\Pages;
-use app\modules\pages\models\search\PagesSearch;
+use app\modules\user\models\search\UserSearch;
+use app\modules\user\models\User;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 /**
- * PagesBackController implements the CRUD actions for Pages model.
+ * UserBackController implements the CRUD actions for User model.
  */
-class PagesBackController extends BackController
+class UserBackController extends BackController
 {
+
     /**
-     * Lists all Pages models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        return $this->renderList();
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
-     * Displays a single Pages model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      */
@@ -35,13 +43,14 @@ class PagesBackController extends BackController
     }
 
     /**
-     * Creates a new Pages model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Pages();
+        $model = new User();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -52,7 +61,7 @@ class PagesBackController extends BackController
     }
 
     /**
-     * Updates an existing Pages model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -60,6 +69,7 @@ class PagesBackController extends BackController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -70,7 +80,7 @@ class PagesBackController extends BackController
     }
 
     /**
-     * Deletes an existing Pages model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -79,28 +89,19 @@ class PagesBackController extends BackController
     {
         $this->findModel($id)->delete();
 
-        return $this->renderList();
-    }
-    public function renderList() {
-        $searchModel = new PagesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Pages model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Pages the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Pages::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -28,6 +28,11 @@ AppAsset::register($this);
                         'encodeLabels' => false,
                         'items' => [
                                 [
+                                'label' => \Yii::t('app', 'Кабинет'),
+                                'url' => ['/user/user/logout'],
+                                'visible' => !\Yii::$app->user->isGuest
+                            ],
+                                [
                                 'label' => Yii::t('app', 'Прогнозы'),
                                 'url' => ['/forecasts'],
                             ],
@@ -42,18 +47,16 @@ AppAsset::register($this);
                                 [
                                 'label' => Yii::t('app', 'Стримы'),
                                 'url' => ['/streams/stream/index'],
-                                'visible' => \Yii::$app->user->isGuest
                             ],
                                 [
                                 'label' => \Yii::t('app', 'Термины'),
                                 'url' => ['/faq'],
-                                'visible' => \Yii::$app->user->isGuest
                             ],
                                 [
                                 'label' => \Yii::t('app', 'Вход'),
                                 'url' => '#',
-                                'visible' => \Yii::$app->user->isGuest,
-                                'template' => '<a href="{url}" data-toggle="modal" data-target="#log">{label}</a>'
+                                'template' => '<a href="{url}" data-toggle="modal" data-target="#log">{label}</a>',
+                                'visible' => \Yii::$app->user->isGuest
                             ],
                                 [
                                 'label' => \Yii::t('app', 'Выход'),

@@ -52,7 +52,8 @@ Modal::begin([
         <div class="form-group">
             <?= Html::submitButton('Войти', ['class' => 'btn btn-reg login-button', 'name' => 'login-button']) ?>
             <a href="<?= Url::to(['/user/auth/reg']) ?>" data-toggle="modal" data-target="#reg" class="btn btn-reg">Зарегестрироваться</a>
-            <?= Html::a('Забыли пароль?', ['/user/auth/send-email'], ['class' => 'forgot-password','data-toggle' => 'modal', 'data-target' => '#mail']) ?>
+            <?= Html::a('Забыли пароль?', ['/user/auth/reset-password'], ['class' => 'forgot-password','data-toggle' => 'modal', 'data-target' => '#mail']) ?>
+            <?= Html::a('Не приходит активационное письмо?', ['/user/auth/send-reactivate-email'], ['class' => 'forgot-password','data-toggle' => 'modal', 'data-target' => '#reactivatemail']) ?>
         </div>
 
         <?php ActiveForm::end();

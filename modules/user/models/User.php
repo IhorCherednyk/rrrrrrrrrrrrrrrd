@@ -13,6 +13,8 @@ class User extends ActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
     const STATUS_NOT_ACTIVE = 1;
     const STATUS_ACTIVE = 10;
+    
+    
     const ROLE_ADMIN = 2;
     const ROLE_USER = 3;
 
@@ -25,8 +27,10 @@ class User extends ActiveRecord implements IdentityInterface {
                 ['email', 'email'],
                 ['username', 'string', 'min' => 5, 'max' => 10, 'tooShort' => "Имя пользователя должно содежрать минимум 5 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 10 символов'],
                 ['password', 'required', 'on' => 'create'],
-                ['username', 'unique', 'message' => 'this name already exist'],
-                ['email', 'unique', 'message' => 'this email already exist.'],
+                ['username', 'unique', 'message' => 'Такое имя уже существует'],
+                ['email', 'unique', 'message' => 'Такой email существует'],
+                [['first_name','last_name','note','skype'], 'string', 'message' => 'Должно быть текстом']
+                
 
         ];
     }

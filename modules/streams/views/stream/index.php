@@ -35,5 +35,6 @@ use yii\helpers\Url;
             <?php endforeach; ?>
         </div>
     </section>
-
+        <?php else :?>
+        Накрылся твич пиздой :)
 <?php endif; ?>

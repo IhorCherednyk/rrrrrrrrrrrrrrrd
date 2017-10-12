@@ -67,7 +67,6 @@ class Email extends \yii\db\ActiveRecord {
         $this->recipient_email = $user->email;
         (is_null($token))?$this->data = $user->email_activation_key: $this->data = $token;
         return $this->save();
-
     }
     
     public static function findByUserEmail($email) {

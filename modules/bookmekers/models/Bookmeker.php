@@ -66,4 +66,9 @@ class Bookmeker extends \yii\db\ActiveRecord
     public static function findByAliasName($alias){
         return static::find()->where('LOWER(gametournament_alias) = "' . strtolower($alias) . '"')->one();
     }
+    
+    public static function findForWidget(){
+        return static::find()->where(['not' , ['bonus' => null]])->all();
+    }
+    
 }

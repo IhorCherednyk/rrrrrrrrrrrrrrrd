@@ -133,4 +133,11 @@ class Matches extends \yii\db\ActiveRecord
         return static::updateAll(['status' => self::ERROR_WITH_PARSING],['id' => $query] );
         
     }
+    
+    public static function findForWidget(){
+        
+        return static::find()->where(['<','start_time', time()])->orderBy('start_time')->limit(2)->all();
+        
+    }
+    
 }
