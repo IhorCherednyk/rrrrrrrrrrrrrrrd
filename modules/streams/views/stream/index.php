@@ -4,14 +4,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
 <?php $this->title = 'Стримы'?>
-<?php 
-    $name = null;
-    $st = strtolower(preg_replace("/[^a-zA-ZА-Яа-я0-9]/", "", $name));
-    D($st);
-?>
 
 <?php if (count($data)): ?>
     
+
     <section class="main-section streams">
         <div class="row">
             <?php foreach ($data as $stream) : ?>

@@ -20,8 +20,8 @@ class m170913_140937_create_matches_koff_table extends Migration
             'id' => $this->primaryKey(),
             'match_id' => $this->integer()->notNull(),
             'book_id' => $this->integer()->notNull(),
-            'team1_koff' => $this- floatval(),
-            'team2_koff' => $this->floatval(),
+            'team1_koff' => $this->float(),
+            'team2_koff' => $this->float(),
         ]);
 
         // creates index for column `match_id`
