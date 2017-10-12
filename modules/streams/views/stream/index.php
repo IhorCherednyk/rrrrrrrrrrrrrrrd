@@ -4,11 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
 <?php $this->title = 'Стримы'?>
-<?php 
-    $name = null;
-    $st = strtolower(preg_replace("/[^a-zA-ZА-Яа-я0-9]/", "", $name));
-    D($st);
-?>
+
 
 <?php if (count($data)): ?>
     
@@ -39,5 +35,6 @@ use yii\helpers\Url;
             <?php endforeach; ?>
         </div>
     </section>
-
+        <?php else :?>
+        Накрылся твич пиздой :)
 <?php endif; ?>

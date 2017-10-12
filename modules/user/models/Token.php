@@ -54,9 +54,9 @@ class Token extends \yii\db\ActiveRecord
         ]);
     }
     
-    public static function isSecretKeyExpire($date)
+    public function isSecretKeyExpire()
     {
-        return $date >= time();
+        return $this->expire_date >= time();
     }
     
     

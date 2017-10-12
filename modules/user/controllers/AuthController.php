@@ -28,125 +28,165 @@ use yii\web\UploadedFile;
  * @author Anastasiya
  */
 class AuthController extends FrontControlller {
-
-
-    public function behaviors() {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['logout'],
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
+    
+    
     public function actionReg() {
+        
+        //check rquest
         if (Yii::$app->request->isAjax) {
+            
             $model = new RegForm();
+            
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                
+                //create user
                 $user = $model->reg();
-                $model = new RegForm();
+                
+                //if create success
                 if ($user) {
+                    
+                    //find or create new Email for this user
                     $email = ($email = Email::findByUserEmail($user->email)) ? $email : new Email();
-                    $email->createEmail($user, Email::EMAIL_ACTIVATE);
-                    Yii::$app->session->setFlash('success', 'На ваш email отправлено письмо с подтверждением');
-                    return $this->redirect(['/site/index']);
+                    
+                    if($email->createEmail($user, Email::EMAIL_ACTIVATE)) {
+                        Yii::$app->session->setFlash('success', 'На ваш email отправлено письмо с подтверждением');
+                        return $this->refresh();
+                    }
+                    
                 }
                 Yii::$app->session->setFlash('error', 'Возникла ошибка при регистрации попробуйте еще раз.');
-                return $this->renderPartial(
-                                'reg', ['model' => $model]
-                );
             }
+            
             return $this->renderPartial(
                             'reg', ['model' => $model]
             );
+            
         }
-        return $this->redirect(['/site/index']);
+        
+        // if not Ajax Request Redirect its happen when we use RBAC and permision denied
+        return $this->redirect(['/forecasts/forecast/index']);
+        
     }
 
+    
+    
+    // Подтверждение email
     public function actionActivateEmail($key) {
         $user = User::findByEmailKey($key);
-
+        
+        //if find user
         if ($user) {
+            
+            //change status
             $user->status = User::STATUS_ACTIVE;
             $user->save();
+            
+            //delete email
             $email = Email::findByUserEmail($user->email);
             if ($email) {
                 $email->delete();
             }
+            
+            //autologin
             if (Yii::$app->getUser()->login($user, 3600 * 24 * 30)) {
                 Yii::$app->session->setFlash('success', 'Вы успешно подтвердили свой email.');
-                return $this->redirect(['/site/index']);
+                return $this->redirect(['/forecasts/forecast/index']);
             }
         }
 
-        return $this->redirect(['site/index']);
+        return $this->redirect(['forecasts/forecast/index']);
     }
 
-    public function actionSendEmail() {
+    
+    
+    // Создание запроса на востановление пароля 
+    public function actionResetPassword() {
         if (Yii::$app->request->isAjax) {
+            
             $model = new SendEmailForm();
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-                if ($model->sendEmail()) {
-                    Yii::$app->session->setFlash('success', 'На вашу почту выслано подтверждение на изменения пароля');
-                    return $this->redirect(['/site/index']);
+                if ($model->sendEmailForResetPassword()) {
+                    return $this->redirect(['/forecasts/forecast/index']);
                 }
             }
-            return $this->renderPartial('send-email', [
+            return $this->renderPartial('reset-password', [
+                'model' => $model,
+            ]);
+        }
+        
+        return $this->redirect(['/forecasts/forecast/index']);
+    }
+
+    // Повторная отправка активационного письма
+    
+    public function actionSendReactivateEmail() {
+        
+        if (Yii::$app->request->isAjax) {
+            
+            $model = new SendEmailForm();
+            
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                
+                if ($model->sendReactivateEmail()) {
+                    return $this->redirect(['/forecasts/forecast/index']);
+                }
+                
+            }
+            return $this->renderPartial('send-reactivate-email', [
                         'model' => $model,
             ]);
         }
-        return $this->redirect(['/site/index']);
+        
+        return $this->redirect(['/forecasts/forecast/index']);
     }
-
+    
+    
     public function actionSetnewPassword($key) {
+        
         $token = Token::findBySecretKey($key);
 
-        if ($token && $token->isSecretKeyExpire($token->expire_date)) {
+        if (!is_null($token) && $token->isSecretKeyExpire()) {
 
             $model = new ResetPasswordForm();
+            
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->resetPassword($token)) {
+                    
                     Yii::$app->session->setFlash('success', 'Ваш пароль успешно изменен');
+                    
                     $email = Email::findByUserToken($key);
                     if ($email) {
                         $email->delete();
                     }
-                    return $this->redirect(['/site/index']);
+                    return $this->redirect(['/forecasts/forecast/index']);
                 }
             }
             return $this->render('setnew-password', [
-                        'model' => $model,
+                'model' => $model,
             ]);
+            
+        }else{
+            Yii::$app->session->setFlash('error', 'Либо неверно указан ключи или срок ссылки на изменение пароля истек, отправьте новй запрос на востановление пароля');
         }
-        Yii::$app->session->setFlash('error', 'Либо неверно указан ключи или срок ссылки на изменение пароля истек, отправьте новй запрос на востановление пароля');
-        return $this->redirect(['/site/index']);
+        
+        return $this->redirect(['/forecasts/forecast/index']);
     }
 
+    
+    
     public function actionLogin() {
         if (Yii::$app->request->isAjax) {
             $model = new LoginForm();
             if ($model->load(Yii::$app->request->post())) {
-
                 if ($model->login()) {
-//                    if ($model->user->role == User::IS_ADMIN) {
-//                        return $this->redirect(['/admin']);
-//                    } else {
-//                        return $this->redirect(['user/index', 'username' => Yii::$app->user->identity->username]);
-//                    }
-                    return $this->redirect(['/site/index']);
+                    if ($model->user->role == User::ROLE_ADMIN) {
+                        return $this->redirect(['/admin']);
+                    } else {
+                        return $this->redirect(['/forecasts/forecast/index', 'username' => Yii::$app->user->identity->username]);
+                    }
+                    return $this->redirect(['/forecasts/forecast/index']);
                 } else {
-                    Yii::$app->session->setFlash('error', 'Возможно вы не активировали свой email');
                     return $this->refresh();
                 }
             }
@@ -154,36 +194,19 @@ class AuthController extends FrontControlller {
                         'model' => $model,
             ]);
         }
-        return $this->redirect(['/site/index']);
+        return $this->redirect(['/forecasts/forecast/index']);
     }
 
+    
+    
+    
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->redirect(['/site/index']);
+        return $this->redirect(['/forecasts/forecast/index']);
     }
 
-    public function actionProfile() {
-        $model = ($model = Profile::findOne(['user_id' => Yii::$app->user->id])) ? $model : new Profile();
+    
+    
 
-        if ($model->load(Yii::$app->request->post())) {
-
-            $model->file = UploadedFile::getInstance($model, 'file');
-
-            if ($model->validate()) {
-
-                $model->file = ImageHelper::saveImage($model);
-
-
-                if ($model->updateProfile($model)) {
-                    Yii::$app->session->setFlash('success', 'Профиль изменен');
-                } else {
-                    Yii::$app->session->setFlash('error', 'Профиль не изменен');
-                    Yii::error('Ошибка записи. Профиль не изменен');
-                    return $this->refresh();
-                }
-            }
-        }
-        return $this->render('profile', ['model' => $model]);
-    }
 
 }

@@ -2,19 +2,32 @@
 
 namespace app\components\controllers;
 
-use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
-use app\modules\setting\helpers\SettingHelper;
+use yii\web\Controller;
 
 /**
  * Description of FrontControlller
  *
  * @author Stableflow
  */
-class FrontControlller extends \yii\web\Controller {
+class FrontControlller extends Controller {
 
     public $layout = '/main';
+    
+    /**
+     * @inheritdoc
+     */
+    public function actions() {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
 
     public function behaviors() {
         return [
@@ -23,12 +36,11 @@ class FrontControlller extends \yii\web\Controller {
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?','@'],
                     ],
                 ],
             ],
         ];
     }
-    
     
 }

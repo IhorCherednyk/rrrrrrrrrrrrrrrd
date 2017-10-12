@@ -3,6 +3,8 @@
 /* @var $content string */
 
 use app\assets\AppAsset;
+use app\components\widgets\BookBonusWidget;
+use app\components\widgets\NearestMatchesWidget;
 use app\components\widgets\TwitchStreamsWidget;
 use yii\helpers\Html;
 use yii\web\View;
@@ -33,7 +35,7 @@ AppAsset::register($this);
                     <?php if (Yii::$app->session->getFlash('success')): ?>
                         <div class="nk-info-box text-success">
                             <div class="nk-info-box-icon">
-                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <i class="fa fa-check" aria-hidden="true"></i>
                             </div>
                             <?= Html::tag('h3', Yii::$app->session->getFlash('success')) ?>
                         </div>
@@ -42,7 +44,7 @@ AppAsset::register($this);
                     <?php if (Yii::$app->session->getFlash('error')): ?>
                         <div class="nk-info-box text-danger">
                             <div class="nk-info-box-icon">
-                                <i class="fa fa-check" aria-hidden="true"></i>
+                                <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
                             <?= Html::tag('h3', Yii::$app->session->getFlash('error')) ?>
                         </div>
@@ -53,7 +55,7 @@ AppAsset::register($this);
                     <div class="row">
                         <!--КОНТЕНТ-->
                         <div class="col-md-8">
-                        <?= $content ?>
+                            <?= $content ?>
                         </div>
                         <!--КОНТЕНТ-->
                         <!--CСАЙДБАР-->
@@ -106,95 +108,20 @@ AppAsset::register($this);
 
                                 </div>
 
-                                <div class="best-sale sidebar-block">
-                                    <h4 class="sidebar-header">
-                                        <span><span class="text-main-1">Бонусы</span> букмекеров</span>
-                                    </h4>
-                                    <ul class="sidebar-content">
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/pari_match.png" alt=""></span>
-                                                <span class="bonus dc va text-right">50$</span>
-                                            </a>
-                                        </li>
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/williamhill_original.png" alt=""></span>
-                                                <span class="bonus dc va text-right">10$</span>
-                                            </a>
-                                        </li>
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/pinnacle.png" alt=""></span>
-                                                <span class="bonus dc va text-right">100$</span>
-                                            </a>
-                                        </li>
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/pari_match.png" alt=""></span>
-                                                <span class="bonus dc va text-right">50$</span>
-                                            </a>
-                                        </li>
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/williamhill_original.png" alt=""></span>
-                                                <span class="bonus dc va text-right">10$</span>
-                                            </a>
-                                        </li>
-                                        <li class="book-bonus">
-                                            <a href="" class="tbl">
-                                                <span class="bonus-img dc"><img src="img/pinnacle.png" alt=""></span>
-                                                <span class="bonus dc va text-right">100$</span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
-
-                                <div class="sidebar-block closest-match">
-                                    <h4 class="sidebar-header">
-                                        <span><span class="text-main-1">Ближайшие</span> игры</span>
-                                    </h4>
-
-                                    <ul>
-                                        <li class="match sidebar-content">
-                                            <a href="" class="tbl">
-                                                <div class="team-1-wrap dc">
-                                                    <span class="team-img team-img-featurue"><img src="img/lgd.png" alt=""></span>
-                                                    <span class="team-name team-name-featurue">Lgd</span>
-                                                </div>
-                                                <div class="vs dc">
-                                                    <span><img src="img/vs1.png" alt=""></span>
-                                                    <span class="match-time"> 02 июня, 17:00 </span>
-                                                </div>
-                                                <div class="team-2-wrap dc">
-                                                    <span class="team-img team-img-featurue"><img src="img/og.png" alt=""></span>
-                                                    <span class="team-name team-name-featurue">og</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="match sidebar-content">
-                                            <a href="" class="tbl">
-                                                <div class="team-1-wrap dc">
-                                                    <span class="team-img team-img-featurue"><img src="img/vp.png" alt=""></span>
-                                                    <span class="team-name team-name-featurue">Danish Bears</span>
-                                                </div>
-                                                <div class="vs dc">
-                                                    <span><img src="img/vs1.png" alt=""></span>
-                                                    <span class="match-time"> 02 июня, 17:00 </span>
-                                                </div>
-                                                <div class="team-2-wrap dc">
-                                                    <span class="team-img team-img-featurue"><img src="img/bb.png" alt=""></span>
-                                                    <span class="team-name team-name-featurue">Planet Odd</span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
                                 <?php 
-                                if(empty($this->params['DisableStreamWidget'])){
-                                   echo TwitchStreamsWidget::widget();
+                                    echo BookBonusWidget::widget();
+                                ?>
+
+                                <?php
+                                echo NearestMatchesWidget::widget();
+                                ?>
+
+                                <?php
+                                if (empty($this->params['DisableStreamWidget'])) {
+                                    try {
+                                        echo TwitchStreamsWidget::widget();
+                                    } catch (Exception $ex) {
+                                    }
                                 }
                                 ?>
                             </aside>
@@ -211,7 +138,8 @@ AppAsset::register($this);
             <?php if (Yii::$app->user->isGuest): ?>
                 <?= $this->render('@app/modules/user/views/auth/login'); ?>
                 <?= $this->render('@app/modules/user/views/auth/reg'); ?>
-                <?= $this->render('@app/modules/user/views/auth/send-email'); ?>
+                <?= $this->render('@app/modules/user/views/auth/reset-password'); ?>
+                <?= $this->render('@app/modules/user/views/auth/send-reactivate-email'); ?>
             <?php endif; ?>
 
 

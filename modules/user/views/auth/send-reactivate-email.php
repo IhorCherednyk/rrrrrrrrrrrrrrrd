@@ -10,8 +10,8 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Profile */
 /* @var $form ActiveForm */
 Modal::begin([
-    'id' => 'mail',
-    'header' => '<h3 class="modal-email">Восстановление <br> пароля</h3>'
+    'id' => 'reactivatemail',
+    'header' => '<h3 class="modal-email">Активация  <br> email</h3>'
 ]);
 if(!isset($model)){
     $model = new SendEmailForm();
@@ -24,7 +24,7 @@ if(!isset($model)){
                 'options' => ['data-pjax' => true],
                 'method' => 'post',
                 'id' => 'send-email',
-                'action' => '/user/auth/send-email',
+                'action' => '/user/auth/send-reactivate-email',
                 'layout' => 'horizontal',
                 'fieldConfig' => [
                     'template' => "{label}\n{input}\n{error}",
@@ -33,7 +33,7 @@ if(!isset($model)){
     ]);
     ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?= $form->field($model, 'email')->label('Введите свой email') ?>
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-reg']) ?>
     </div>
