@@ -11,7 +11,7 @@ class UserGroupRule extends Rule
  
     public function execute($user, $item, $params)
     {
-        
+            
         if (!\Yii::$app->user->isGuest) {
             
             $role = \Yii::$app->user->identity->role;

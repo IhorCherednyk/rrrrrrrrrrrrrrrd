@@ -109,6 +109,7 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     public static function findByEmailKey($key) {
+
         return static::findOne([
                     'email_activation_key' => $key,
         ]);

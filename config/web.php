@@ -42,11 +42,11 @@ $config = [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                    [
-                    'class' => 'yii\log\FileTarget',
-                    'logFile' => '@app/runtime/logs/curl.txt',
-                    'levels' => ['error', 'warning'],
-                    'logVars' => []
+                'db' => [
+                    'class' => 'yii\log\DbTarget',
+                    'levels' => ['warning'],
+                    'categories' => ['profile'], // Если не указывать 'categories', то по умолчанию значение будет равно 'application' и к нашим сообщения будут добавлены многие другие. Например, подключение и запросы к базе данных.
+                    'logVars' => [] // не пишет данные из переменных $_GET, $_POST, $_FILES, $_COOKIE, $_SESSION и $_SERVER.
                 ],
             ],
         ],

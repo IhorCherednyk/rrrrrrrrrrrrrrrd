@@ -12,7 +12,6 @@ class ImageHelper {
 
     public static function saveImage($model, $attr, $delattr = null) {
 
-
         // проверяем является ли $file экземплояром класса UploadedFile
         if ($model->{$attr} instanceof UploadedFile) {
 

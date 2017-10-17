@@ -94,7 +94,7 @@ class AuthController extends FrontControlller {
             }
         }
 
-        return $this->redirect(['forecasts/forecast/index']);
+        return $this->redirect(['/forecasts/forecast/index']);
     }
 
     

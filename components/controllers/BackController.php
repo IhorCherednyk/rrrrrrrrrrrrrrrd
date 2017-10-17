@@ -3,7 +3,9 @@
 namespace app\components\controllers;
 
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
+use const YII_ENV_TEST;
 
 /**
  * Description of BackController

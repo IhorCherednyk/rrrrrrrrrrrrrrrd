@@ -29,7 +29,7 @@ AppAsset::register($this);
                         'items' => [
                                 [
                                 'label' => \Yii::t('app', 'Кабинет'),
-                                'url' => ['/user/user/logout'],
+                                'url' => ['/user/user/profile'],
                                 'visible' => !\Yii::$app->user->isGuest
                             ],
                                 [
