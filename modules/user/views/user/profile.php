@@ -7,32 +7,36 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\Profile */
 /* @var $form ActiveForm */
 ?>
-<div class="auth-profile">
-        
-        <?php $form = ActiveForm::begin(); ?>
+<?php $this->title = 'Кабинет'?>
+<div class="col-md-5">
+    <div id="auth-profile">
 
+        <?php
+        if ($model->model->avatar_path) {
+            echo Html::img($model->model->avatar_path);
+        } else {
+            echo Yii::t('app', 'Картинка не загруженна');
+        }
+        ?>
+        <?php $form = ActiveForm::begin([
+                    'method' => 'post',
+                    'id' => 'profile-form',
+                    'action' => '/user/user/profile',
+        ]);
+        ?>
+        <?= $form->field($model, 'file')->fileInput() ?>
+        
         <?= $form->field($model->model, 'username') ?>
         <?= $form->field($model->model, 'email') ?>
-        <?= $form->field($model->model, 'note') ?>
+        <?= $form->field($model->model, 'note')->textarea() ?>
         <?= $form->field($model->model, 'skype') ?>
-        <?= $form->field($model->model, 'first_name') ?>
-        <?= $form->field($model->model, 'last_name') ?>
-        <?= $form->field($model->model, 'avatar_path') ?>
-        <?= $form->field($model, 'file')->fileInput() ?>
-    
-        <h2>картинка профиля</h2>
-        <?php 
         
-           if($model->model->avatar_path){
-               echo Html::img($model->model->avatar_path);
-           }else{
-               echo Yii::t('app','Картинка не загруженна');
-           }
-       ?>
-    
         <div class="form-group">
             <?= Html::submitButton('Edit', ['class' => 'btn btn-primary']) ?>
         </div>
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
 
-</div><!-- auth-profile -->
+    </div>
+</div>
+    
+

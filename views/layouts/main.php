@@ -53,6 +53,9 @@ AppAsset::register($this);
                         <h3><?= $this->title ?></h3>
                     </div>
                     <div class="row">
+                        <?php if(Yii::$app->controller->action->id === 'profile'):?>
+                            <?= $content ?>
+                        <?php else:?>
                         <!--КОНТЕНТ-->
                         <div class="col-md-8">
                             <?= $content ?>
@@ -60,6 +63,7 @@ AppAsset::register($this);
                         <!--КОНТЕНТ-->
                         <!--CСАЙДБАР-->
                         <div class="col-md-4">
+                            
                             <aside>
                                 <div class="top-expert sidebar-block">
                                     <h4 class="sidebar-header">
@@ -125,8 +129,10 @@ AppAsset::register($this);
                                 }
                                 ?>
                             </aside>
+                            
                         </div> 
                         <!--CСАЙДБАР-->
+                        <?php endif;?>
                     </div>
 
                 </div>

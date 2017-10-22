@@ -10,13 +10,16 @@ class ImageHelper {
     const NEW_IMAGE_MAX_WIDTH = 200;
     const NEW_IMAGE_MAX_HEIGHT = 200;
 
-    public static function saveImage($model, $attr, $delattr = null) {
+    public static function saveImage($model, $attr, $delattr = null,$deleteFromModelForm = false) {
 
         // проверяем является ли $file экземплояром класса UploadedFile
         if ($model->{$attr} instanceof UploadedFile) {
 
-//            $model->{$attr} = self::resizeImage($model->{$attr});
-            if(!is_null($delattr)){
+
+            if(!is_null($delattr) && $deleteFromModelForm){
+                self::deleteCurentImage($model->model->{$delattr});
+                $model->{$attr} = self::resizeImage($model->{$attr});
+            }else if (!is_null($delattr) && !$deleteFromModelForm){
                 self::deleteCurentImage($model->{$delattr});
             }
             
@@ -70,7 +73,7 @@ class ImageHelper {
 
 
     public static function resizeImage($image) {
-
+        
         switch ($image->extension) {
             case 'png':
                 $source = imagecreatefrompng($image->tempName);
@@ -100,10 +103,10 @@ class ImageHelper {
             $create_image_width = self::NEW_IMAGE_MAX_WIDTH;
             $create_image_height = (int) (self::NEW_IMAGE_MAX_WIDTH / $currentAspectRatio);
         }
-
+        
         //Create a new true color image
         $newImage = imagecreatetruecolor($create_image_width, $create_image_height);
-
+        
         //Create a new image from file 
         //Copy and resize part of an image with resampling
         //Output image to file
@@ -114,6 +117,8 @@ class ImageHelper {
                 imagesavealpha($newImage, true);
                 $transparentindex = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
                 imagefill($newImage, 0, 0, $transparentindex);
+                imagecopyresampled($newImage, $source, 0, 0, 0, 0, $create_image_width, $create_image_height, $currentImageWidth, $currentImageHeight);
+                imagepng($newImage,$image->tempName);
                 break;
             case 'jpg':
                 imagecopyresampled($newImage, $source, 0, 0, 0, 0, $create_image_width, $create_image_height, $currentImageWidth, $currentImageHeight);
@@ -124,11 +129,12 @@ class ImageHelper {
                 imagejpeg($newImage, $image->tempName, 90);
                 break;
         }
-
+        
         //set rights on image file
+        
         chmod($image->tempName, 0777);
         //return crop image
-
+        
         return $image;
     }
 

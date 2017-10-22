@@ -20,14 +20,23 @@ class ProfileForm extends Model {
             return false;
         }
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function rules() {
+        return [
+            [['file'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'], 'skipOnEmpty' => true],    
+        ];
+    }
 
     public function updateProfile($data) {
         
         if(!is_null($this->file)){
             if (!empty($this->model->avatar_path)) {
-                $this->model->avatar_path = ImageHelper::saveImage($model, 'file', $model->avatar_path);
+                $this->model->avatar_path = ImageHelper::saveImage($this, 'file', 'avatar_path', true);
             } else {
-                $this->model->avatar_path = ImageHelper::saveImage($model, 'file');
+                $this->model->avatar_path = ImageHelper::saveImage($this, 'file');
             }
         }
         
