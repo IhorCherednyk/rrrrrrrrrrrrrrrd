@@ -1179,3 +1179,27 @@ aside .match .team-img-featurue img{
 aside .sidebar-content.nearestmatches {
     padding: 20px 15px;
 }
+#avatar_image_wrapper .avatar-image{
+    width: 200px;
+    height: 200px;
+    background-position: left;
+    background-repeat: no-repeat;
+}
+
+#auth-profile {
+    background-color: #273138;
+    border: 1px solid #313d46;
+    padding: 30px 20px;
+}
+#auth-profile #profile-form .form-control {
+    border: 1px solid #242b31;
+    background-color: rgb(40, 43, 47);
+    color: #b5c0cc;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42;
+    border-radius: 4px;
+}
+#profile-form .fileinput-button {
+    margin: 10px 0;
+}

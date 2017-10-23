@@ -33,19 +33,18 @@ class UserController extends FrontControlller {
 
     public function actionProfile() {
         $model = new ProfileForm(User::findOne(Yii::$app->user->id));
-        D($_FILES);
 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
-            
-            $model->file = UploadedFile::getInstance($model, 'file');
-            
-            if ($model->updateProfile(Yii::$app->request->post())) {
-                Yii::$app->session->setFlash('success', 'Профиль изменен');
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка, Профиль не изменен');
+            if($model->load(Yii::$app->request->post())){
+                
+                $model->file = UploadedFile::getInstance($model, 'file');
+                if($model->validate()){
+                    $model->saveImage(Yii::$app->request->post());
+                    return $this->renderPartial('profile', ['model' => $model]);
+                }
+                return $this->renderPartial('profile', ['model' => $model]);
             }
-            
-            return $this->renderPartial('profile', ['model' => $model]);
+             
         }else if($model->load(Yii::$app->request->post())){
             
             $model->file = UploadedFile::getInstance($model, 'file');

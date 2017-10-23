@@ -43,27 +43,27 @@ $(function () {
     
     
 
-    $(document).on('change','#profileform-file' , function(e){
-        $.ajax({
-            url: '/user/user/profile',
-            type: 'POST',
-            data: new FormData( $('#profile-form') ),
-            processData: false,
-            contentType: false,
-            success: function(res){
-                if(!res) console.log('Ошибка!');
-                showCart(res);
-            },
-            error: function(){
-                console.log('Error!');
-            }
-        });
-        
-    });
-    
-    function showCart(cart){
-        console.log(cart);
-//        $('#profile-form').html(cart);
-    }
+//    $(document).on('change','#profileform-file' , function(e){
+//        $.ajax({
+//            url: '/user/user/profile',
+//            type: 'POST',
+//            data: new FormData( $('#profile-form') ),
+//            processData: false,
+//            contentType: false,
+//            success: function(res){
+//                if(!res) console.log('Ошибка!');
+//                showCart(res);
+//            },
+//            error: function(){
+//                console.log('Error!');
+//            }
+//        });
+//        
+//    });
+//    
+//    function showCart(cart){
+//        console.log(cart);
+////        $('#profile-form').html(cart);
+//    }
     
 });
