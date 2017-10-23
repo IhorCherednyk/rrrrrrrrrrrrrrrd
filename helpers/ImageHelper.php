@@ -7,8 +7,8 @@ use yii\web\UploadedFile;
 
 class ImageHelper {
 
-    const NEW_IMAGE_MAX_WIDTH = 200;
-    const NEW_IMAGE_MAX_HEIGHT = 200;
+    const NEW_IMAGE_MAX_WIDTH = 160;
+    const NEW_IMAGE_MAX_HEIGHT = 160;
 
     public static function saveImage($model, $attr, $delattr = null,$deleteFromModelForm = false) {
 

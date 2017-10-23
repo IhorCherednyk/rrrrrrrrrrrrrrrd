@@ -14,8 +14,19 @@ use yii\widgets\Pjax;
 <div class="col-md-4">
     <div id="auth-profile">
 
-        <div id="avatar_image_wrapper">
-            <?= Html::img(($model->model->avatar_path) ? '/img/site/noavatar.png' : '/img/site/noavatar.png')?>
+        <div id="avatar_image_wrapper" class="clearfix">
+            <div class="avatar_image">
+                <?= Html::img(($model->model->avatar_path) ? $model->model->avatar_path : '/img/site/noavatar.png')?>
+            </div>
+            <div class="user_status">
+                <ul>
+                    <li>Статус: <span>Bronze</span></li>
+                    <li>Прогнозов: <span>1234</span></li>
+                    <li>Побед: <span>442</span></li>
+                    <li>% Побед: <span>60%</span></li>
+                </ul>
+            </div>
+            <div style="clear: both;"></div>
             <div class="avatar-error-message"><?= (($model->hasErrors('file'))) ? $model->getFirstErrors()['file'] : ''; ?></div>
         </div>
 
@@ -40,8 +51,8 @@ use yii\widgets\Pjax;
                     console.log(data.files[0].error)
                                     var fileType = data.files[0].name.split(".").pop(), allowdtypes = "jpeg,jpg,png";
                                         if (allowdtypes.indexOf(fileType) < 0) {
-                                            //$(document).find("#avatar_image_wrapper .avatar-error-message").text("Поддерживаются только файлы с разширением: .png, .jpg, .jpeg")
-                                            //return false;
+                                            $(document).find("#avatar_image_wrapper .avatar-error-message").text("Поддерживаются только файлы с разширением: .png, .jpg, .jpeg")
+                                            return false;
                                         }
 
                                 }',
@@ -53,13 +64,14 @@ use yii\widgets\Pjax;
         ]);
         ?>
 
-        <?= $form->field($model->model, 'username') ?>
-        <?= $form->field($model->model, 'email') ?>
-        <?= $form->field($model->model, 'skype') ?>
-        <?= $form->field($model->model, 'note')->textarea() ?>
-
+        <div class="user-form-fields">
+            <?= $form->field($model->model, 'username')->label('Имя') ?>
+            <?= $form->field($model->model, 'email') ?>
+            <?= $form->field($model->model, 'skype') ?>
+            <?= $form->field($model->model, 'note')->textarea()->label('О себе') ?>
+        </div>
         <div class="form-group">
-            <?= Html::submitButton('Обновить', ['class' => 'btn btn-watch']) ?>
+            <?= Html::submitButton('Обновить', ['class' => 'btn btn-fileinput-button']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

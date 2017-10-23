@@ -482,7 +482,7 @@ aside .stream .stream-info-wrapper .viewers {
     text-align: right; 
 }
 
-.btn-watch, .btn-reg {
+.btn-watch, .btn-reg, .fileinput-button {
     color: #38a220;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -490,6 +490,38 @@ aside .stream .stream-info-wrapper .viewers {
     -webkit-border-radius: 0px;
     border-radius: 0px;
     margin: 0 2px; 
+}
+.fileinput-button, .btn-fileinput-button {
+    background-image: -webkit-linear-gradient(#8a9196, #7a8288 60%, #70787d);
+    background-image: -o-linear-gradient(#8a9196, #7a8288 60%, #70787d);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#8a9196), color-stop(60%, #7a8288), to(#70787d));
+    background-image: linear-gradient(#8a9196, #7a8288 60%, #70787d);
+    background-repeat: no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8a9196', endColorstr='#ff70787d', GradientType=0);
+    -webkit-filter: none;
+    filter: none;
+    color: #fff;
+    border-radius: 4px; 
+    border: none;
+    padding: 7px 27px;
+    width: 160px;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: none;
+}
+.fileinput-button:hover, .fileinput-button:focus, .fileinput-button:active, .btn-fileinput-button:hover, .btn-fileinput-button:focus, .btn-fileinput-button:active{
+    background-image: -webkit-linear-gradient(#404448, #4e5458 40%, #585e62);
+    background-image: -o-linear-gradient(#404448, #4e5458 40%, #585e62);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#404448), color-stop(40%, #4e5458), to(#585e62));
+    background-image: linear-gradient(#404448, #4e5458 40%, #585e62);
+    background-repeat: no-repeat;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff404448', endColorstr='#ff585e62', GradientType=0);
+    -webkit-filter: none;
+    filter: none;
+    color: #fff;
+}
+.btn-fileinput-button {
+    font-size: 14px;
 }
 .btn-watch:hover, .btn-watch:active, .btn-watch:focus, .btn-reg:hover, .btn-reg:active, .btn-reg:focus {
     color: #297718;
@@ -1185,11 +1217,14 @@ aside .sidebar-content.nearestmatches {
     background-position: left;
     background-repeat: no-repeat;
 }
+#avatar_image_wrapper {
+    overflow: hidden;
+}
 
 #auth-profile {
     background-color: #273138;
     border: 1px solid #313d46;
-    padding: 30px 20px;
+    padding: 30px 20px 15px 20px;
 }
 #auth-profile #profile-form .form-control {
     border: 1px solid #242b31;
@@ -1202,4 +1237,40 @@ aside .sidebar-content.nearestmatches {
 }
 #profile-form .fileinput-button {
     margin: 10px 0;
+}
+.avatar_image {
+    max-height: 200px;
+    overflow: hidden;
+    border: 3px solid #8a9196;
+    padding: 5px;
+    border-radius: 4px;
+    float: left;
+    width: 50%;
+}
+.avatar_image img{
+    width: 100%;
+    height: auto;
+}
+.user_status {
+    float: left;
+    width: 50%;
+    color: #fff;
+    padding-left: 15px;
+}
+.user_status ul li span {
+    float: right
+}
+.user_status ul li {
+    padding: 1px 0;
+}
+#profile-form .control-label {
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+.user-form-fields {
+    margin-top: 20px;
+}
+.avatar-error-message {
+    color: #ff0000;
 }
