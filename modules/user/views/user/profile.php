@@ -12,7 +12,7 @@ use yii\widgets\Pjax;
 ?>
 <?php $this->title = 'Кабинет'; //D($model->errors);?>
 <div class="col-md-4">
-    <div id="auth-profile">
+    <div id="auth-profile-room" class="auth-profile-room">
 
         <div id="avatar_image_wrapper" class="clearfix">
             <div class="avatar_image">
@@ -65,10 +65,10 @@ use yii\widgets\Pjax;
         ?>
 
         <div class="user-form-fields">
-            <?= $form->field($model->model, 'username')->label('Имя') ?>
-            <?= $form->field($model->model, 'email') ?>
-            <?= $form->field($model->model, 'skype') ?>
-            <?= $form->field($model->model, 'note')->textarea()->label('О себе') ?>
+            <?= $form->field($model->model, 'username')->label('Имя:') ?>
+            <?= $form->field($model->model, 'email')->label('Email:') ?>
+            <?= $form->field($model->model, 'skype')->label('Skype:') ?>
+            <?= $form->field($model->model, 'note')->textarea()->label('О себе:') ?>
         </div>
         <div class="form-group">
             <?= Html::submitButton('Обновить', ['class' => 'btn btn-fileinput-button']) ?>
@@ -80,7 +80,7 @@ use yii\widgets\Pjax;
 </div>
 
 <div class="col-md-8">
-    <div id="auth-profile">
+    <div class="auth-profile-room">
         <br>
         <br>
         <br>

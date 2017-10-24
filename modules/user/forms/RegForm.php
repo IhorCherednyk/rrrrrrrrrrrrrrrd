@@ -13,8 +13,8 @@ class RegForm extends Model {
     public $password;
     public $status;
     public $password_repeat;
-    public $first_name;
-    public $last_name;
+//    public $first_name;
+//    public $last_name;
 
     public function rules() {
         return [

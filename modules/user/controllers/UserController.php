@@ -12,6 +12,7 @@ use yii\web\UploadedFile;
 class UserController extends FrontControlller {
 
     public function behaviors() {
+        D(Yii::$app->user->identity);
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -32,6 +33,7 @@ class UserController extends FrontControlller {
 
 
     public function actionProfile() {
+        
         $model = new ProfileForm(User::findOne(Yii::$app->user->id));
 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){

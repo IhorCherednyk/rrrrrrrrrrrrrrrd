@@ -23,13 +23,14 @@ class User extends ActiveRecord implements IdentityInterface {
     public function rules() {
         return [
                 [['username', 'email', 'password'], 'filter', 'filter' => 'trim'],
-                [['username', 'email', 'status','password_hash'], 'required'],
+                [['username','status'], 'required', 'message' => 'Имя не может быть пустым'],
                 ['email', 'email'],
                 ['username', 'string', 'min' => 5, 'max' => 10, 'tooShort' => "Имя пользователя должно содежрать минимум 5 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 10 символов'],
                 ['password', 'required', 'on' => 'create'],
                 ['username', 'unique', 'message' => 'Такое имя уже существует'],
                 ['email', 'unique', 'message' => 'Такой email существует'],
-                [['first_name','last_name','note','skype'], 'string', 'message' => 'Должно быть текстом']
+                [['first_name','last_name','note','skype'], 'string', 'message' => 'Должно быть текстом'],
+                [['steam_id'], 'integer']
                 
 
         ];

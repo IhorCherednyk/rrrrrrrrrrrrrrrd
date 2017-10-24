@@ -17,13 +17,16 @@ if (!isset($model)) {
 }
 Modal::begin([
     'id' => 'reg',
-    'header' => '<h3>Регистрация</h3>'
 ]);
 ?>
 
-<div class="row">
-    <div class="col-md-12">
-
+<div class="model-wrapper-auth">
+        <div class="top-register-panel">
+            <ul>
+                <li><a href="<?= Url::to(['/user/auth/reg']) ?>" data-toggle="modal" data-target="#log" class="btn btn-reg">Вход</a></li>
+                <li  class="active"><a href="javascript:void(0);" class="btn btn-reg">Регистрация</a></li>
+            </ul>
+        </div>
         <?php
         
         Pjax::begin(['enablePushState' => false, 'id' => 'regform']);
@@ -57,7 +60,6 @@ Modal::begin([
         Pjax::end();
         ?>
 
-    </div>
 </div>
 <?php
 Modal::end();
