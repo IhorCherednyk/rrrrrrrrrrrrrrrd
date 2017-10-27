@@ -107,7 +107,7 @@ class AuthController extends FrontControlller {
                                     'steam_id' => $userData->response->players[0]->steamid,
                                     'avatar_path' => $userData->response->players[0]->avatarfull
                                 ]);
-                                
+                               
                                 
                                 
                                 if (!$user->save()) {
@@ -115,13 +115,13 @@ class AuthController extends FrontControlller {
                                 }else {
                                     Yii::$app->session->setFlash('success', 'Вы успешно зарегестрировались через Steam.');
                                 }
-                                
+                                 D($user);
                                 
                             }else{
+                                
                                 $user->avatar_path = $userData->response->players[0]->avatarfull;
                                 $user->save();
                             }
-                            
                             
                             Yii::$app->user->login($user, 3600 * 24 * 30);
                             

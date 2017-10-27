@@ -12,7 +12,6 @@ use yii\web\UploadedFile;
 class UserController extends FrontControlller {
 
     public function behaviors() {
-        D(Yii::$app->user->identity);
         return [
             'access' => [
                 'class' => AccessControl::className(),
