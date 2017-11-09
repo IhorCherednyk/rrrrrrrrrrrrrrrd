@@ -4,34 +4,51 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\forecasts\models\Matches */
+/* @var $model app\modules\forecasts\models\Forecast */
 /* @var $form yii\widgets\ActiveForm */
+
+$this->registerJs(" 
+        $(function(){
+            
+            $('.select2').select2();
+            
+        });", \yii\web\View::POS_END);
 ?>
 
-<div class="matches-form">
+<div class="forecast-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'gametournament_id')->textInput() ?>
+    <?php
 
-    <?= $form->field($model, 'team1_id')->textInput() ?>
+    $matchNameArray = [];
+    
+    foreach ($matches as $key => $match) {
+        $matchNameArray[$match['id']] = $match['team1']['name'] . ' vs ' . $match['team2']['name'];
+    }
 
-    <?= $form->field($model, 'team2_id')->textInput() ?>
+    ?>
+    
+    <?= $form->field($model, 'match_id')->dropDownList($matchNameArray, [
+        'class' => 'select2',
+        'prompt' => 'Выберете матч'
+    ])
+    ?>
 
-    <?= $form->field($model, 'tournament_id')->textInput() ?>
+    <?= $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'start_time')->textInput() ?>
+    <?= $form->field($model, 'bookmeker_id')->textInput() ?>
+    
+    <?= $form->field($model, 'description')->textarea() ?>
 
-    <?= $form->field($model, 'team1_result')->textInput() ?>
+    <?= $form->field($model, 'bookmeker_koff')->textInput() ?>
 
-    <?= $form->field($model, 'team2_result')->textInput() ?>
+    <?= $form->field($model, 'user_koff')->textInput() ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
 
-    <?= $form->field($model, 'koff_counter')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -28,7 +28,7 @@ if (!isset($model)) {
         $form = ActiveForm::begin([
                     'options' => ['data-pjax' => true],
                     'method' => 'post',
-                    'id' => 'send-reactivate-email',
+                    'id' => 'sendreactivateemail',
                     'action' => '/user/auth/send-reactivate-email',
                     'layout' => 'horizontal',
                     'fieldConfig' => [

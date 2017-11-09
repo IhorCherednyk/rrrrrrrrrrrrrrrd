@@ -28,7 +28,8 @@ use yii\helpers\HtmlPurifier;
         </div>
         <div class="match-bets">
             <span>Прогнозов на матч: 10 </span>
-            <a href="prognoz-single.html" class="btn btn-watch">Смотреть прогнозы</a>
+            
+            <?= Html::a('Смотреть прогнозы', ['/forecasts/forecast/single-match', 'id' => $model->id], ['class' => 'btn btn-watch'])?>
         </div>
     </div>
 </div>

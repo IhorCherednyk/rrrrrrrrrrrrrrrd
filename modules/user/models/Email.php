@@ -65,7 +65,7 @@ class Email extends \yii\db\ActiveRecord {
         $this->type = $type;
         $this->status = $this::STATUS_NOTSUCCSSES;
         $this->recipient_email = $user->email;
-        (is_null($token))?$this->data = $user->email_activation_key: $this->data = $token;
+        (is_null($token))? $this->data = $user->email_activation_key: $this->data = $token;
         return $this->save();
     }
     

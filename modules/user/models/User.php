@@ -24,8 +24,9 @@ class User extends ActiveRecord implements IdentityInterface {
         return [
                 [['username', 'email', 'password'], 'filter', 'filter' => 'trim'],
                 [['username','status'], 'required', 'message' => 'Имя не может быть пустым'],
-                ['email', 'email'],
-                ['username', 'string', 'min' => 5, 'max' => 10, 'tooShort' => "Имя пользователя должно содежрать минимум 5 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 10 символов'],
+                ['email', 'email', 'message' => 'Не валидный Email'],
+                ['username', 'string', 'min' => 3, 'max' => 13, 'tooShort' => "Имя пользователя должно содежрать минимум 3 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 13 символов'],
+                ['note', 'string', 'max' => 255, 'tooLong' => 'Информация о себе не должна содежрать более 255 символов'],
                 ['password', 'required', 'on' => 'create'],
                 ['username', 'unique', 'message' => 'Такое имя уже существует'],
                 ['email', 'unique', 'message' => 'Такой email существует'],
@@ -37,10 +38,6 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
 
-    public function getProfile() {
-        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
-    }
-
     public function getToken() {
         return $this->hasOne(Token::className(), ['user_id' => 'id']);
     }
@@ -49,17 +46,6 @@ class User extends ActiveRecord implements IdentityInterface {
         return $this->hasMany(Message::className(), ['recipient_id' => 'id']);
     }
 
-    public function getMessagesSender() {
-        return $this->hasMany(Message::className(), ['sender_id' => 'id']);
-    }
-
-    public function getCountMessages() {
-        return $this->hasMany(Message::className(), ['sender_id' => 'id'])->count();
-    }
-
-    public function getCountNotReadMessage() {
-        return $this->hasMany(Message::className(), ['recipient_id' => 'id'])->count();
-    }
 
     /* Поведения */
 
@@ -83,8 +69,10 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     public function validatePassword($password) {
-
-        return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+        if(!is_null($this->password_hash)){
+            return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+        }
+        return false;
     }
 
     public function init() {

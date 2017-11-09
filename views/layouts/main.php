@@ -49,6 +49,17 @@ AppAsset::register($this);
                             <?= Html::tag('h3', Yii::$app->session->getFlash('error')) ?>
                         </div>
                     <?php endif; ?>
+                    
+                    <?php if (Yii::$app->session->getFlash('info')): ?>
+                        <div class="nk-info-box text-info">
+                            <div class="nk-info-box-icon">
+                                <i class="fa fa-info" aria-hidden="true"></i>
+                            </div>
+                            <?= Html::tag('h3', Yii::$app->session->getFlash('error')) ?>
+                        </div>
+                    
+                    <?php endif; ?>
+                    
                     <div class="page-name">
                         <h3><?= $this->title ?></h3>
                     </div>

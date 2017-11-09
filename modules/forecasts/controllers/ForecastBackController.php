@@ -3,25 +3,25 @@
 namespace app\modules\forecasts\controllers;
 
 use app\components\controllers\BackController;
+use app\modules\forecasts\models\Forecast;
 use app\modules\forecasts\models\Matches;
-use app\modules\forecasts\models\search\MatchesSearch;
+use app\modules\forecasts\models\search\ForecastSearch;
 use Yii;
 use yii\web\NotFoundHttpException;
 
 /**
- * ForecastBackController implements the CRUD actions for Matches model.
+ * ForecastBackController implements the CRUD actions for Forecast model.
  */
 class ForecastBackController extends BackController
 {
 
-
     /**
-     * Lists all Matches models.
+     * Lists all Forecast models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MatchesSearch();
+        $searchModel = new ForecastSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -31,7 +31,7 @@ class ForecastBackController extends BackController
     }
 
     /**
-     * Displays a single Matches model.
+     * Displays a single Forecast model.
      * @param integer $id
      * @return mixed
      */
@@ -43,25 +43,31 @@ class ForecastBackController extends BackController
     }
 
     /**
-     * Creates a new Matches model.
+     * Creates a new Forecast model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Matches();
-
+        $model = new Forecast();
+        $matches = Matches::find()->with('team1')->with('team2')
+                ->where(['status' => Matches::NOT_COMPLETE])
+                ->andWhere(['not', ['team1_id' => null]])
+                ->andWhere(['not', ['team2_id' => null]])
+//                ->andWhere(['>','start_time',time()])
+                ->asArray()->all();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'matches' => $matches
             ]);
         }
     }
 
     /**
-     * Updates an existing Matches model.
+     * Updates an existing Forecast model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -80,7 +86,7 @@ class ForecastBackController extends BackController
     }
 
     /**
-     * Deletes an existing Matches model.
+     * Deletes an existing Forecast model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -93,15 +99,15 @@ class ForecastBackController extends BackController
     }
 
     /**
-     * Finds the Matches model based on its primary key value.
+     * Finds the Forecast model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Matches the loaded model
+     * @return Forecast the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Matches::findOne($id)) !== null) {
+        if (($model = Forecast::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

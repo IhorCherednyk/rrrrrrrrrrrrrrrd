@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Profile */
 /* @var $form ActiveForm */
 ?>
-<?php $this->title = 'Кабинет'; //D($model->errors);?>
+<?php $this->title = $model->model->username;?>
 <div class="col-md-4">
     <div id="auth-profile-room" class="auth-profile-room">
 
@@ -66,7 +66,11 @@ use yii\widgets\Pjax;
 
         <div class="user-form-fields">
             <?= $form->field($model->model, 'username')->label('Имя:') ?>
-            <?= $form->field($model->model, 'email')->label('Email:') ?>
+            <?php if(is_null($model->model->steam_id)):?>
+                <?= $form->field($model, 'email')->textInput(['disabled' => true])->label('Email:') ?>
+            <?php else:?>
+                <?= $form->field($model, 'email')->label('Email:') ?>
+            <?php endif;?>
             <?= $form->field($model->model, 'skype')->label('Skype:') ?>
             <?= $form->field($model->model, 'note')->textarea()->label('О себе:') ?>
         </div>
@@ -77,6 +81,7 @@ use yii\widgets\Pjax;
         <?php ActiveForm::end(); ?>
 
     </div>
+
 </div>
 
 <div class="col-md-8">

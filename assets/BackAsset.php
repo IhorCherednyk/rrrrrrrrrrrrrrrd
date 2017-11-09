@@ -32,6 +32,7 @@ class BackAsset extends AssetBundle {
         /*fonts*/
         'back/fonts/web-icons/web-icons.min.css',
         'back/fonts/brand-icons/brand-icons.min.css',
+        'back/vendor/select2/select2.min.css',
         'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all',
         'http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic',
     ];
@@ -47,6 +48,7 @@ class BackAsset extends AssetBundle {
         /*Plugins*/
         'back/vendor/intro-js/intro.js',
         'back/vendor/slidepanel/jquery-slidePanel.js',
+        'back/vendor/select2/select2.full.min.js',
         
         
         /*Scripts*/

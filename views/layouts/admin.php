@@ -126,31 +126,36 @@ $this->registerJsFile('@web/back/vendor/breakpoints/breakpoints.js', ['position'
 //                                        ],
 //                                    ],
 //                                ],
-                                
-                                [
-                                'label' => '<i class="site-menu-icon wb-file" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Pages') . '</span>',
-                                'url' => ['/pages/pages-back/index'],
-                                'options' => ['class' => 'site-menu-item'], 
+
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-file" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Pages') . '</span>',
+                                    'url' => ['/pages/pages-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
                                 ],
-                                [
-                                'label' => '<i class="site-menu-icon wb-bookmark" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Bookmekers') . '</span>',
-                                'url' => ['/bookmekers/bookmeker-back/index'],
-                                'options' => ['class' => 'site-menu-item'], 
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-bookmark" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Bookmekers') . '</span>',
+                                    'url' => ['/bookmekers/bookmeker-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
                                 ],
-                                [
-                                'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Teams') . '</span>',
-                                'url' => ['/team/team-back/index'],
-                                'options' => ['class' => 'site-menu-item'], 
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Teams') . '</span>',
+                                    'url' => ['/team/team-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
                                 ],
-                                [
-                                'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Matches') . '</span>',
-                                'url' => ['/forecasts/forecast-back/index'],
-                                'options' => ['class' => 'site-menu-item'], 
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Matches') . '</span>',
+                                    'url' => ['/forecasts/matches-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
                                 ],
-                                [
-                                'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Users') . '</span>',
-                                'url' => ['/user/user-back/index'],
-                                'options' => ['class' => 'site-menu-item'], 
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Forecasts') . '</span>',
+                                    'url' => ['/forecasts/forecast-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
+                                ],
+                                    [
+                                    'label' => '<i class="site-menu-icon wb-users" aria-hidden="true"></i><span class="site-menu-title">' . Yii::t('app', 'Users') . '</span>',
+                                    'url' => ['/user/user-back/index'],
+                                    'options' => ['class' => 'site-menu-item'],
                                 ]
                             ],
                         ]);
@@ -196,7 +201,7 @@ $this->registerJsFile('@web/back/vendor/breakpoints/breakpoints.js', ['position'
 
 
 
-<?php $this->endBody() ?>
+        <?php $this->endBody() ?>
         <script>
             (function (document, window, $) {
                 'use strict';

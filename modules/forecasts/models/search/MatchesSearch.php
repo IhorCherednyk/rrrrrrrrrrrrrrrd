@@ -22,7 +22,7 @@ class MatchesSearch extends Matches
     public function rules()
     {
         return [
-            [['id', 'gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter'], 'integer'],
+            [['id', 'gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter', 'match_type'], 'integer'],
             [['team1','team2'], 'safe']
         ];
     }
@@ -116,6 +116,7 @@ class MatchesSearch extends Matches
             'team2_result' => $this->team2_result,
             'status' => $this->status,
             'koff_counter' => $this->koff_counter,
+            'match_type' => $this->match_type
         ]);
         
         

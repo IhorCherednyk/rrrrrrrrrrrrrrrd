@@ -32,7 +32,7 @@ class UserController extends FrontControlller {
 
 
     public function actionProfile() {
-        
+
         $model = new ProfileForm(User::findOne(Yii::$app->user->id));
 
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
@@ -51,9 +51,7 @@ class UserController extends FrontControlller {
             $model->file = UploadedFile::getInstance($model, 'file');
             
             if ($model->updateProfile(Yii::$app->request->post())) {
-                Yii::$app->session->setFlash('success', 'Профиль изменен');
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка, Профиль не изменен');
+                Yii::$app->session->setFlash('success', 'Профиль обновлен');
             }
             
         }

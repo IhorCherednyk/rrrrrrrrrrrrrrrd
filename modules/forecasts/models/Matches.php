@@ -24,13 +24,20 @@ use app\modules\team\models\Teams;
  */
 class Matches extends \yii\db\ActiveRecord
 {
+    // FOR UPDATE
     const TBD_MATCH = null;
-    const SATISFY_KOFF = 2;
+    const SATISFY_KOFF = 2; // count of bookmeker kofficient  if less then 2 we update over match again
     
-    
+    // STATUS
     const NOT_COMPLETE = 0;
     const COMPLETE = 1;
     const ERROR_WITH_PARSING = 3;
+    
+    // TYPE
+    const TYPE_BO1 = 0;
+    const TYPE_BO3 = 1;
+    const TYPE_BO5 = 2;
+    
 
     
     
@@ -51,7 +58,7 @@ class Matches extends \yii\db\ActiveRecord
     {
         return [
             [['gametournament_id', 'tournament_id', 'start_time'], 'required'],
-            [['gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter'], 'integer'],
+            [['gametournament_id', 'team1_id', 'team2_id', 'tournament_id', 'start_time', 'team1_result', 'team2_result', 'status', 'koff_counter', 'match_type'], 'integer'],
             [['tournament_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tournaments::className(), 'targetAttribute' => ['tournament_id' => 'id']],
         ];
     }
@@ -71,7 +78,8 @@ class Matches extends \yii\db\ActiveRecord
             'team1_result' => 'Team1 Result',
             'team2_result' => 'Team2 Result',
             'status' => 'Status',
-            'koff_counter' => 'Koff Counter'
+            'koff_counter' => 'Koff Counter',
+            'match_type' => 'Match Type'
         ];
     }
 

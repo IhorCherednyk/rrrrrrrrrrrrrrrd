@@ -44,7 +44,6 @@ class SendEmailForm extends Model
         } else if(!is_null($user) && $user->status == User::STATUS_ACTIVE){
             Yii::$app->session->setFlash('success', 'Email уже активирован.');
             return true;
-            
         }
 
         return false;

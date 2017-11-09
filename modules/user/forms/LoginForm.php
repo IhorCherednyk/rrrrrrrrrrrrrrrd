@@ -27,9 +27,11 @@ class LoginForm extends Model {
     public function validatePassword($attribute) {
         if (!$this->hasErrors()){
             $this->getUser();
-
+            
+            if(!is_null($this->_user) && !is_null($this->_user->steam_id) && !$this->_user->validatePassword($this->password)){
+                $this->addError($attribute, 'Вы должны входить с помощью Steam');
+            }
             if (is_null($this->_user) || !$this->_user->validatePassword($this->password)){
-                Yii::$app->session->setFlash('error', 'Неправильный логин или пароль');
                 $this->addError($attribute, 'Неправильный логин или пароль.');
             }
         }
@@ -37,6 +39,7 @@ class LoginForm extends Model {
     }
 
     public function login() {
+        
         if ($this->validate()){
             if ($this->_user->status === User::STATUS_ACTIVE){
                 return Yii::$app->user->login($this->_user, $this->rememberMe ? 3600 * 24 * 30 : 0);

@@ -46,8 +46,8 @@ class ParsegametournamentController extends Controller{
         
         if ($dotaPage) {
             $html = SimpleHTMLDom::str_get_html($dotaPage);
+            
             if ($html) {
-                
                 $this->generateMatchArray($html);
                 
                 if (!empty($this->matchGlobalArray)) {
@@ -100,7 +100,6 @@ class ParsegametournamentController extends Controller{
             foreach ($table->find('tr') as $key => $row) {
                 $id = (int) $row->rel;
                 try {
-
                     if (empty($row->class) && (int) $row->find('td', 2)->children(1)->children(0)->time <= $time && is_null(Matches::findOne(['gametournament_id' => $id]))) {
                         
                         // Match Id in gametournament
@@ -119,7 +118,7 @@ class ParsegametournamentController extends Controller{
                         $this->matchGlobalArray[$key]['tournament_id'] = $this->generateTournamentData($tourneyNamae, $tourneyImage);
                         // Match start time
                         $this->matchGlobalArray[$key]['start_time'] = (int) $row->find('td', 2)->children(1)->children(0)->time;
-
+                        
 
                         $this->matchGlobalArray[$key]['team1'] = [
                             'name_team_alias' => trim($row->find('td', 1)->find('a', 0)->children(0)->children(0)->plaintext),
@@ -182,6 +181,7 @@ class ParsegametournamentController extends Controller{
                     $data = $this->getDataFromSinglePage($html);
 
                     if(!empty($data)){
+                        $this->matchGlobalArray[$key]['match_type'] = (int)$data['match_type'];
                         $this->matchGlobalArray[$key]['team1']['name_team'] = $data['name1'];
                         $this->matchGlobalArray[$key]['team1']['team_img'] = $data['team1_img'];
                         $this->matchGlobalArray[$key]['team2']['name_team'] = $data['name2'];
@@ -207,6 +207,7 @@ class ParsegametournamentController extends Controller{
     function getDataFromSinglePage($html) {
         
         $singleTeamDataParent = $html->find('.match-info', 0)->children(0);
+        $mtype = $html->find('.stage-time', 0)->find('.mtype', 0);
         $singleBetsDataParent = $html->find('#pastkef', 0);
         $data = [];
         
@@ -214,6 +215,7 @@ class ParsegametournamentController extends Controller{
         if (!empty($singleTeamDataParent)) {
             $data['name1'] = $singleTeamDataParent->children(0)->find('.mteamname', 0)->children(0)->title;
             $data['team1_img'] = $this->clearImgPath($singleTeamDataParent->children(0)->find('.mteamlogo', 0)->children(0)->src);
+            $data['match_type'] = !empty($mtype)?strtolower(preg_replace("/[^0-9]/", "", $mtype->plaintext)): 3;
             $data['name2'] = $singleTeamDataParent->children(2)->find('.mteamname', 0)->children(0)->title;
             $data['team2_img'] = $this->clearImgPath($singleTeamDataParent->children(2)->find('.mteamlogo', 0)->children(0)->src);
         }
@@ -295,6 +297,14 @@ class ParsegametournamentController extends Controller{
         foreach ($this->matchGlobalArray as $key => $value) {
             if (!empty($value['bets'])) {
                 $value['koff_counter'] = count($value['bets']);
+            }
+
+            if($value['match_type'] === 5) {
+                $value['match_type'] = Matches::TYPE_BO5;
+            }else if ($value['match_type'] === 1){
+                $value['match_type'] = Matches::TYPE_BO1;
+            }else {
+               $value['match_type'] = Matches::TYPE_BO3;
             }
             
             $match = new Matches();

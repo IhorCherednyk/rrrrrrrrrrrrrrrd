@@ -21,8 +21,8 @@ class RegForm extends Model {
             [['username', 'email', 'password'], 'filter', 'filter' => 'trim'], // удаляем пробелы вокруг
             ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Пароли не совпадают" ],
             [['username', 'email', 'password'], 'required', 'message' => "Обязательны к заполнению"], // обязательны
-            ['username', 'string', 'min' => 5, 'max' => 10, 'tooShort' => "Имя пользователя должно содежрать минимум 5 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 10 символов'],
-            ['password', 'string', 'min' => 2, 'max' => 255, 'tooShort' => "Пароль должен содежрать минимум 5 символов", 'tooLong' => 'Пароль должен содежрать не более 20 символов'], // содержать 2-255
+            ['username', 'string', 'min' => 3, 'max' => 13, 'tooShort' => "Имя пользователя должно содежрать минимум 5 символов", 'tooLong' => 'Имя пользователя должно содежрать не более 10 символов'],
+            ['password', 'string', 'min' => 5, 'max' => 20, 'tooShort' => "Пароль должен содежрать минимум 5 символов", 'tooLong' => 'Пароль должен содежрать не более 20 символов'], // содержать 2-255
             [['email'], 'unique', 'targetClass' => User::className(), 'message' => 'Такой email уже существует'], //уникальность
             ['email', 'email'], //
             ['username','checkUserName'],

@@ -4,18 +4,19 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\forecasts\models\Matches */
+/* @var $model app\modules\forecasts\models\Forecast */
 
-$this->title = 'Create Matches';
-$this->params['breadcrumbs'][] = ['label' => 'Matches', 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Forecast');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forecasts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="matches-create">
+<div class="forecast-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'matches' => $matches
     ]) ?>
 
 </div>

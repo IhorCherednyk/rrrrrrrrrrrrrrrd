@@ -11,10 +11,17 @@ use function D;
 class ProfileForm extends Model {
 
     public $file;
+    public $email;
     public $model;
-    
-    public function __construct($model) {     
+    const SCENARIO_NOSTEAM = 'nosteam';
+
+
+    public function __construct($model) {
         $this->model = $model;
+        $this->email = !is_null($this->model->email)?$this->model->email:'';
+        if (is_null($this->model->steam_id)) {
+            $this->scenario = self::SCENARIO_NOSTEAM;
+        }
     }
     
     /**
@@ -22,15 +29,19 @@ class ProfileForm extends Model {
      */
     public function rules() {
         return [            
-            [['file'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'],'maxSize' => 5 * 1024 * 1024, 'tooBig' => 'Сильно большой размер файла, лимит 5MB','wrongExtension' => 'Поддерживаются только файлы с разширением: .png, .jpg, .jpeg', 'skipOnEmpty' => true],    
+            [['file'], 'file', 'extensions' => ['png', 'jpg', 'jpeg'],'maxSize' => 5 * 1024 * 1024, 'tooBig' => 'Сильно большой размер файла, лимит 5MB','wrongExtension' => 'Поддерживаются только файлы с разширением: .png, .jpg, .jpeg', 'skipOnEmpty' => true],
+            [['email'], 'required','message' => 'Email не может быть пустым', 'on' => self::SCENARIO_NOSTEAM],
+            [['email'],'email']
         ];
         
     }
 
     public function updateProfile($data) {
-        
+        $this->model->email = $this->email;
         if($this->model->load($data) && $this->model->save()){
             return true;
+        }else{
+            $this->addErrors($this->model->errors);
         }
         
         return false;

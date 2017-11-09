@@ -3,14 +3,16 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\forecasts\models\Matches */
+/* @var $model app\modules\forecasts\models\Forecast */
 
-$this->title = 'Update Matches: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Matches', 'url' => ['index']];
+$this->title = Yii::t('app', 'Update {modelClass}: ', [
+    'modelClass' => 'Forecast',
+]) . $model->id;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forecasts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
-<div class="matches-update">
+<div class="forecast-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
