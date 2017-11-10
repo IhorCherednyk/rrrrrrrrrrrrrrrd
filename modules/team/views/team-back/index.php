@@ -22,11 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
 //            'id',
             'total_place',
             'name',
-            'second_name',
             [
             'attribute' => 'img',
             'format' => 'raw',
@@ -35,10 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ],
         'dotabuff_id',
-            // 'dotabuff_link',
-            // 'game_count',
-            // 'winrate',
-
              [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Actions'),

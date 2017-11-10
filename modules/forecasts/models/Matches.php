@@ -37,6 +37,7 @@ class Matches extends \yii\db\ActiveRecord
     const TYPE_BO1 = 0;
     const TYPE_BO3 = 1;
     const TYPE_BO5 = 2;
+    const TYPE_BO2 = 3;
     
 
     

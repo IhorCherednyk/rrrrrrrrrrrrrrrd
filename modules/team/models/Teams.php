@@ -10,7 +10,6 @@ use yii\db\ActiveRecord;
  *
  * @property integer $id
  * @property string $name
- * @property string $second_name
  * @property string $img
  * @property integer $dotabuff_id
  * @property string $dotabuff_link

@@ -303,7 +303,10 @@ class ParsegametournamentController extends Controller{
                 $value['match_type'] = Matches::TYPE_BO5;
             }else if ($value['match_type'] === 1){
                 $value['match_type'] = Matches::TYPE_BO1;
-            }else {
+            }else if ($value['match_type'] === 2){
+                $value['match_type'] = Matches::TYPE_BO2;
+            }
+            else {
                $value['match_type'] = Matches::TYPE_BO3;
             }
             
