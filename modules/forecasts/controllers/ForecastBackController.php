@@ -3,6 +3,7 @@
 namespace app\modules\forecasts\controllers;
 
 use app\components\controllers\BackController;
+use app\modules\forecasts\models\BetsType;
 use app\modules\forecasts\models\Forecast;
 use app\modules\forecasts\models\Matches;
 use app\modules\forecasts\models\search\ForecastSearch;
@@ -56,12 +57,42 @@ class ForecastBackController extends BackController
                 ->andWhere(['not', ['team2_id' => null]])
 //                ->andWhere(['>','start_time',time()])
                 ->asArray()->all();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        
+        $matchNameArray = [];
+        foreach ($matches as $key => $match) {
+            $matchNameArray[$match['id']] = $match['team1']['name'] . ' vs ' . $match['team2']['name'];
+        }
+        $betsType = $model->generateBetsType();
+        $betsArray = [];
+        
+        if (Yii::$app->request->isAjax) {
+           $model->load(Yii::$app->request->post());
+           
+           if(!empty($model->match_id) && !empty($model->bets_type)){
+               $betsArray = $model->generateBackBets($model->match_id,$model->bets_type);
+           }
+          
+           return $this->renderPartial('create', [
+                'model' => $model,
+                'matchNameArray' => $matchNameArray,
+                'betsType' => $betsType,
+                'betsArray' => $betsArray
+            ]);
+        }
+        
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->user_id = \Yii::$app->user->id;
+            $model->status = Forecast::FORECAST_NOT_COUNTED;
+            
             return $this->redirect(['view', 'id' => $model->id]);
+            
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'matches' => $matches
+                'matchNameArray' => $matchNameArray,
+                'betsType' => $betsType,
+                'betsArray' => $betsArray
             ]);
         }
     }

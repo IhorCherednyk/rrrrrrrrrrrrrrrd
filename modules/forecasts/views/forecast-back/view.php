@@ -32,11 +32,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'match_id',
             'user_id',
             'bookmeker_id',
+            'bets_type',
             'status',
             'bookmeker_koff',
-            'user_koff',
+            'description:ntext',
+            'match_started',
             'created_at',
             'updated_at',
+            'team1',
+            'team2',
+            'coins_bet',
         ],
     ]) ?>
 

@@ -18,7 +18,8 @@ class ForecastSearch extends Forecast
     public function rules()
     {
         return [
-            [['id', 'match_id', 'user_id', 'bookmeker_id', 'status', 'bookmeker_koff', 'user_koff', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'match_id', 'user_id', 'bookmeker_id', 'bets_type', 'status', 'bookmeker_koff', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'integer'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -62,12 +63,18 @@ class ForecastSearch extends Forecast
             'match_id' => $this->match_id,
             'user_id' => $this->user_id,
             'bookmeker_id' => $this->bookmeker_id,
+            'bets_type' => $this->bets_type,
             'status' => $this->status,
             'bookmeker_koff' => $this->bookmeker_koff,
-            'user_koff' => $this->user_koff,
+            'match_started' => $this->match_started,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'team1' => $this->team1,
+            'team2' => $this->team2,
+            'coins_bet' => $this->coins_bet,
         ]);
+
+        $query->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

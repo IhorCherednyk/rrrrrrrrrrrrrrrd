@@ -34,15 +34,12 @@ class Matches extends \yii\db\ActiveRecord
     const ERROR_WITH_PARSING = 3;
     
     // TYPE
-    const TYPE_BO1 = 0;
-    const TYPE_BO3 = 1;
-    const TYPE_BO5 = 2;
-    const TYPE_BO2 = 3;
+    const TYPE_BO1 = 1;
+    const TYPE_BO3 = 3;
+    const TYPE_BO5 = 5;
+    const TYPE_BO2 = 2;
     
 
-    
-    
-    
     
     /**
      * @inheritdoc
@@ -115,6 +112,7 @@ class Matches extends \yii\db\ActiveRecord
     }
     
     
+    
     public static function findMatchesWithoutResult(){
         return static::find()->select('gametournament_id')->where(['status' => self::NOT_COMPLETE])->asArray()->column();
     }
@@ -137,7 +135,7 @@ class Matches extends \yii\db\ActiveRecord
         $query = static::find()->select('id')->where(['team1_id' => self::TBD_MATCH])
                              ->orWhere(['team2_id' => self::TBD_MATCH])
                              ->orWhere(['status' => self::NOT_COMPLETE])
-                             ->andHaving(['<','SUM(start_time + (24 * 60 * 60))', time() ])->asArray()->column();
+                             ->andHaving(['<','start_time + (24 * 60 * 60)', time() ])->asArray()->column();
         
         return static::updateAll(['status' => self::ERROR_WITH_PARSING],['id' => $query] );
         
@@ -148,5 +146,7 @@ class Matches extends \yii\db\ActiveRecord
         return static::find()->where(['<','start_time', time()])->orderBy('start_time')->limit(2)->all();
         
     }
+    
+   
     
 }

@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\forecasts\models\search\ForecastSearch */
@@ -14,31 +13,33 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="forecast-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-<?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-    <?= Html::a(Yii::t('app', 'Create Forecast'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Forecast'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>    <?=
-    GridView::widget([
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'formatter' => [
-            'class' => 'yii\i18n\Formatter',
-            'nullDisplay' => 'Null',
-        ],
         'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
             'id',
             'match_id',
             'user_id',
             'bookmeker_id',
-            'status',
+            'bets_type',
+            // 'status',
             // 'bookmeker_koff',
-            // 'user_koff',
+            // 'description:ntext',
+            // 'match_started',
             // 'created_at',
             // 'updated_at',
+            // 'team1',
+            // 'team2',
+            // 'coins_bet',
+
             ['class' => 'yii\grid\ActionColumn'],
         ],
-    ]);
-    ?>
-<?php Pjax::end(); ?></div>
+    ]); ?>
+</div>

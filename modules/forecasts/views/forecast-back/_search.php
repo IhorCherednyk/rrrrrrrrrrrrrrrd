@@ -23,15 +23,25 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'bookmeker_id') ?>
 
-    <?= $form->field($model, 'status') ?>
+    <?= $form->field($model, 'bets_type') ?>
+
+    <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'bookmeker_koff') ?>
 
-    <?php // echo $form->field($model, 'user_koff') ?>
+    <?php // echo $form->field($model, 'description') ?>
+
+    <?php // echo $form->field($model, 'match_started') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'updated_at') ?>
+
+    <?php // echo $form->field($model, 'team1') ?>
+
+    <?php // echo $form->field($model, 'team2') ?>
+
+    <?php // echo $form->field($model, 'coins_bet') ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

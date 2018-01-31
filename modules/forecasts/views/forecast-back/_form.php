@@ -1,50 +1,83 @@
 <?php
 
+use app\modules\bookmekers\models\Bookmeker;
+use app\modules\forecasts\models\Forecast;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\forecasts\models\Forecast */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $this View */
+/* @var $model Forecast */
+/* @var $form ActiveForm */
 
-$this->registerJs(" 
-        $(function(){
-            
-            $('.select2').select2();
-            
-        });", \yii\web\View::POS_END);
+
+
+$bookmekers = Bookmeker::find()->all();
+$bookArray = ArrayHelper::map($bookmekers, 'id', 'gametournament_alias');
+
+$this->registerJs("
+    
+    $(document).on('change','#forecast-match_id',function(e){
+        e.preventDefault();
+        submitMe();
+    });
+    
+    $(document).on('change','#forecast-bets_type',function(e){
+        e.preventDefault();
+        submitMe();
+    });
+
+    function submitMe() {
+        var form = $('form#w0');
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (response) {
+                 $('.panel-body').html(response);
+            },
+            error: function (response) {
+                console.log('error');
+            }
+        });
+        
+    }
+    
+    
+");
 ?>
 
 <div class="forecast-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php
-
-    $matchNameArray = [];
-    
-    foreach ($matches as $key => $match) {
-        $matchNameArray[$match['id']] = $match['team1']['name'] . ' vs ' . $match['team2']['name'];
-    }
-
-    ?>
-    
-    <?= $form->field($model, 'match_id')->dropDownList($matchNameArray, [
-        'class' => 'select2',
-        'prompt' => 'Выберете матч'
+    <?=
+    $form->field($model, 'match_id')->dropDownList($matchNameArray, [
+        'prompt' => 'Выберите матч'
     ])
     ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?=
+    $form->field($model, 'bets_type')->dropDownList($betsType, [
+        'prompt' => 'Выберите прогноз'
+    ])
+    ?>
+    <?=
+    $form->field($model, 'user_choice')->dropDownList($betsArray, [
+        'prompt' => 'Выберите прогноз'
+    ])
+    ?>
+    <?=
+    $form->field($model, 'bookmeker_id')->dropDownList($bookArray, [
+        'prompt' => 'Выберите букмекера'
+    ])
+    ?>
 
-    <?= $form->field($model, 'bookmeker_id')->textInput() ?>
-    
+
     <?= $form->field($model, 'description')->textarea() ?>
 
-    <?= $form->field($model, 'bookmeker_koff')->textInput() ?>
-
-    <?= $form->field($model, 'user_koff')->textInput() ?>
-
+    <?= $form->field($model, 'coins_bet')->textInput() ?>
 
 
     <div class="form-group">

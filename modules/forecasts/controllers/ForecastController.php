@@ -10,7 +10,7 @@ class ForecastController extends FrontControlller {
 
     public function actionIndex() {
         
-        $query = Matches::find()->where(['status' => Matches::NOT_COMPLETE]);
+        $query = Matches::find()->where(['status' => Matches::NOT_COMPLETE])->andWhere(['not',['koff_counter' => 0]]);
         
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

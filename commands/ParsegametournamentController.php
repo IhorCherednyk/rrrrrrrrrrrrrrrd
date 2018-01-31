@@ -117,7 +117,7 @@ class ParsegametournamentController extends Controller{
                         //Create or get Id by Tournament
                         $this->matchGlobalArray[$key]['tournament_id'] = $this->generateTournamentData($tourneyNamae, $tourneyImage);
                         // Match start time
-                        $this->matchGlobalArray[$key]['start_time'] = (int) $row->find('td', 2)->children(1)->children(0)->time;
+                        $this->matchGlobalArray[$key]['start_time'] = (int) $row->find('td', 2)->children(1)->children(0)->attr['data-time'];
                         
 
                         $this->matchGlobalArray[$key]['team1'] = [
