@@ -57,7 +57,7 @@ class ForecastBackController extends BackController
                 ->andWhere(['not', ['team2_id' => null]])
 //                ->andWhere(['>','start_time',time()])
                 ->asArray()->all();
-        
+       
         $matchNameArray = [];
         foreach ($matches as $key => $match) {
             $matchNameArray[$match['id']] = $match['team1']['name'] . ' vs ' . $match['team2']['name'];
@@ -67,11 +67,9 @@ class ForecastBackController extends BackController
         
         if (Yii::$app->request->isAjax) {
            $model->load(Yii::$app->request->post());
-           
            if(!empty($model->match_id) && !empty($model->bets_type)){
                $betsArray = $model->generateBackBets($model->match_id,$model->bets_type);
            }
-          
            return $this->renderPartial('create', [
                 'model' => $model,
                 'matchNameArray' => $matchNameArray,
@@ -81,12 +79,8 @@ class ForecastBackController extends BackController
         }
         
         
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model->user_id = \Yii::$app->user->id;
-            $model->status = Forecast::FORECAST_NOT_COUNTED;
-            
-            return $this->redirect(['view', 'id' => $model->id]);
-            
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+            $model->saveForecast();
         } else {
             return $this->render('create', [
                 'model' => $model,

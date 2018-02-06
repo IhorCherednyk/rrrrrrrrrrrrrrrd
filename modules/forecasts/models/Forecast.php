@@ -29,34 +29,36 @@ use Yii;
 class Forecast extends \yii\db\ActiveRecord {
 
     public $user_choice;
+
+    const STATUS_NOT_COUNTED = 0;
+    const STATUS_COMPLETE = 1;
     
-    const BETS_TYPE_WIN_LOSE = 0;
-    const BETS_TYPE_SCORE = 1;
-    const BETS_TYPE_FORA = 2;
+    
+    const BETS_TYPE_WIN_LOSE = 1;
+    const BETS_TYPE_SCORE = 2;
+//    const BETS_TYPE_FORA = 2;
     const WIN_LOSE_TYPE_WIN_TEAM_1 = 0;
     const WIN_LOSE_TYPE_WIN_TEAM_2 = 1;
     const WIN_LOSE_TYPE_DRAFT = 2;
-    const SCORE_TYPE_1_0 = 3;
-    const SCORE_TYPE_0_1 = 4;
-    const SCORE_TYPE_1_1 = 5;
-    const SCORE_TYPE_2_0 = 6;
-    const SCORE_TYPE_2_1 = 7;
-    const SCORE_TYPE_0_2 = 8;
-    const SCORE_TYPE_1_2 = 9;
-    const SCORE_TYPE_3_0 = 10;
-    const SCORE_TYPE_3_1 = 11;
-    const SCORE_TYPE_3_2 = 12;
-    const SCORE_TYPE_0_3 = 13;
-    const SCORE_TYPE_1_3 = 14;
-    const SCORE_TYPE_2_3 = 15;
-    const FORA_TYPE_TEAM1_PLUS_0_5 = 16;
-    const FORA_TYPE_TEAM1_PLUS_1_5 = 17;
-    const FORA_TYPE_TEAM1_MINUS_0_5 = 18;
-    const FORA_TYPE_TEAM1_MINUS_1_5 = 19;
-    const FORA_TYPE_TEAM2_PLUS_0_5 = 20;
-    const FORA_TYPE_TEAM2_PLUS_1_5 = 21;
-    const FORA_TYPE_TEAM2_MINUS_0_5 = 22;
-    const FORA_TYPE_TEAM2_MINUS_1_5 = 23;
+    const SCORE_TYPE_2_0 = 3;
+    const SCORE_TYPE_2_1 = 4;
+    const SCORE_TYPE_0_2 = 5;
+    const SCORE_TYPE_1_2 = 6;
+    const SCORE_TYPE_3_0 = 7;
+    const SCORE_TYPE_3_1 = 8;
+    const SCORE_TYPE_3_2 = 9;
+    const SCORE_TYPE_0_3 = 10;
+    const SCORE_TYPE_1_3 = 11;
+    const SCORE_TYPE_2_3 = 12;
+
+//    const FORA_TYPE_TEAM1_PLUS_0_5 = 16;
+//    const FORA_TYPE_TEAM1_PLUS_1_5 = 17;
+//    const FORA_TYPE_TEAM1_MINUS_0_5 = 18;
+//    const FORA_TYPE_TEAM1_MINUS_1_5 = 19;
+//    const FORA_TYPE_TEAM2_PLUS_0_5 = 20;
+//    const FORA_TYPE_TEAM2_PLUS_1_5 = 21;
+//    const FORA_TYPE_TEAM2_MINUS_0_5 = 22;
+//    const FORA_TYPE_TEAM2_MINUS_1_5 = 23;
 
     /**
      * @inheritdoc
@@ -70,7 +72,7 @@ class Forecast extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'required'],
+                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started','team1', 'team2', 'coins_bet'], 'required'],
                 [['match_id', 'user_id', 'bookmeker_id', 'bets_type', 'status', 'bookmeker_koff', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'integer'],
                 [['description'], 'string'],
                 [['bookmeker_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\modules\bookmekers\models\Bookmeker::className(), 'targetAttribute' => ['bookmeker_id' => 'id']],
@@ -126,37 +128,85 @@ class Forecast extends \yii\db\ActiveRecord {
         return $arr = [
             self::BETS_TYPE_WIN_LOSE => 'Ставка на победу',
             self::BETS_TYPE_SCORE => 'Точный счет',
-            self::BETS_TYPE_FORA => 'Поставить на Фору',
+
         ];
     }
 
-    public function generateBackBets($matchType) {
-        
-        switch ($matchType) {
-            case Matches::TYPE_BO1:
-                $arr = [
-                    self::BETS_TYPE_WIN_LOSE => '(1:0)',
-                    self::BETS_TYPE_WIN_LOSE => '(0:1)',
-                    self::TPL_STUDENT_FINISHED_CERT => [
-                        '[full_name]',
-                        '[result]',
-                        '[quiz_title]',
-                        '[result_count]'
-                    ],
-                    self::TEST => [
-                        '[full_name]',
-                        '[login]',
-                    ],
-                    self::TEST2 => [
-                        '[full_name]',
-                        '[login]',
-                        '[login_url]',
-                    ],
-                ];
-                break;
+    public function generateBackBets($matchId, $betsType) {
+        $match = Matches::findOne($matchId);
+        if (!empty($match)) {
 
-            default:
-                break;
+            switch ($match->match_type) {
+                case Matches::TYPE_BO1:
+                case Matches::TYPE_BO2:
+                    $arr = [
+                        self::WIN_LOSE_TYPE_WIN_TEAM_1 => 'Победа 1',
+                        self::WIN_LOSE_TYPE_WIN_TEAM_2 => 'Победа 2',
+                        self::WIN_LOSE_TYPE_DRAFT => 'Ничья',
+                    ];
+                    break;
+                case Matches::TYPE_BO3:
+                    
+                    switch ($betsType) {
+                        case Forecast::BETS_TYPE_WIN_LOSE:
+                            $arr = [
+                                self::WIN_LOSE_TYPE_WIN_TEAM_1 => 'Победа 1',
+                                self::WIN_LOSE_TYPE_WIN_TEAM_2 => 'Победа 2',
+                                self::WIN_LOSE_TYPE_DRAFT => 'Ничья',
+                            ];
+                            break;
+                        case Forecast::BETS_TYPE_SCORE:
+                            $arr = [
+                                self::SCORE_TYPE_2_0 => '(2:0)',
+                                self::SCORE_TYPE_2_1 => '(2:1)',
+                                self::SCORE_TYPE_0_2 => '(0:2)',
+                                self::SCORE_TYPE_1_2 => '(1:2)',
+                            ];
+                            break;
+                    }
+                    
+                    break;
+                case Matches::TYPE_BO5:
+                    switch ($betsType) {
+                        case Forecast::BETS_TYPE_WIN_LOSE:
+                            $arr = [
+                                self::WIN_LOSE_TYPE_WIN_TEAM_1 => 'Победа 1',
+                                self::WIN_LOSE_TYPE_WIN_TEAM_2 => 'Победа 2',
+                                self::WIN_LOSE_TYPE_DRAFT => 'Ничья',
+                            ];
+                            break;
+                        case Forecast::BETS_TYPE_SCORE:
+                            $arr = [
+                                self::SCORE_TYPE_3_0 => '(3:0)',
+                                self::SCORE_TYPE_3_1 => '(3:1)',
+                                self::SCORE_TYPE_3_2 => '(3:2)',
+                                self::SCORE_TYPE_0_3 => '(0:3)',
+                                self::SCORE_TYPE_1_3 => '(1:3)',
+                                self::SCORE_TYPE_2_3 => '(2:3)',
+                            ];
+                            break;
+                    }
+
+                    break;
+            }
+            return $arr;
+        } else {
+            throw new \yii\web\NotFoundHttpException();
         }
     }
+    
+    public function saveForecast(){
+        $this->user_id = \Yii::$app->user->id;
+        $match = Matches::findOne($this->match_id);
+        
+        if(!empty($match)){
+            $this->match_started = $match->start_time;
+
+        }
+        
+        $this->validate();
+//        $this->match_started = Matches::
+        D($this);
+    }
+
 }

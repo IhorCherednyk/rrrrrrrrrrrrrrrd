@@ -24,11 +24,13 @@ $this->registerJs("
     });
     
     $(document).on('change','#forecast-bets_type',function(e){
+        
         e.preventDefault();
         submitMe();
     });
 
     function submitMe() {
+        
         var form = $('form#w0');
         $.ajax({
             type: 'POST',
