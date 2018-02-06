@@ -12,10 +12,6 @@ use yii\widgets\ActiveForm;
 /* @var $form ActiveForm */
 
 
-
-$bookmekers = Bookmeker::find()->all();
-$bookArray = ArrayHelper::map($bookmekers, 'id', 'gametournament_alias');
-
 $this->registerJs("
     
     $(document).on('change','#forecast-match_id',function(e){

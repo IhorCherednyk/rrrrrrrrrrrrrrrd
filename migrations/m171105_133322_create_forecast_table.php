@@ -16,6 +16,7 @@ class m171105_133322_create_forecast_table extends Migration {
      * @inheritdoc
      */
     public function up() {
+        
         $this->createTable('{{%forecast}}', [
             'id' => $this->primaryKey(),
             'match_id' => $this->integer()->notNull(),
@@ -23,7 +24,7 @@ class m171105_133322_create_forecast_table extends Migration {
             'bookmeker_id' => $this->integer()->notNull(),
             'bets_type' => $this->integer()->defaultValue(0),
             'status' => $this->integer()->defaultValue(0),
-            'bookmeker_koff' => $this->integer()->notNull(),
+            'bookmeker_koff' => $this->float()->notNull(),
             'description' => $this->text()->notNull(),
             'match_started' => $this->integer(11)->notNull(),
             'created_at' => $this->integer(11)->notNull(),

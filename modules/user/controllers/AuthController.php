@@ -92,7 +92,7 @@ class AuthController extends FrontControlller {
     
     public function actionSteamLogin() {
         //Set Steam Api Key
-        $steamKey = 'BB5C149531065D6659743AC5734D58EC';
+        $steamKey = '37436F92BDD663F5C9D650713B5B49CF';
 
         try {
             //First request set your action 

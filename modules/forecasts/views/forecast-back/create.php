@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'matchNameArray' => $matchNameArray,
         'betsType' => $betsType,
-        'betsArray' => $betsArray
+        'betsArray' => $betsArray,
+        'bookArray' => $bookArray
     ])
     ?>
 

@@ -30,7 +30,7 @@ class ImageHelper {
             $baseName = md5($model->{$attr}->baseName . time());
 
             // Создаем путь к нашей картинке 
-            $dir = '/' . 'img' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
+            $dir = '/' . 'img/uploads' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
 
             if (!is_dir($basePath . $dir)) {
                 $oldmask = umask(0);
@@ -57,7 +57,7 @@ class ImageHelper {
        
         $basePath = Yii::getAlias('@webroot');
         $baseName = md5($imgpath . time());
-        $dir = '/' . 'img' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
+        $dir = '/' . 'img/uploads' . '/' . substr($baseName, 0, 2) . '/' . substr($baseName, 2, 2);
         if (!is_dir($basePath . $dir)) {
                 $oldmask = umask(0);
                 mkdir($basePath . $dir, 0777, true);

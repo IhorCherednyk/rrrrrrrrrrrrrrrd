@@ -32,8 +32,6 @@ class Forecast extends \yii\db\ActiveRecord {
 
     const STATUS_NOT_COUNTED = 0;
     const STATUS_COMPLETE = 1;
-    
-    
     const BETS_TYPE_WIN_LOSE = 1;
     const BETS_TYPE_SCORE = 2;
 //    const BETS_TYPE_FORA = 2;
@@ -72,8 +70,9 @@ class Forecast extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started','team1', 'team2', 'coins_bet'], 'required'],
-                [['match_id', 'user_id', 'bookmeker_id', 'bets_type', 'status', 'bookmeker_koff', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'integer'],
+                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started', 'team1', 'team2', 'coins_bet'], 'required'],
+                [['bookmeker_koff'], 'number'],
+                [['match_id', 'user_id', 'bookmeker_id', 'bets_type', 'status', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'integer'],
                 [['description'], 'string'],
                 [['bookmeker_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\modules\bookmekers\models\Bookmeker::className(), 'targetAttribute' => ['bookmeker_id' => 'id']],
                 [['match_id'], 'exist', 'skipOnError' => true, 'targetClass' => Matches::className(), 'targetAttribute' => ['match_id' => 'id']],
@@ -128,8 +127,23 @@ class Forecast extends \yii\db\ActiveRecord {
         return $arr = [
             self::BETS_TYPE_WIN_LOSE => 'Ставка на победу',
             self::BETS_TYPE_SCORE => 'Точный счет',
-
         ];
+    }
+
+    public function getTypeData($type) {
+        $arr = [
+            self::SCORE_TYPE_2_0 => '2-0',
+            self::SCORE_TYPE_2_1 => '2-1',
+            self::SCORE_TYPE_0_2 => '0-2',
+            self::SCORE_TYPE_1_2 => '1-2',
+            self::SCORE_TYPE_3_0 => '3-0',
+            self::SCORE_TYPE_3_1 => '3-1',
+            self::SCORE_TYPE_3_2 => '3-2',
+            self::SCORE_TYPE_0_3 => '0-3',
+            self::SCORE_TYPE_1_3 => '1-3',
+            self::SCORE_TYPE_2_3 => '2-3'
+        ];
+        return $arr[$type];
     }
 
     public function generateBackBets($matchId, $betsType) {
@@ -146,7 +160,7 @@ class Forecast extends \yii\db\ActiveRecord {
                     ];
                     break;
                 case Matches::TYPE_BO3:
-                    
+
                     switch ($betsType) {
                         case Forecast::BETS_TYPE_WIN_LOSE:
                             $arr = [
@@ -164,7 +178,7 @@ class Forecast extends \yii\db\ActiveRecord {
                             ];
                             break;
                     }
-                    
+
                     break;
                 case Matches::TYPE_BO5:
                     switch ($betsType) {
@@ -194,19 +208,48 @@ class Forecast extends \yii\db\ActiveRecord {
             throw new \yii\web\NotFoundHttpException();
         }
     }
-    
-    public function saveForecast(){
-        $this->user_id = \Yii::$app->user->id;
-        $match = Matches::findOne($this->match_id);
-        
-        if(!empty($match)){
-            $this->match_started = $match->start_time;
 
+    public function saveForecast() {
+
+        $match = Matches::findOne($this->match_id);
+        $this->match_started = $match->start_time;
+
+        if ($this->bets_type == self::BETS_TYPE_WIN_LOSE) {
+            $this->parseWinLoseType();
+        } else {
+            $this->parseScoreType();
         }
+
         
-        $this->validate();
-//        $this->match_started = Matches::
-        D($this);
+        return $this->save();
+    }
+
+    public function parseWinLoseType() {
+        $matchesKoff = MatchesKoff::find()->where(['match_id' => $this->match_id])->andWhere(['book_id' => $this->bookmeker_id])->one();
+        $result = explode('-', $this->getTypeData($this->user_choice));
+        $this->team1 = $result[0];
+        $this->team2 = $result[1];
+        if ($result[0] > $result[1]) {
+            $this->bookmeker_koff = $matchesKoff->team1_koff;
+        } else if ($result[0] < $result[1]) {
+            $this->bookmeker_koff = $matchesKoff->team2_koff;
+        } else {
+            $this->bookmeker_koff = ($matchesKoff->team1_koff + $matchesKoff->team2_koff) / 2;
+        }
+    }
+
+    public function parseScoreType() {
+        $matchesKoff = MatchesKoff::find()->where(['match_id' => $this->match_id])->andWhere(['book_id' => $this->bookmeker_id])->one();
+        $result = explode('-', $this->getTypeData($this->user_choice));
+        $this->team1 = $result[0];
+        $this->team2 = $result[1];
+        if($result[0] > $result[1]){
+            $this->bookmeker_koff = $matchesKoff->team1_koff;
+        }else if ($result[0] < $result[1]) {
+            $this->bookmeker_koff = $matchesKoff->team2_koff;
+        }else {
+            $this->bookmeker_koff = ($matchesKoff->team1_koff + $matchesKoff->team2_koff)/2;
+        }
     }
 
 }
