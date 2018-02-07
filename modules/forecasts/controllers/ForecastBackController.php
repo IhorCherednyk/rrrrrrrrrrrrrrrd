@@ -55,6 +55,7 @@ class ForecastBackController extends BackController {
                         ->where(['status' => Matches::NOT_COMPLETE])
                         ->andWhere(['not', ['team1_id' => null]])
                         ->andWhere(['not', ['team2_id' => null]])
+                        ->andWhere(['not',['koff_counter' => 0]])
 //                ->andWhere(['>','start_time',time()])
                         ->asArray()->all();
 

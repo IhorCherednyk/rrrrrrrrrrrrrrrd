@@ -132,6 +132,9 @@ class Forecast extends \yii\db\ActiveRecord {
 
     public function getTypeData($type) {
         $arr = [
+            self::WIN_LOSE_TYPE_WIN_TEAM_1 => '1-0',
+            self::WIN_LOSE_TYPE_WIN_TEAM_2 => '0-1',
+            self::WIN_LOSE_TYPE_DRAFT => '1-1',
             self::SCORE_TYPE_2_0 => '2-0',
             self::SCORE_TYPE_2_1 => '2-1',
             self::SCORE_TYPE_0_2 => '0-2',
