@@ -2,22 +2,20 @@
 
 namespace app\commands;
 
-use yii\console\Controller;
 use app\helpers\ImageHelper;
 use app\modules\bookmekers\models\Bookmeker;
+use app\modules\forecasts\models\Forecast;
 use app\modules\forecasts\models\Matches;
 use app\modules\forecasts\models\MatchesKoff;
 use app\modules\forecasts\models\TeamAlias;
 use app\modules\team\models\Teams;
 use darkdrim\simplehtmldom\SimpleHTMLDom;
 use Yii;
+use yii\console\Controller;
 use yii\db\Exception;
-use yii\helpers\ArrayHelper;
-use app\modules\forecasts\models\Tournaments;
 
+class GametournamentUpdateController extends Controller {
 
-class GametournamentUpdateController extends Controller{
-    
     /**
      * Renders the index view for the module
      * @return string
@@ -37,43 +35,39 @@ class GametournamentUpdateController extends Controller{
 
 
         if ($dotaPage) {
-            
+
             $html = SimpleHTMLDom::str_get_html($dotaPage);
-            
+
             if ($html) {
-                
+
+                //find match witch we not completle update where team = null or etc
                 $matches = Matches::findUpdateConditions();
+
                 $finishedMatches = Matches::findMatchesWithoutResult();
-                
+
                 if (!empty($matches)) {
 
                     $this->generateMatchArray($html, $matches);
 
                     if (!empty($this->matchGlobalArray)) {
-                        
+
                         $this->referToArrayLink();
                         $this->identifyTeamInMatchArray();
                         $this->saveMatches();
-                        
-                    }else{
+                    } else {
                         Yii::warning(__CLASS__ . '$this->matchGlobalArray is empty', 'gametournamentupdater');
                     }
-                    
                 }
 
                 if (!empty($finishedMatches)) {
                     $this->refreshFinishedMatches($html, $finishedMatches);
                 }
-                
-                
             } else {
                 Yii::warning(__CLASS__ . 'SimpleHTMLDom dont create HTML', 'gametournamentupdater');
             }
-            
         }
 
         Matches::findErrorMatches();
-        
     }
 
     function curlInit($url) {
@@ -94,7 +88,7 @@ class GametournamentUpdateController extends Controller{
 
             return $str;
         } else {
-            Yii::warning(__METHOD__ . 'gametournament curl init exeption','gametournamentupdater');
+            Yii::warning(__METHOD__ . 'gametournament curl init exeption', 'gametournamentupdater');
             throw new Exception(__METHOD__);
         }
     }
@@ -149,76 +143,70 @@ class GametournamentUpdateController extends Controller{
 
             $singleDotaPage = $this->curlInit($this->dotaUrl . $match['link_for_bets']);
 
-            if($singleDotaPage){
+            if ($singleDotaPage) {
 
                 $html = SimpleHTMLDom::str_get_html($singleDotaPage);
 
-                if($html){
+                if ($html) {
 
                     $data = $this->getDataFromSinglePage($html);
 
-                    if(!empty($data)){
+                    if (!empty($data)) {
                         $this->matchGlobalArray[$key]['team1']['name_team'] = $data['name1'];
                         $this->matchGlobalArray[$key]['team1']['team_img'] = $data['team1_img'];
                         $this->matchGlobalArray[$key]['team2']['name_team'] = $data['name2'];
-                        $this->matchGlobalArray[$key]['team2']['team_img'] = $data['team2_img']; 
-                        if (!empty($data['bets'])){
+                        $this->matchGlobalArray[$key]['team2']['team_img'] = $data['team2_img'];
+                        if (!empty($data['bets'])) {
                             $this->matchGlobalArray[$key]['bets'] = $data['bets'];
                         }
-                    }else{
-                       Yii::warning(__METHOD__ . 'Dont find data in single page for ','gametournamentupdater'); 
+                    } else {
+                        Yii::warning(__METHOD__ . 'Dont find data in single page for ', 'gametournamentupdater');
                     }
-                }else{
-                    Yii::warning(__METHOD__ . 'Dont create HTML for single page','gametournamentupdater');
+                } else {
+                    Yii::warning(__METHOD__ . 'Dont create HTML for single page', 'gametournamentupdater');
                 }
-
-            }else{
-                Yii::warning(__METHOD__ . 'Dont init curl in single page','gametournamentupdater');
+            } else {
+                Yii::warning(__METHOD__ . 'Dont init curl in single page', 'gametournamentupdater');
             }
-
         }
-        
     }
-    
 
     function getDataFromSinglePage($html) {
-            $singleTeamDataParent = $html->find('.match-info', 0)->children(0);
-            $singleBetsDataParent = $html->find('#pastkef', 0);
-            $data = [];
-            
-            if (!empty($singleTeamDataParent)) {
-                $data['name1'] = $singleTeamDataParent->children(0)->find('.mteamname', 0)->children(0)->title;
-                $data['team1_img'] = $this->clearImgPath($singleTeamDataParent->children(0)->find('.mteamlogo', 0)->children(0)->src);
-                $data['name2'] = $singleTeamDataParent->children(2)->find('.mteamname', 0)->children(0)->title;
-                $data['team2_img'] = $this->clearImgPath($singleTeamDataParent->children(2)->find('.mteamlogo', 0)->children(0)->src);
-            }
-            
-            if (!empty($singleBetsDataParent)) {
-                foreach ($singleBetsDataParent->find('.row2') as $key => $row) {
-                    if (!empty($row)) {
-                        $data['bets'][] = [
-                            'name' => split('&', split('=', $row->children(0)->children(0)->href)[1])[0],
-                            'team1_koff' => $row->find('.koeftable', 0)->children(0)->children(1)->children(0)->plaintext,
-                            'team2_koff' => $row->find('.koeftable', 0)->children(0)->children(1)->children(1)->plaintext,
-                            'img_path' => $row->children(0)->children(0)->find('img', 0)->src
-                        ];
-                    }
+        $singleTeamDataParent = $html->find('.match-info', 0)->children(0);
+        $singleBetsDataParent = $html->find('#pastkef', 0);
+        $data = [];
+
+        if (!empty($singleTeamDataParent)) {
+            $data['name1'] = $singleTeamDataParent->children(0)->find('.mteamname', 0)->children(0)->title;
+            $data['team1_img'] = $this->clearImgPath($singleTeamDataParent->children(0)->find('.mteamlogo', 0)->children(0)->src);
+            $data['name2'] = $singleTeamDataParent->children(2)->find('.mteamname', 0)->children(0)->title;
+            $data['team2_img'] = $this->clearImgPath($singleTeamDataParent->children(2)->find('.mteamlogo', 0)->children(0)->src);
+        }
+
+        if (!empty($singleBetsDataParent)) {
+            foreach ($singleBetsDataParent->find('.row2') as $key => $row) {
+                if (!empty($row)) {
+                    $data['bets'][] = [
+                        'name' => split('&', split('=', $row->children(0)->children(0)->href)[1])[0],
+                        'team1_koff' => $row->find('.koeftable', 0)->children(0)->children(1)->children(0)->plaintext,
+                        'team2_koff' => $row->find('.koeftable', 0)->children(0)->children(1)->children(1)->plaintext,
+                        'img_path' => $row->children(0)->children(0)->find('img', 0)->src
+                    ];
                 }
             }
+        }
 
-            return $data;
-
+        return $data;
     }
 
     // Save or Create Team by Match Array end get Team id
     function identifyTeamInMatchArray() {
         $link = &$this->matchGlobalArray;
-        
+
         foreach ($link as $key => $match) {
             $this->matchGlobalArray[$key]['team1_id'] = $this->setOrSaveTeam($match['team1']);
             $this->matchGlobalArray[$key]['team2_id'] = $this->setOrSaveTeam($match['team2']);
         }
-        
     }
 
     function setOrSaveTeam($teamData) {
@@ -287,60 +275,54 @@ class GametournamentUpdateController extends Controller{
                                 $bookmeker->img_medium = $this->saveTeamImage($this->dotaUrl . $bet['img_path']);
                                 if ($bookmeker->save()) {
                                     $this->saveKofficientForMatch($match['id'], $bookmeker->id, $bet);
-                                }else {
+                                } else {
                                     Yii::warning(__METHOD__ . 'Bookmeker dont`t saved', 'gametournamentupdater');
                                 }
                             }
                         }
                     }
-                }else{
-                    Yii::warning(__METHOD__ . 'Match dont`t saved','gametournamentupdater');
+                } else {
+                    Yii::warning(__METHOD__ . 'Match dont`t saved', 'gametournamentupdater');
                 }
             }
         }
     }
-    
-    
-    function refreshFinishedMatches($html,$finishedMatches){
-        
+
+    function refreshFinishedMatches($html, $finishedMatches) {
 
         $pastTable = $html->find('#block_matches_past .matches', 0);
 
         if (!empty($pastTable)) {
-            
+
             foreach ($pastTable->find('tr') as $key => $row) {
                 $id = (int) $row->rel;
                 try {
                     if (in_array($id, $finishedMatches)) {
-                        
+
                         $currentMatch = Matches::findByTournamentId($id);
-                        
-                        if(!is_null($currentMatch)){
-                            $result = explode(':',str_replace(' ','',$row->find('td', 1)->children(0)->children(1)->children(1)->children(0)->attr['data-score']));
-                            
-                            if($result){
+
+                        if (!is_null($currentMatch)) {
+                            $result = explode(':', str_replace(' ', '', $row->find('td', 1)->children(0)->children(1)->children(1)->children(0)->attr['data-score']));
+
+                            if ($result) {
                                 $currentMatch->team1_result = $result[0];
                                 $currentMatch->team2_result = $result[1];
-                                if(!is_null($currentMatch->team1_result) && !is_null($currentMatch->team2_result)){
+                                if (!is_null($currentMatch->team1_result) && !is_null($currentMatch->team2_result)) {
                                     $currentMatch->status = Matches::COMPLETE;
-                                    if(!$currentMatch->save()){
-                                        Yii::warning(__METHOD__ . 'Match dont updated','gametournamentupdater');
+                                    if (!$currentMatch->save()) {
+                                        Yii::warning(__METHOD__ . 'Match dont updated', 'gametournamentupdater');
                                     }
                                 }
                             }
-                            
                         }
-
                     }
                 } catch (Exception $exc) {
-                    Yii::warning($exc->getMessage(),'gametournamentupdater');
+                    Yii::warning($exc->getMessage(), 'gametournamentupdater');
                     continue;
                 }
             }
         }
     }
-    
-    
 
     function saveKofficientForMatch($matchid, $bookid, $data) {
         $koff = MatchesKoff::findForUpdate($matchid, $bookid);

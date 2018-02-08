@@ -31,7 +31,10 @@ class Forecast extends \yii\db\ActiveRecord {
     public $user_choice;
 
     const STATUS_NOT_COUNTED = 0;
-    const STATUS_COMPLETE = 1;
+    const STATUS_COMPLETE_SUCCESS = 1;
+    const STATUS_COMPLETE_FAIL = 2;
+    const STATUS_FAIL_COUNTED = 3;
+    
     const BETS_TYPE_WIN_LOSE = 1;
     const BETS_TYPE_SCORE = 2;
 //    const BETS_TYPE_FORA = 2;

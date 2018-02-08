@@ -31,6 +31,7 @@ class Matches extends \yii\db\ActiveRecord
     // STATUS
     const NOT_COMPLETE = 0;
     const COMPLETE = 1;
+    const COMPLETE_AND_COUNTED = 2;
     const ERROR_WITH_PARSING = 3;
     
     // TYPE

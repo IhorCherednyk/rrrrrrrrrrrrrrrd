@@ -3,13 +3,14 @@
 namespace app\modules\bookmekers\controllers;
 
 use app\components\controllers\BackController;
+use app\helpers\ImageHelper;
 use app\modules\bookmekers\models\Bookmeker;
 use app\modules\bookmekers\models\search\BookmekerSearch;
+use app\modules\forecasts\models\Forecast;
+use app\modules\forecasts\models\Matches;
 use Yii;
-use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
-use app\helpers\ImageHelper;
 
 /**
  * BookmekerBackController implements the CRUD actions for Bookmeker model.
@@ -68,9 +69,9 @@ class BookmekerBackController extends BackController {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post())) {
-            
+
             $model->filemedium_img = UploadedFile::getInstance($model, 'filemedium_img');
             $model->filesmall_img = UploadedFile::getInstance($model, 'filesmall_img');
             if ($model->validate()) {
