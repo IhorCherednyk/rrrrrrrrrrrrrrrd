@@ -60,7 +60,7 @@ a:focus, a:active, a:hover, a:visited{
 .main-nav .main-ul {
     float: right; 
 }
-.main-nav .main-ul li {
+.main-nav .main-ul > li {
     float: left; 
 }
 .main-nav .main-ul li a {
@@ -75,10 +75,10 @@ a:focus, a:active, a:hover, a:visited{
     -webkit-transition: all .25s esase;
     transition: all .25s esase; 
 }
-.main-nav .main-ul li.active a {
+.main-nav .main-ul > li.active > a {
     color: #dd163b; 
 }
-.main-nav .main-ul li:hover a {
+.main-nav .main-ul > li:hover > a {
     color: #dd163b; 
 }
 
@@ -1019,11 +1019,11 @@ td.team img {
     height: 0;
 }
 .stream-wrapper iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 .match-prognoz-content .read-more {
     position: absolute;
@@ -1371,7 +1371,7 @@ aside .sidebar-content.nearestmatches {
 .modal .form-group.steam-login-wrapper{
     overflow: hidden;
     margin: 20px 0;
-    
+
 }
 .steam-login-wrapper .btn{
     float: left;
@@ -1437,4 +1437,82 @@ aside .sidebar-content.nearestmatches {
 
 .single-match .match-sect-item {
     padding-bottom: 0;
+}
+.menu-avatar {
+    width: 45px;
+    border-radius: 10em;
+    position: relative;
+    top: -5px;
+    border: 1px solid #fff
+}
+
+.menu-item-wrappers {
+    float: left;
+}
+.menu-item-wrappers span {
+    display: block;
+    line-height: 1;
+    font-size: 13px;
+    font-weight: 400;
+}
+.submenu {
+    position: relative;
+}
+
+.main-nav .main-ul li.submenu:hover a {
+    color: #fff;
+}
+.submenu:hover .m-menu__subnav{
+    display: block;
+    opacity: 1;
+    max-height: 400px;
+
+}
+.m-menu__subnav {
+    background-color: rgba(0,0,0,.65);
+    padding: 10px;
+    position: absolute;
+    opacity: 0;
+    overflow: hidden;
+    max-height: 0;
+    min-width: 250px;
+    left: -50%;
+    -webkit-transition: all 0.4s ease-in;
+    -moz-transition: all 0.4s ease-in;
+    -o-transition: all 0.4s ease-in;
+    transition: all 0.4s ease-in;
+}
+.m-menu__subnav.open{
+    display: block;
+}
+
+.main-nav .main-ul > .submenu li.active > a {
+    color: #dd163b; 
+}
+.main-nav .main-ul > .submenu li:hover > a {
+    color: #dd163b; 
+}
+.m-menu__subnav .avatar_image{
+    width: 35%;
+}
+.m-menu__subnav .user_status{
+    width: 65%;
+    float: left;
+    padding:0 10px;
+}
+.m-menu__subnav li.submenu-li{
+    float: left;
+    width: 50%;
+    text-align: center;
+    border: 1px solid #333;
+}
+.m-menu__subnav .user_status li img {
+    width: 15px;
+}
+.m-menu__subnav .user_status ul li {
+    line-height: 1;
+    margin-bottom: 5px;
+}
+.header-dropdown {
+    margin-bottom: 15px;
 }
