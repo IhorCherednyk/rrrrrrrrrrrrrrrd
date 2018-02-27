@@ -8,6 +8,8 @@ $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
+        !! Создать транзакции для юзеров
+       
         1. Добавить Проверку на стримы если твитч афк
          <br>
         2. Ссылки на сингл матчи в виджетах
