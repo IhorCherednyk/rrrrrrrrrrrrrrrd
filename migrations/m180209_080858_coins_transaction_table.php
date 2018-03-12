@@ -12,7 +12,9 @@ class m180209_080858_coins_transaction_table extends Migration {
         $this->createTable('{{%transactions}}', [
             'id' => $this->primaryKey(),
             'type' => $this->integer()->notNull(),
-            'coins' => $this->integer()->notNull()
+            'coins' => $this->integer()->notNull(),
+            'reciver_coin' => $this->integer()->notNull(),
+            'status' => $this->integer()->defaultValue(0)
         ]);
 
     }

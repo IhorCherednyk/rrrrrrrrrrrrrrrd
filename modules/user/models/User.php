@@ -19,6 +19,17 @@ class User extends ActiveRecord implements IdentityInterface {
     const ROLE_USER = 3;
 
     public $password;
+    
+    public function afterSave($insert, $changedAttributes) {
+        parent::afterSave($insert, $changedAttributes);
+        if($insert){
+            $transaction = new Transactions();
+            $transaction->type = Transactions::TRANSACTION_TYPE_START;
+            $transaction->coins = Transactions::START_AND_REFRESH_COINS;
+            $transaction->reciver_coin = $this->id;
+            $transaction->save();
+        }
+    }
 
     public function rules() {
         return [
