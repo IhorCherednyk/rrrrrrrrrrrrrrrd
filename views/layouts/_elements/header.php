@@ -75,7 +75,15 @@ AppAsset::register($this);
                                         . '<ul>'
                                         . '<li>Статус: <span>Bronze</span></li>'
                                         . '<li>Имя: <span>Admin</span></li>'
-                                        . '<li><img src="/img/site/coin.png"><span>1000</span></li>'
+                                        . '<li>'
+                                        . '<img src="/img/site/coin.png">'
+                                        . ((Yii::$app->user->identity->coins <= 0) 
+                                            ? '' 
+                                            : Html::a('<i class="fa fa-refresh"></i>', 'javascript:;', ['id' => 'refresh']))
+                                        . '<span>' 
+                                        . Yii::$app->user->identity->coins 
+                                        . '</span>'
+                                        . '</li>'
                                         . '</ul>'
                                         . '</div>'
                                         . '<div style="clear: both;"></div>'

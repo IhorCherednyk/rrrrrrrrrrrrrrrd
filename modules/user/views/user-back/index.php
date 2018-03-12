@@ -8,27 +8,50 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\user\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Users');
+
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Users') . '</span>',
+    'url' => 'javascript:;',
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
 ?>
-<div class="user-index">
+<div class="m-portlet__body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-<?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
-
-    <p>
-    <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+    <p class="button-area">
+        <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>    <?=
+    <?php
+    Pjax::begin([
+        'id' => 'user',
+        'enablePushState' => false
+    ]);
+    ?>   
+    <?=
     GridView::widget([
+        'tableOptions' => Yii::$app->params['admin.grid.tableOptions'],
+        'options' => Yii::$app->params['admin.grid.options'],
+        'headerRowOptions' => Yii::$app->params['admin.grid.headerRowOptions'],
+        'pager' => Yii::$app->params['admin.grid.pager'],
         'dataProvider' => $dataProvider,
+        'layout' => '{items}{pager}',
         'filterModel' => $searchModel,
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'nullDisplay' => 'Null',
         ],
         'columns' => [
-            'id',
+                [
+                'attribute' => 'id',
+                'label' => 'id',
+                'headerOptions' => [
+                    'width' => '60',
+                ],
+                'contentOptions' => [
+//                    'class' => 'id'
+                ]
+            ],
             'username',
             'email:email',
 //            'password_hash',
@@ -48,35 +71,39 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Actions'),
                 'headerOptions' => [
-                    'width' => '50',
+                    'width' => '150'
+                ],
+                'contentOptions' => [
+                    'class' => 'actions-column'
                 ],
                 'buttons' => [
                     'delete' => function($url, $model) {
-                        return Html::a('<i class="icon wb-close"></i> ', ['delete', 'id' => $model->id], [
-                                    'class' => 'btn-red adm-btn',
+                        return Html::a('<i class="la la-trash"></i> ', ['delete', 'id' => $model->id], [
+                                    'class' => 'btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--outline-2x m-btn--pill',
                                     'title' => Yii::t('app', 'Delete'),
                                     'data-pjax' => 1,
                                     'data-method' => 'post',
+                                    'data-confirm' => Yii::t('app', 'Are you sure you want to delete this user?'),
+                        ]);
+                    },
+                    'loginAs' => function($url, $model) {
+                        return Html::a('<i class="fa fa-sign-in"></i> ', ['login-as', 'id' => $model->id], [
+                                    'class' => 'btn btn-outline-info m-btn m-btn--icon m-btn--icon-only m-btn--outline-2x m-btn--pill',
+                                    'title' => Yii::t('app', 'Login As'),
+                                    'data-pjax' => 1,
                         ]);
                     },
                     'edit' => function($url, $model) {
-                        return Html::a('<i class="icon wb-pencil"></i> ', ['update', 'id' => $model->id], [
-                                    'class' => 'btn-green adm-btn',
+                        return Html::a('<i class="la la-edit"></i> ', ['update', 'id' => $model->id], [
+                                    'class' => 'btn btn-outline-success m-btn m-btn--icon m-btn--icon-only m-btn--outline-2x m-btn--pill',
                                     'title' => Yii::t('app', 'Edit'),
-                                    'data-pjax' => 0
-                        ]);
-                    },
-                    'view' => function($url, $model) {
-                        return Html::a('<i class="icon wb-eye"></i> ', ['view', 'id' => $model->id], [
-                                    'class' => 'btn-green adm-btn',
-                                    'title' => Yii::t('app', 'View'),
                                     'data-pjax' => 0
                         ]);
                     }
                 ],
-                'template' => '{edit} {delete} {view}',
+                'template' => '{edit}{delete}{loginAs}',
             ],
         ],
     ]);
     ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?></div>

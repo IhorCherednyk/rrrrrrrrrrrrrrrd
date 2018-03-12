@@ -3,6 +3,41 @@
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 \Yii::setAlias('@img', '/img');
+
+$params['admin.grid.tableOptions'] = [
+    'class' => 'table table-bordered table-hover table-striped m-table--head-bg-success'
+];
+$params['admin.grid.options'] = [
+    'class' => 'grid-view table-responsive'
+];
+$params['admin.grid.headerRowOptions'] = [
+    'class' => ''
+];
+
+//FORM OPTIONS
+$params['admin.form.fieldConfig'] = [
+    'options' => [
+        'class' => 'm-form m-form--fit m-form--label-align-right m-form--state',
+    ],
+    'errorCssClass' => 'has-danger',
+    'fieldConfig' => [
+        'options' => [
+            'class' => 'form-group m-form__group',
+        ],
+        'template' => "{label}{input}{error}",
+        'inputOptions' => [
+            'class' => 'form-control m-input',
+        ],
+        'errorOptions' => [
+            'class' => 'help-block form-control-feedback',
+        ],
+    ],
+];
+$params['admin.grid.pager'] = [
+    'firstPageLabel' => Yii::t('app', 'First Page'),
+    'lastPageLabel' => Yii::t('app', 'Last Page'),
+];
+
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
@@ -61,6 +96,14 @@ $config = [
                 'streams' => 'streams/stream/index',
                 'forecasts' => 'forecasts/forecast/index',
                 '<slug>' => 'pages/pages/show'
+            ],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'sourcePath' => null,
+                    'js' => []
+                ],
             ],
         ],
     ],

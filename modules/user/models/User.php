@@ -44,7 +44,6 @@ class User extends ActiveRecord implements IdentityInterface {
                 [['first_name','last_name','note','skype'], 'string', 'message' => 'Должно быть текстом'],
                 [['steam_id'], 'integer']
                 
-
         ];
     }
 

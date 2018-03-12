@@ -163,6 +163,8 @@ AppAsset::register($this);
         </div>
         <img class="nk-page-background-top" src="/img/site/top-bg2.png" alt="">
         <img class="nk-page-background-bottom" src="/img/site/bg-bottom.png" alt="">
+        <script src="/back/vendor/jquery/jquery.min.js"></script>
+        
         <?php $this->endBody() ?>
     </body>
 </html>

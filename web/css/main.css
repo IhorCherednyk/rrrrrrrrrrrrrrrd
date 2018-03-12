@@ -1516,3 +1516,13 @@ aside .sidebar-content.nearestmatches {
 .header-dropdown {
     margin-bottom: 15px;
 }
+a#refresh {
+    float: right;
+    padding: 0 !important;
+    margin-left: 5px;
+    margin-top: -1px;
+    color: #fff !important;
+}
+a#refresh:hover {
+   color: #ff0000 !important; 
+}

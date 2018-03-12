@@ -5,14 +5,22 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = 'Update User: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = Yii::t('app', 'Update User');
+
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Users') . '</span>',
+    'url' => ['index'],
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Update User') . '</span>',
+    'url' => 'javascript:;',
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
 ?>
 <div class="user-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

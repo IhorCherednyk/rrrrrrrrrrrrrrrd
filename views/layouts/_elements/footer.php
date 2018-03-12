@@ -122,3 +122,30 @@ AppAsset::register($this);
     </div>
 
 </footer>
+<?php $this->registerJs("
+        
+    $(document).ready(function() {
+    
+        $('#refresh').on('click', function(e){
+            e.preventDefault();
+            submitAssign();
+        });
+        function submitAssign() {
+            $.ajax({
+                type: 'POST',
+                url: '/user/user/refresh-coins',
+                success: function (response) {
+                },
+                error: function (response) {
+                    console.log('error');
+                }
+            });
+        }
+    });
+
+            
+
+", \yii\web\View::POS_END);
+?>
+
+    

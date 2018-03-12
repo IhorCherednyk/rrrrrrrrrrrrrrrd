@@ -6,13 +6,22 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\user\models\User */
 
-$this->title = 'Create User';
-$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Create User');
+
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Users') . '</span>',
+    'url' => ['index'],
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Create User') . '</span>',
+    'url' => 'javascript:;',
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
 ?>
 <div class="user-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,
