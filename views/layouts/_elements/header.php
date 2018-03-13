@@ -58,7 +58,7 @@ AppAsset::register($this);
                             ],
                                 [
                                 'label' => Html::img(!empty(Yii::$app->user->identity->avatar_path) ?
-                                                Yii::$app->user->identity->avatar_path : '/img/site/noavatar.png', ['class' => 'menu-avatar']),
+                                                '/img/site/avatar-home.png' : '/img/site/noavatar.png', ['class' => 'menu-avatar']),
                                 'url' => '#',
                                 'visible' => !\Yii::$app->user->isGuest,
                                 'template' => '<a href="{url}" class="open-menu">{label}</a>',
@@ -69,7 +69,8 @@ AppAsset::register($this);
                                         [
                                         'template' => '<div class="header-dropdown" class="clearfix">'
                                         . '<div class="avatar_image">'
-                                        . '<img src="/img/site/noavatar.png" alt="">'
+                                        . Html::img(!empty(Yii::$app->user->identity->avatar_path) ?
+                                                Yii::$app->user->identity->avatar_path : '/img/site/noavatar.png', ['class' => 'menu-avatar'])
                                         . '</div>'
                                         . '<div class="user_status">'
                                         . '<ul>'
@@ -77,11 +78,11 @@ AppAsset::register($this);
                                         . '<li>Имя: <span>Admin</span></li>'
                                         . '<li>'
                                         . '<img src="/img/site/coin.png">'
-                                        . ((Yii::$app->user->identity->coins <= 0) 
+                                        . ((!empty(Yii::$app->user->identity->coins ) && Yii::$app->user->identity->coins <= 0) 
                                             ? '' 
                                             : Html::a('<i class="fa fa-refresh"></i>', 'javascript:;', ['id' => 'refresh']))
                                         . '<span id="coins">' 
-                                        . Yii::$app->user->identity->coins 
+                                        . (!empty(Yii::$app->user->identity->coins )?Yii::$app->user->identity->coins:'' )
                                         . '</span>'
                                         . '</li>'
                                         . '</ul>'
@@ -89,6 +90,7 @@ AppAsset::register($this);
                                         . '<div style="clear: both;"></div>'
                                         . '</div>',
                                         'url' => '#',
+                                        
                                     ],
                                         [
                                         'label' => Yii::t('app', 'Кабинет'),
@@ -96,6 +98,7 @@ AppAsset::register($this);
                                             'class' => 'submenu-li',
                                         ],
                                         'url' => ['/user/user/profile'],
+
                                     ],
                                         [
                                         'label' => Yii::t('app', 'Выход'),
@@ -103,8 +106,9 @@ AppAsset::register($this);
                                             'class' => 'submenu-li',
                                         ],
                                         'url' => ['/user/auth/logout'],
+
                                     ],
-                                ]
+                                ],
                             ],
                         ],
                     ]);

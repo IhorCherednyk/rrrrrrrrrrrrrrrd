@@ -42,7 +42,7 @@ a:focus, a:active, a:hover, a:visited{
 }
 .main-header {
     background-color: rgba(0, 0, 0, 0.64);
-    padding: 25px 0;
+    padding: 25px 0 0;
     z-index: 2; 
 }
 .main-header .container {
@@ -1442,8 +1442,8 @@ aside .sidebar-content.nearestmatches {
     width: 45px;
     border-radius: 10em;
     position: relative;
-    top: -5px;
-    border: 1px solid #fff
+    top: -11px;
+    background-color: #fff;
 }
 
 .menu-item-wrappers {

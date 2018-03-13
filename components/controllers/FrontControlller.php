@@ -30,6 +30,7 @@ class FrontControlller extends Controller {
     }
 
     public function behaviors() {
+        
         return [
             'access' => [
                 'class' => AccessControl::className(),
