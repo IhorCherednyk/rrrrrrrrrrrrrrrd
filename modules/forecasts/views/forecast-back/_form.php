@@ -5,7 +5,7 @@ use app\modules\forecasts\models\Forecast;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this View */
 /* @var $model Forecast */
@@ -33,7 +33,7 @@ $this->registerJs("
             url: form.attr('action'),
             data: form.serialize(),
             success: function (response) {
-                 $('.panel-body').html(response);
+                 $('.forecast-create').replaceWith($(response));
             },
             error: function (response) {
                 console.log('error');
@@ -48,7 +48,7 @@ $this->registerJs("
 
 <div class="forecast-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(Yii::$app->params['admin.form.fieldConfig']); ?>
 
     <?=
     $form->field($model, 'match_id')->dropDownList($matchNameArray, [
@@ -78,8 +78,11 @@ $this->registerJs("
     <?= $form->field($model, 'coins_bet')->textInput() ?>
 
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="m-portlet__foot m-portlet__foot--fit">
+        <div class="m-form__actions">
+                    <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

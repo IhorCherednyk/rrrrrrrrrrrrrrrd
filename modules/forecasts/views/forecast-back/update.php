@@ -6,18 +6,32 @@ use yii\helpers\Html;
 /* @var $model app\modules\forecasts\models\Forecast */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Forecast',
-]) . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forecasts'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+            'modelClass' => 'Forecast',
+        ]) . $model->id;
+
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Forecast') . '</span>',
+    'url' => ['index'],
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
+$this->params['breadcrumbs'][] = [
+    'label' => '<span class="m-nav__link-text">' . Yii::t('app', 'Update Forecast') . '</span>',
+    'url' => 'javascript:;',
+    'encode' => false,
+    'class' => 'm-nav__link'
+];
 ?>
 <div class="forecast-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
+    <?=
+    $this->render('_form', [
         'model' => $model,
-    ]) ?>
+        'matchNameArray' => $matchNameArray,
+        'betsType' => $betsType,
+        'betsArray' => $betsArray,
+        'bookArray' => $bookArray
+    ])
+    ?>
 
 </div>

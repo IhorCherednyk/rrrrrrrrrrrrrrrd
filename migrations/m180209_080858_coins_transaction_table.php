@@ -16,7 +16,16 @@ class m180209_080858_coins_transaction_table extends Migration {
             'reciver_coin' => $this->integer()->notNull(),
             'status' => $this->integer()->defaultValue(0)
         ]);
+        
+        // creates index for column `user_id`
+        $this->createIndex(
+                'idx-token-reciver_coin', '{{%transactions}}', 'reciver_coin'
+        );
 
+        // add foreign key for table `user`
+        $this->addForeignKey(
+                'fk-ttoken-reciver_coin', '{{%transactions}}', 'reciver_coin', 'user', 'id', 'CASCADE'
+        );
     }
 
     /**

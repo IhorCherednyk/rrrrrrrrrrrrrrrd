@@ -38,7 +38,6 @@ class ParsegametournamentController extends Controller{
         
         $dotaPage = $this->curlInit($this->dotaUrl . '/dota-2');
         
-//        $html = SimpleHTMLDom::str_get_html($dotaPage);
 //        $file = fopen('match.html', 'w');
 //        fwrite($file,$dotaPage);
 //        fclose($file);
@@ -68,7 +67,7 @@ class ParsegametournamentController extends Controller{
     }
 
     function curlInit($url) {
-        sleep(30);
+        sleep(5);
         $ch = curl_init();  //Инициализация сеанса
         if ($ch) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

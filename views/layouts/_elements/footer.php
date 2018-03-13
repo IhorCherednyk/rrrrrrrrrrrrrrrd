@@ -135,6 +135,7 @@ AppAsset::register($this);
                 type: 'POST',
                 url: '/user/user/refresh-coins',
                 success: function (response) {
+                    $('#coins').text(response);
                 },
                 error: function (response) {
                     console.log('error');

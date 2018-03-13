@@ -80,7 +80,7 @@ AppAsset::register($this);
                                         . ((Yii::$app->user->identity->coins <= 0) 
                                             ? '' 
                                             : Html::a('<i class="fa fa-refresh"></i>', 'javascript:;', ['id' => 'refresh']))
-                                        . '<span>' 
+                                        . '<span id="coins">' 
                                         . Yii::$app->user->identity->coins 
                                         . '</span>'
                                         . '</li>'

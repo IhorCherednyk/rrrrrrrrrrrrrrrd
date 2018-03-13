@@ -2,7 +2,15 @@
 
 namespace app\modules\forecasts\models;
 
+use app\modules\bookmekers\models\Bookmeker;
+use app\modules\user\models\Transactions;
+use app\modules\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
+use yii\web\NotFoundHttpException;
+use yii\web\User as User2;
 
 /**
  * This is the model class for table "{{%forecast}}".
@@ -24,17 +32,14 @@ use Yii;
  *
  * @property Bookmeker $bookmeker
  * @property Matches $match
- * @property User $user
+ * @property User2 $user
  */
-class Forecast extends \yii\db\ActiveRecord {
-
-    public $user_choice;
+class Forecast extends ActiveRecord {
 
     const STATUS_NOT_COUNTED = 0;
     const STATUS_COMPLETE_SUCCESS = 1;
     const STATUS_COMPLETE_FAIL = 2;
     const STATUS_FAIL_COUNTED = 3;
-    
     const BETS_TYPE_WIN_LOSE = 1;
     const BETS_TYPE_SCORE = 2;
 //    const BETS_TYPE_FORA = 2;
@@ -73,13 +78,19 @@ class Forecast extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started', 'team1', 'team2', 'coins_bet'], 'required'],
+                [['match_id', 'user_id', 'bookmeker_id', 'bookmeker_koff', 'description', 'match_started', 'team1', 'team2', 'coins_bet', 'user_choice'], 'required'],
                 [['bookmeker_koff'], 'number'],
                 [['match_id', 'user_id', 'bookmeker_id', 'bets_type', 'status', 'match_started', 'created_at', 'updated_at', 'team1', 'team2', 'coins_bet'], 'integer'],
                 [['description'], 'string'],
-                [['bookmeker_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\modules\bookmekers\models\Bookmeker::className(), 'targetAttribute' => ['bookmeker_id' => 'id']],
+                [['bookmeker_id'], 'exist', 'skipOnError' => true, 'targetClass' => Bookmeker::className(), 'targetAttribute' => ['bookmeker_id' => 'id']],
                 [['match_id'], 'exist', 'skipOnError' => true, 'targetClass' => Matches::className(), 'targetAttribute' => ['match_id' => 'id']],
-                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => \app\modules\user\models\User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+        ];
+    }
+
+    public function behaviors() {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 
@@ -102,28 +113,29 @@ class Forecast extends \yii\db\ActiveRecord {
             'team1' => Yii::t('app', 'Team1'),
             'team2' => Yii::t('app', 'Team2'),
             'coins_bet' => Yii::t('app', 'Coins Bet'),
+            'user_choice' => Yii::t('app', 'User Choice'),
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getBookmeker() {
         return $this->hasOne(Bookmeker::className(), ['id' => 'bookmeker_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getMatch() {
         return $this->hasOne(Matches::className(), ['id' => 'match_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getUser() {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User2::className(), ['id' => 'user_id']);
     }
 
     public function generateBetsType() {
@@ -158,11 +170,16 @@ class Forecast extends \yii\db\ActiveRecord {
 
             switch ($match->match_type) {
                 case Matches::TYPE_BO1:
+                    $arr = [
+                        self::WIN_LOSE_TYPE_WIN_TEAM_1 => '1-0',
+                        self::WIN_LOSE_TYPE_WIN_TEAM_2 => '0-1',
+                    ];
+                    break;
                 case Matches::TYPE_BO2:
                     $arr = [
-                        self::WIN_LOSE_TYPE_WIN_TEAM_1 => 'Победа 1',
-                        self::WIN_LOSE_TYPE_WIN_TEAM_2 => 'Победа 2',
-                        self::WIN_LOSE_TYPE_DRAFT => 'Ничья',
+                        self::WIN_LOSE_TYPE_WIN_TEAM_1 => '1-0',
+                        self::WIN_LOSE_TYPE_WIN_TEAM_2 => '0-1',
+                        self::WIN_LOSE_TYPE_DRAFT => '1-1',
                     ];
                     break;
                 case Matches::TYPE_BO3:
@@ -211,7 +228,7 @@ class Forecast extends \yii\db\ActiveRecord {
             }
             return $arr;
         } else {
-            throw new \yii\web\NotFoundHttpException();
+            throw new NotFoundHttpException();
         }
     }
 
@@ -219,15 +236,25 @@ class Forecast extends \yii\db\ActiveRecord {
 
         $match = Matches::findOne($this->match_id);
         $this->match_started = $match->start_time;
-
         if ($this->bets_type == self::BETS_TYPE_WIN_LOSE) {
             $this->parseWinLoseType();
         } else {
             $this->parseScoreType();
         }
+        $transaction = \Yii::$app->db->beginTransaction();
+        if ($this->save()) {
+            $userTransaction = new Transactions();
+            $userTransaction->type = Transactions::TRANSACTION_BET;
+            $userTransaction->coins = $this->coins_bet * (-1);
+            $userTransaction->reciver_coin = $this->user_id;
+            if($userTransaction->save()){
+                $transaction->commit();
+                return true;
+            }
+            $transaction->rollBack();
+        }
 
-        
-        return $this->save();
+        return false;
     }
 
     public function parseWinLoseType() {
@@ -249,12 +276,12 @@ class Forecast extends \yii\db\ActiveRecord {
         $result = explode('-', $this->getTypeData($this->user_choice));
         $this->team1 = $result[0];
         $this->team2 = $result[1];
-        if($result[0] > $result[1]){
+        if ($result[0] > $result[1]) {
             $this->bookmeker_koff = $matchesKoff->team1_koff;
-        }else if ($result[0] < $result[1]) {
+        } else if ($result[0] < $result[1]) {
             $this->bookmeker_koff = $matchesKoff->team2_koff;
-        }else {
-            $this->bookmeker_koff = ($matchesKoff->team1_koff + $matchesKoff->team2_koff)/2;
+        } else {
+            $this->bookmeker_koff = ($matchesKoff->team1_koff + $matchesKoff->team2_koff) / 2;
         }
     }
 

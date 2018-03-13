@@ -12,16 +12,15 @@ use Yii;
  * @property integer $coins
  * @property integer $reciver_coin
  * @property integer $status
+ *
+ * @property User $reciverCoin
  */
 class Transactions extends \yii\db\ActiveRecord
 {
     
     const TRANSACTION_TYPE_START = 0;
     const TRANSACTION_TYPE_USER_REFRESH = 1;
-    
-    const TRANSACTION_STATUS_SUCCESS = 0;
-    
-    const START_AND_REFRESH_COINS = 1000;
+    const TRANSACTION_BET = 2;
 
     /**
      * @inheritdoc
@@ -39,6 +38,7 @@ class Transactions extends \yii\db\ActiveRecord
         return [
             [['type', 'coins', 'reciver_coin'], 'required'],
             [['type', 'coins', 'reciver_coin', 'status'], 'integer'],
+            [['reciver_coin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['reciver_coin' => 'id']],
         ];
     }
 
@@ -54,5 +54,13 @@ class Transactions extends \yii\db\ActiveRecord
             'reciver_coin' => Yii::t('app', 'Reciver Coin'),
             'status' => Yii::t('app', 'Status'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReciverCoin()
+    {
+        return $this->hasOne(User::className(), ['id' => 'reciver_coin']);
     }
 }

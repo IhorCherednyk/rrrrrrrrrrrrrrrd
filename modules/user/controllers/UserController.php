@@ -66,8 +66,10 @@ class UserController extends FrontControlller {
 
     public function actionRefreshCoins() {
         if (Yii::$app->request->isAjax) {
-                $transactionsCount = Transactions::find()->where(['reciver_coin' => Yii::$app->user->id])->sum('coins');
-                if($transactionsCount <= 0){
+            $transactionsCount = Transactions::find()->where(['reciver_coin' => Yii::$app->user->id])->sum('coins');
+            if (!empty($transactionsCount)) {
+
+                if ($transactionsCount <= 0) {
                     $transaction = new Transactions();
                     $transaction->type = Transactions::TRANSACTION_TYPE_START;
                     $transaction->coins = Transactions::START_AND_REFRESH_COINS;
@@ -75,15 +77,17 @@ class UserController extends FrontControlller {
                     $transaction->save();
                     $transactionsCount = $transaction->coins;
                 }
-             
-            Yii::$app->user->identity->coins = $transactionsCount;
-            Yii::$app->user->identity->save();
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            
+
+                Yii::$app->user->identity->coins = $transactionsCount;
+                Yii::$app->user->identity->save();
+                Yii::$app->response->format = Response::FORMAT_JSON;
+
+                return Yii::$app->user->identity->coins;
+            }
             return Yii::$app->user->identity->coins;
         }
     }
-    
+
     public function actionAddCoins() {
         if (Yii::$app->request->isAjax) {
             $user = User::findOne(Yii::$app->request->post('userId'));

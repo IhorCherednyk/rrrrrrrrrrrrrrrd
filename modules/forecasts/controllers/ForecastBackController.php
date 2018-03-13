@@ -113,14 +113,58 @@ class ForecastBackController extends BackController {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+        $model->user_id = \Yii::$app->user->id;
+        $matches = Matches::find()->with('team1')->with('team2')
+                        ->where(['status' => Matches::NOT_COMPLETE])
+                        ->andWhere(['not', ['team1_id' => null]])
+                        ->andWhere(['not', ['team2_id' => null]])
+                        ->andWhere(['not', ['koff_counter' => 0]])
+//                ->andWhere(['>','start_time',time()])
+                        ->asArray()->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
+
+        $bookmekers = Bookmeker::find()->all();
+
+
+        $matchNameArray = [];
+        foreach ($matches as $key => $match) {
+            $matchNameArray[$match['id']] = $match['team1']['name'] . ' vs ' . $match['team2']['name'];
+        }
+        
+        $betsType = $model->generateBetsType();
+        $betsArray = $model->generateBackBets($model->match_id, $model->bets_type);
+        if (Yii::$app->request->isAjax) {
+            $model->load(Yii::$app->request->post());
+            if (!empty($model->match_id) && !empty($model->bets_type)) {
+                $betsArray = $model->generateBackBets($model->match_id, $model->bets_type);
+                $mathesKoff = Matches::find()->where([Matches::tableName() . '.id' => $model->match_id])
+                                ->select(MatchesKoff::tableName() . '.book_id')->joinWith(['matchesKoffs'])->column();
+                $bookmekers = Bookmeker::find()->where(['id' => $mathesKoff])->all();
+            }
+            $bookArray = ArrayHelper::map($bookmekers, 'id', 'gametournament_alias');
+            return $this->renderPartial('create', [
                         'model' => $model,
+                        'matchNameArray' => $matchNameArray,
+                        'betsType' => $betsType,
+                        'betsArray' => $betsArray,
+                        'bookArray' => $bookArray
             ]);
         }
+
+        $bookArray = ArrayHelper::map($bookmekers, 'id', 'gametournament_alias');
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+            $model->user_choice = Yii::$app->request->post('Forecast')['user_choice'];
+            $model->saveForecast();
+        }
+        
+        return $this->render('update', [
+                    'model' => $model,
+                    'matchNameArray' => $matchNameArray,
+                    'betsType' => $betsType,
+                    'betsArray' => $betsArray,
+                    'bookArray' => $bookArray
+        ]);
+
     }
 
     /**
