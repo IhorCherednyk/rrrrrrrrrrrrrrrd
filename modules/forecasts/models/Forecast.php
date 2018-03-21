@@ -145,6 +145,52 @@ class Forecast extends ActiveRecord {
         ];
     }
 
+    public function getStatusName() {
+        $arr = $this->getStatusArray();
+        switch ($this->status) {
+            case self::STATUS_NOT_COUNTED:
+                return '<span class="m-badge m-badge--warning m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            case self::STATUS_COMPLETE_SUCCESS:
+                return '<span class="m-badge m-badge--success m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            case self::STATUS_COMPLETE_FAIL:
+                return '<span class="m-badge m-badge--danger m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            default:
+                return NULL;
+        }
+    }
+    public static function getStatusArray() {
+        return [
+            self::STATUS_NOT_COUNTED => Yii::t('app', 'Not counted'),
+            self::STATUS_COMPLETE_SUCCESS => Yii::t('app', 'success'),
+            self::STATUS_COMPLETE_FAIL => Yii::t('app', 'fail'),
+        ];
+    }
+    
+
+    public function getBetsTypeName() {
+        $arr = $this->getBetsTypeArray();
+        switch ($this->bets_type) {
+            case self::BETS_TYPE_WIN_LOSE:
+                return '<span class="m-badge m-badge--warning m-badge--wide">' . $arr[$this->bets_type] . '</span>';
+                break;
+            case self::BETS_TYPE_SCORE:
+                return '<span class="m-badge m-badge--success m-badge--wide">' . $arr[$this->bets_type] . '</span>';
+                break;
+            default:
+                return NULL;
+        }
+    }
+
+    public static function getBetsTypeArray() {
+        return [
+            self::BETS_TYPE_WIN_LOSE => Yii::t('app', 'Win Or Loss'),
+            self::BETS_TYPE_SCORE => Yii::t('app', 'On Score'),
+        ];
+    }
+
     public function getTypeData($type) {
         $arr = [
             self::WIN_LOSE_TYPE_WIN_TEAM_1 => '1-0',
@@ -249,6 +295,7 @@ class Forecast extends ActiveRecord {
             $userTransaction->reciver_coin = $this->user_id;
             if($userTransaction->save()){
                 $transaction->commit();
+                \Yii::$app->user->identity->calcualteCoins();
                 return true;
             }
             $transaction->rollBack();

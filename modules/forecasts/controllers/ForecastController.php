@@ -19,7 +19,7 @@ class ForecastController extends FrontControlller {
         return $this->render('index', ['listDataProvider' => $dataProvider]);
     }
     
-    public function actionSingleMatch($id) {
+    public function actionSingleMatch($id,$isForecast) {
         
         $model = Matches::findOne($id);
         

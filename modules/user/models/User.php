@@ -42,7 +42,8 @@ class User extends ActiveRecord implements IdentityInterface {
                 ['username', 'unique', 'message' => 'Такое имя уже существует'],
                 ['email', 'unique', 'message' => 'Такой email существует'],
                 [['first_name','last_name','note','skype'], 'string', 'message' => 'Должно быть текстом'],
-                [['steam_id'], 'integer']
+                [['steam_id'], 'integer'],
+                [['coins'], 'double']
                 
         ];
     }
@@ -143,4 +144,10 @@ class User extends ActiveRecord implements IdentityInterface {
         return '{{%user}}';
     }
 
+    public function calcualteCoins(){
+        $transactionsCount = Transactions::find()->where(['reciver_coin' => $this->id])->sum('coins');
+        Yii::$app->user->identity->coins = $transactionsCount;
+        Yii::$app->user->identity->save();
+
+    }
 }

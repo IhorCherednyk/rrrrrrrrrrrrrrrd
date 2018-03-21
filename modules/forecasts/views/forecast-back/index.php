@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = [
     </p>
     <?php
     Pjax::begin([
-        'id' => 'user',
         'enablePushState' => false
     ]);
     ?>
@@ -41,14 +40,64 @@ $this->params['breadcrumbs'][] = [
         'layout' => '{items}{pager}',
         'filterModel' => $searchModel,
         'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'match_id',
+                [
+                'attribute' => 'id',
+                'label' => 'id',
+                'headerOptions' => [
+                    'width' => '60',
+                ],
+                'contentOptions' => [
+//                    'class' => 'id'
+                ]
+            ],
+                [
+                'attribute' => 'match_id',
+                'headerOptions' => [
+                    'width' => '100',
+                ],
+            ],
+                [
+                'label' => Yii::t('app', 'Teams'),
+                'value' => function($model) {
+                    return $model->match->team1->name . ' vs ' . $model->match->team2->name;
+                }
+            ],
             'user_id',
-            'bookmeker_id',
-            'bets_type',
-            // 'status',
-            // 'bookmeker_koff',
+                [
+                'attribute' => 'bookmeker_koff',
+                'label' => Yii::t('app','Koff'),
+                'format' => 'raw',
+                'headerOptions' => [
+                    'width' => '100',
+                ],
+            ],
+                [
+                'attribute' => 'bookmeker_id',
+                'format' => 'raw',
+                'headerOptions' => [
+                    'width' => '120',
+                ],
+                'value' => function($model) {
+                    return $model->bookmeker->gametournament_alias;
+                }
+            ],
+                [
+                'attribute' => 'bets_type',
+                'format' => 'raw',
+                'headerOptions' => [
+                    'width' => '150',
+                ],
+                'value' => 'betsTypeName'
+            ],
+                [
+                'attribute' => 'status',
+                'filter' => $searchModel->getStatusArray(),
+                'format' => 'raw',
+                'contentOptions' => [
+                    'style' => 'text-align: center'
+                ],
+                'value' => 'statusName'
+            ],
             // 'description:ntext',
             // 'match_started',
             // 'created_at',

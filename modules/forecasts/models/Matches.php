@@ -116,7 +116,12 @@ class Matches extends \yii\db\ActiveRecord
     
     
     public static function findMatchesWithoutResult(){
-        return static::find()->select('gametournament_id')->where(['status' => self::NOT_COMPLETE])->asArray()->column();
+        return static::find()->select('gametournament_id')
+                ->where(['status' => self::NOT_COMPLETE])
+                ->andWhere(['not',['team1_id' => self::TBD_MATCH ]])
+                ->andWhere(['not',['team2_id' => self::TBD_MATCH ]])
+                ->asArray()
+                ->column();
     }
 
     public static function findUpdateConditions(){
@@ -137,8 +142,7 @@ class Matches extends \yii\db\ActiveRecord
         $query = static::find()->select('id')->where(['team1_id' => self::TBD_MATCH])
                              ->orWhere(['team2_id' => self::TBD_MATCH])
                              ->orWhere(['status' => self::NOT_COMPLETE])
-                             ->andHaving(['<','start_time + (24 * 60 * 60)', time() ])->asArray()->column();
-        
+                             ->andWhere(['<', 'start_time', strtotime('- 1 days', time())])->asArray()->column();
         return static::updateAll(['status' => self::ERROR_WITH_PARSING],['id' => $query] );
         
     }
@@ -149,6 +153,64 @@ class Matches extends \yii\db\ActiveRecord
         
     }
     
-   
-    
+
+    public function getStatusName() {
+       
+        $arr = $this->getStatusArray();
+        switch ($this->status) {
+            case self::NOT_COMPLETE:
+                return '<span class="m-badge m-badge--secondary m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            case self::COMPLETE:
+                return '<span class="m-badge m-badge--info m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            case self::COMPLETE_AND_COUNTED:
+                return '<span class="m-badge m-badge--success m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            case self::ERROR_WITH_PARSING:
+                return '<span class="m-badge m-badge--danger m-badge--wide">' . $arr[$this->status] . '</span>';
+                break;
+            default:
+                return NULL;
+        }
+    }
+
+    public static function getStatusArray() {
+        return [
+            self::NOT_COMPLETE => Yii::t('app', 'Not complete'),
+            self::COMPLETE => Yii::t('app', 'complete'),
+            self::COMPLETE_AND_COUNTED => Yii::t('app', 'complete and counted'),
+            self::ERROR_WITH_PARSING => Yii::t('app', 'error'),
+        ];
+    }
+
+    public function getTypeName() {
+        $arr = $this->getTypeArray();
+        switch ($this->match_type) {
+            case self::TYPE_BO1:
+                return '<span class="m-badge m-badge--secondary m-badge--wide">' . $arr[$this->match_type] . '</span>';
+                break;
+            case self::TYPE_BO2:
+                return '<span class="m-badge m-badge--secondary m-badge--wide">' . $arr[$this->match_type] . '</span>';
+                break;
+            case self::TYPE_BO3:
+                return '<span class="m-badge m-badge--secondary m-badge--wide">' . $arr[$this->match_type] . '</span>';
+                break;
+            case self::TYPE_BO5:
+                return '<span class="m-badge m-badge--secondary m-badge--wide">' . $arr[$this->match_type] . '</span>';
+                break;
+            default:
+                return NULL;
+        }
+    }
+
+    public static function getTypeArray() {
+        return [
+            self::TYPE_BO1 => Yii::t('app', 'BO1'),
+            self::TYPE_BO2 => Yii::t('app', 'BO2'),
+            self::TYPE_BO3 => Yii::t('app', 'BO3'),
+            self::TYPE_BO5 => Yii::t('app', 'BO4'),
+
+        ];
+    }
 }

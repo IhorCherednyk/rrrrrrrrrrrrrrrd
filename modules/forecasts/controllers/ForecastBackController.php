@@ -49,6 +49,7 @@ class ForecastBackController extends BackController {
      * @return mixed
      */
     public function actionCreate() {
+        
         $model = new Forecast();
         $model->user_id = \Yii::$app->user->id;
         $matches = Matches::find()->with('team1')->with('team2')
@@ -93,6 +94,7 @@ class ForecastBackController extends BackController {
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
             $model->user_choice = Yii::$app->request->post('Forecast')['user_choice'];
             $model->saveForecast();
+            return $this->redirect(['/forecasts/forecast-back/index']);
         }
         
         return $this->render('create', [

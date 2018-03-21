@@ -29,7 +29,10 @@ use yii\helpers\HtmlPurifier;
         <div class="match-bets">
             <span>Прогнозов на матч: 10 </span>
             
-            <?= Html::a('Смотреть прогнозы', ['/forecasts/forecast/single-match', 'id' => $model->id], ['class' => 'btn btn-watch'])?>
+           
+            <?= Html::a('Сделать ставку', ['/forecasts/forecast/single-match', 'id' => $model->id,'isForecast' => true], ['class' => 'btn btn-reg'])?>
+            <?= Html::a('Смотреть прогнозы', ['/forecasts/forecast/single-match', 'id' => $model->id,'isForecast' => false], ['class' => 'btn btn-watch'])?>
+            
         </div>
     </div>
 </div>

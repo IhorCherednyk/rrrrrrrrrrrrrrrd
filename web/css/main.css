@@ -843,14 +843,16 @@ td.team img {
     width: 100%;
     float: left;
     border-top: 1px solid #313d46;
-    padding: 10px 20px;
+    padding: 10px 10px 10px 35px;
     overflow: hidden; 
 }
-.match-sect .match-sect-item .match-bets .btn-watch {
+.match-sect .match-sect-item .match-bets .btn-watch, .match-sect .match-sect-item .match-bets .btn-reg {
     float: right; 
 }
+.match-sect .match-sect-item .match-bets .btn-reg {
+    margin-left: 5px;
+}
 .match-sect .match-sect-item .match-bets span {
-    width: 70%;
     float: left;
     text-align: center; 
 }
@@ -907,9 +909,10 @@ td.team img {
 
 .match-coff {
     background-color: #171e22;
-    padding: 30px 20px;
+    padding: 5px 20px;
     border: 1px solid #313d46;
-    width: 100%; 
+    width: 100%;
+    margin-top: -1px;
 }
 
 .single-match .match-sect-item {

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\commands;
+namespace app\controllers;
 
 use app\helpers\ImageHelper;
 use app\modules\bookmekers\models\Bookmeker;
@@ -9,12 +9,14 @@ use app\modules\forecasts\models\Matches;
 use app\modules\forecasts\models\MatchesKoff;
 use app\modules\forecasts\models\TeamAlias;
 use app\modules\team\models\Teams;
+use app\modules\user\models\Transactions;
 use darkdrim\simplehtmldom\SimpleHTMLDom;
 use Yii;
-use yii\console\Controller;
 use yii\db\Exception;
+use yii\web\NotFoundHttpException;
+use function D;
 
-class GametournamentUpdateController extends Controller {
+class GametournamentUpdateController extends SiteController {
 
     /**
      * Renders the index view for the module
@@ -32,20 +34,27 @@ class GametournamentUpdateController extends Controller {
     public function actionIndex() {
         // Get matches by conditions
         $dotaPage = $this->curlInit($this->dotaUrl . '/dota-2');
+        
 
+//        $file = fopen('matchU.html', 'w');
+//        fwrite($file,$dotaPage);
+//        fclose($file);
+//        D($file);
+        $this->calculateForecast();
+        
+        $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/match.html');
+        
+//        if ($dotaPage) {
+        if ($html) {
 
-        if ($dotaPage) {
-
-            $html = SimpleHTMLDom::str_get_html($dotaPage);
+//            $html = SimpleHTMLDom::str_get_html($dotaPage);
 
             if ($html) {
 
                 //find match witch we not completle update where team = null or etc
                 $matches = Matches::findUpdateConditions();
-
                 
-
-                if (!empty($matches)) {
+                if (false && !empty($matches)) {
 
                     $this->generateMatchArray($html, $matches);
 
@@ -70,10 +79,11 @@ class GametournamentUpdateController extends Controller {
         }
 
         Matches::findErrorMatches();
+        
     }
 
     function curlInit($url) {
-        sleep(30);
+//        sleep(30);
         $ch = curl_init();  //Инициализация сеанса
         if ($ch) {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -140,35 +150,43 @@ class GametournamentUpdateController extends Controller {
     function referToArrayLink() {
 
         $link = &$this->matchGlobalArray;
-
+        $count = 0;
         foreach ($link as $key => $match) {
-
             $singleDotaPage = $this->curlInit($this->dotaUrl . $match['link_for_bets']);
+            
+            $count++;
+            if ($count <= 1) {
 
-            if ($singleDotaPage) {
+//            $file = fopen('matchU.html', 'w');
+//            fwrite($file,$singleDotaPage);
+//            fclose($file);
+//            die;
+                if ($singleDotaPage) {
 
-                $html = SimpleHTMLDom::str_get_html($singleDotaPage);
+                    $html = SimpleHTMLDom::file_get_html('http://www.dota-prognoz.web/matchU.html');
+//                    $html = SimpleHTMLDom::str_get_html($singleDotaPage);
 
-                if ($html) {
+                    if ($html) {
 
-                    $data = $this->getDataFromSinglePage($html);
+                        $data = $this->getDataFromSinglePage($html);
 
-                    if (!empty($data)) {
-                        $this->matchGlobalArray[$key]['team1']['name_team'] = $data['name1'];
-                        $this->matchGlobalArray[$key]['team1']['team_img'] = $data['team1_img'];
-                        $this->matchGlobalArray[$key]['team2']['name_team'] = $data['name2'];
-                        $this->matchGlobalArray[$key]['team2']['team_img'] = $data['team2_img'];
-                        if (!empty($data['bets'])) {
-                            $this->matchGlobalArray[$key]['bets'] = $data['bets'];
+                        if (!empty($data)) {
+                            $this->matchGlobalArray[$key]['team1']['name_team'] = $data['name1'];
+                            $this->matchGlobalArray[$key]['team1']['team_img'] = $data['team1_img'];
+                            $this->matchGlobalArray[$key]['team2']['name_team'] = $data['name2'];
+                            $this->matchGlobalArray[$key]['team2']['team_img'] = $data['team2_img'];
+                            if (!empty($data['bets'])) {
+                                $this->matchGlobalArray[$key]['bets'] = $data['bets'];
+                            }
+                        } else {
+                            Yii::warning(__METHOD__ . 'Dont find data in single page for ', 'gametournamentupdater');
                         }
                     } else {
-                        Yii::warning(__METHOD__ . 'Dont find data in single page for ', 'gametournamentupdater');
+                        Yii::warning(__METHOD__ . 'Dont create HTML for single page', 'gametournamentupdater');
                     }
                 } else {
-                    Yii::warning(__METHOD__ . 'Dont create HTML for single page', 'gametournamentupdater');
+                    Yii::warning(__METHOD__ . 'Dont init curl in single page', 'gametournamentupdater');
                 }
-            } else {
-                Yii::warning(__METHOD__ . 'Dont init curl in single page', 'gametournamentupdater');
             }
         }
     }
@@ -204,16 +222,21 @@ class GametournamentUpdateController extends Controller {
     // Save or Create Team by Match Array end get Team id
     function identifyTeamInMatchArray() {
         $link = &$this->matchGlobalArray;
-
-        foreach ($link as $key => $match) {
-            $this->matchGlobalArray[$key]['team1_id'] = $this->setOrSaveTeam($match['team1']);
-            $this->matchGlobalArray[$key]['team2_id'] = $this->setOrSaveTeam($match['team2']);
-        }
+        $this->matchGlobalArray[4]['team1_id'] = $this->setOrSaveTeam($link[4]['team1']);
+        $this->matchGlobalArray[4]['team2_id'] = $this->setOrSaveTeam($link[4]['team2']);
+        D($this->matchGlobalArray);
+        
+        
+//        foreach ($link as $key => $match) {
+//            $this->matchGlobalArray[$key]['team1_id'] = $this->setOrSaveTeam($match['team1']);
+//            $this->matchGlobalArray[$key]['team2_id'] = $this->setOrSaveTeam($match['team2']);
+//        }
     }
 
     function setOrSaveTeam($teamData) {
+        
         $teams = Teams::findByAttributes($teamData['team_idt2'], $teamData['name_team'], $teamData['name_team_alias']);
-
+//        D($teams);
 
         //Update Teams and create or Upldate Alias
         if (!is_null($teams)) {
@@ -350,26 +373,25 @@ class GametournamentUpdateController extends Controller {
     function clearImgPath($img) {
         return str_replace('_60/', '', $img);
     }
-    
-    
+
     public function calculateForecast() {
         $matches = Matches::find()->where(['status' => Matches::COMPLETE])->all();
-
+        
         if (!empty($matches)) {
 
             foreach ($matches as $ma => $match) {
 
                 $forecasts = Forecast::find()->where(['match_id' => $match->id])->andWhere(['status' => Forecast::STATUS_NOT_COUNTED])->all();
-
+                
                 if (!empty($forecasts)) {
-
+                    
 
                     try {
 
                         foreach ($forecasts as $fc => $forecast) {
-
+                            
                             $transaction = Yii::$app->db->beginTransaction();
-
+                            
                             if ($forecast->bets_type == Forecast::BETS_TYPE_SCORE) {
                                 if ($forecast->team1 == $match->team1_result && $forecast->team2 == $match->team2_result) {
                                     $forecast->status = Forecast::STATUS_COMPLETE_SUCCESS;
@@ -387,27 +409,30 @@ class GametournamentUpdateController extends Controller {
                                     $forecast->status = Forecast::STATUS_COMPLETE_FAIL;
                                 }
                             }
-
-                            if ($forecast->status == Forecast::STATUS_COMPLETE_SUCCESS) {
+                            
+                            if($forecast->status == Forecast::STATUS_COMPLETE_SUCCESS){
                                 $transactionUser = New Transactions();
                                 $transactionUser->reciver_coin = $forecast->user_id;
                                 $transactionUser->type = Transactions::TRANSACTION_BET_WIN;
                                 $transactionUser->coins = $forecast->coins_bet * $forecast->bookmeker_koff;
-
-                                if (!$transactionUser->save()) {
+                                
+                                if(!$transactionUser->save()){
                                     throw new NotFoundHttpException();
                                 }
                             }
-
+                            
                             if (!$forecast->save()) {
                                 throw new NotFoundHttpException();
                             }
-
+                            
                             $transaction->commit();
+                            
                         }
 
                         $match->status = Matches::COMPLETE_AND_COUNTED;
                         $match->save();
+
+
                     } catch (NotFoundHttpException $exc) {
                         $transaction->rollBack();
                     }

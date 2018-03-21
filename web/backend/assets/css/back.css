@@ -739,3 +739,7 @@ p.question-sub2 {
 .user-demo {
     display: none;
 }
+.grid-img {
+    width: 50px;
+    height: auto;
+}

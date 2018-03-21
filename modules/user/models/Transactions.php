@@ -21,6 +21,7 @@ class Transactions extends \yii\db\ActiveRecord
     const TRANSACTION_TYPE_START = 0;
     const TRANSACTION_TYPE_USER_REFRESH = 1;
     const TRANSACTION_BET = 2;
+    const TRANSACTION_BET_WIN = 3;
 
     /**
      * @inheritdoc
@@ -37,7 +38,8 @@ class Transactions extends \yii\db\ActiveRecord
     {
         return [
             [['type', 'coins', 'reciver_coin'], 'required'],
-            [['type', 'coins', 'reciver_coin', 'status'], 'integer'],
+            [['coins'], 'double'],
+            [['type', 'reciver_coin', 'status'], 'integer'],
             [['reciver_coin'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['reciver_coin' => 'id']],
         ];
     }
