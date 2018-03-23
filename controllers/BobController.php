@@ -37,9 +37,6 @@ class BobController extends SiteController {
         $guestsTeam = 'Челси';
         $refery = 'Тейлор';
 
-
-
-
         $data_key = $this->getDataKeyFromHTML($dotaPage);
         preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $dotaPage, $matches);        // get cookie
         $cookies = [];
@@ -80,15 +77,47 @@ class BobController extends SiteController {
 
         foreach ($table->find('tr') as $key => $row) {
             if ($key >= 1) {
-
-                if ($refery == $row->children(2)->sortorder) {
+                
+                if ($refery == $row->children(2)->sortorder && (int)$row->children(5)->text() > 0) {
                     
                     $this->referylink .= $row->children(2)->children(0)->href;
-                    D($this->referylink);
+                    break;
+                    
+                    
                             
                 }
             }
         }
+        
+        $linkHtml = $this->curlInit($this->referylink);
+        $html = SimpleHTMLDom::str_get_html($linkHtml);
+        $referyTable = $html->find('table',1);
+        $this->dataArray[$refery]['total35-more'] = 0;
+        $this->dataArray[$refery]['total35-less'] = 0;
+        $this->dataArray[$refery]['total35-more-last35'] = 0;
+        $this->dataArray[$refery]['total35-less-last35'] = 0;
+        $step = count($referyTable->find('tr')) - 3;
+        
+        foreach ($referyTable->find('tr') as $key => $row) {
+            if ($key >= 1) {
+                
+                if((int)$row->children(4)->plaintext > 3.5){
+                    $this->dataArray[$refery]['total35-more'] = $this->dataArray[$refery]['total35-more'] + 1;
+                }else{
+                    $this->dataArray[$refery]['total35-less'] = $this->dataArray[$refery]['total35-less'] + 1;
+                }
+                
+            }
+            if($key >= $step){
+                if((int)$row->children(4)->plaintext > 3.5){
+                    $this->dataArray[$refery]['total35-more-last35'] = $this->dataArray[$refery]['total35-more-last35'] + 1;
+                }else{
+                    $this->dataArray[$refery]['total35-less-last35'] = $this->dataArray[$refery]['total35-less-last35'] + 1;
+                }
+                
+            }
+        }
+        D($this->dataArray);
     }
 
     function curlInit($url, $coockie_str = false) {
