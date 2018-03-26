@@ -10,6 +10,16 @@ $config = require(__DIR__ . '/../config/web.php');
 
 (new yii\web\Application($config))->run();
 function D($data, $isDie = TRUE) {
+    $caller = array_shift(debug_backtrace(1));
+    echo '<code>File: ' . $caller['file'] . ' / Line: ' . $caller['line'] . '</code>';
+    echo '<pre>';
+    \yii\helpers\VarDumper::dump($data, 10, true);
+    echo '</pre>';
+    if ($isDie)
+        die();
+}
+
+function DD($data, $isDie = TRUE) {
     echo '<pre>';
     yii\helpers\VarDumper::dump($data);
 

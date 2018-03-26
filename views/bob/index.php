@@ -5,59 +5,137 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'My Yii Application';
+//    D($dataGlobalArray);
 ?>
-<div class="site-index">
-    <?php
-    $table = $html->find('#teams-all table', 0);
-    $rowData = array();
-    foreach ($table->find('tr') as $key => $row) {
-        if($key >= 2){
-            $flight = array();
-            foreach ($row->find('td') as $key2 => $cell) {
-                $teamAttr = array();
-                if ($key2 == 0){
-                    foreach($cell->find('img') as $attr){
-                        $teamAttr['image_path'] = $attr->src;
-                    }
-                    foreach($cell->find('a') as $attr){
-                        $teamAttr['dotabuff_link'] = $attr->href;
-                        $teamAttr['dotabuf_id'] = preg_replace('/[^0-9]/', '', $attr->href);
-                    }
-                    $flight[] = $teamAttr;
-                }else {
-                    $flight[] = $cell->plaintext;
-                }
-            }
-            $rowData[] = $flight;
-        }
+
+<style>
+    table,th,td{
+        text-align: center;
     }
-    echo '<pre>';
-//    print_r($rowData);    
-    
+</style>
 
-    $teamData = array();
-    foreach ($rowData as $key => $team) {
-       $teamData[$key]['img'] = $team[0]['image_path'];
-       $teamData[$key]['dotabuff_link'] = $team[0]['dotabuff_link'];
-       $teamData[$key]['dotabuff_id'] = $team[0]['dotabuf_id'];
-       $teamData[$key]['team_name'] = substr($team[1],0,-21);
-       $teamData[$key]['total_place'] = substr($team[2],0,-2);
-       $teamData[$key]['game_count'] = $team[3];
-       $teamData[$key]['winrate'] = $team[4];
-    }
-    print_r($teamData);
-    ?> 
+<table class="predxi b-table-sortlist table scrollabletable">
+    <tr class="tmml">
+        <th></th>
+        <th title="Личные показатели жк" colspan="3">Личные</th>
+        <th title="Общие показатели жк" colspan="3">Общие</th>
+        <th title="Общие показатели жк" colspan="3">Тотaл 3.5 % </th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr class="fozn">
+        <th>Команда</th>
+        <th title="Желтые карточки среднее">среднее</th>
+        <th title="Желтые карточки дома">дома</th>
+        <th title="Желтые карточки на выезде">в гостях</th>
+        <th title="Желтые карточки среднее в матче">среднее</th>
+        <th title="Желтые карточки дома в матче">дома</th>
+        <th title="Желтые карточки на выезде в матче">в гостях</th>
+        <th title="Проход тотала 3.5 среднее в матче">среднее</th>
+        <th title="Проход тотала 3.5 дома в матче">дома</th>
+        <th title="Проход тотала 3.5 на выезде в матче">в гостях</th>
+        <th>Кол-во карточек с этим рефери</th>
+        <th>Результат карточек</th>
+        <th>Прогноз</th>
+    </tr>
+   
+       <?php foreach ($dataGlobalArray as $key => $data): ?>
+        <tr>
+            <td><?= $data['team-0']['name'] ?></td>
+            <?php if (!empty($data['team-0']['own'])): ?>
+                <?php foreach ($data['team-0']['own'] as $ownKey => $own): ?>
+                    <td><?= $own ?></td>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if (!empty($data['team-0']['game'])): ?>
+                <?php foreach ($data['team-0']['game'] as $gameKey => $game): ?>
+                    <td><?= $game ?></td>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if (!empty($data['team-0']['tb35'])): ?>
+                <?php foreach ($data['team-0']['tb35'] as $tb35Key => $tb35): ?>
+                    <td><?= $tb35 ?></td>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if (!empty($data['team-0']['refery'])): ?>
+                    <td>
+                <?php foreach ($data['team-0']['refery'] as $referyKey => $ref): ?>
+                    <?= $ref . ',' ?>
+                <?php endforeach; ?>
+                        </td>
+            <?php endif; ?>
+                        <td></td>
+                        <td></td>
+        </tr>
+        <tr>
+                <td><?= $data['team-1']['name'] ?></td>
+                <?php if (!empty($data['team-1']['own'])): ?>
+                    <?php foreach ($data['team-1']['own'] as $ownKey => $own): ?>
+                        <td><?= $own ?></td>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php if (!empty($data['team-1']['game'])): ?>
+                    <?php foreach ($data['team-1']['game'] as $gameKey => $game): ?>
+                        <td><?= $game ?></td>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php if (!empty($data['team-1']['tb35'])): ?>
+                    <?php foreach ($data['team-1']['tb35'] as $tb35Key => $tb35): ?>
+                        <td><?= $tb35 ?></td>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php if (!empty($data['team-1']['refery'])): ?>
+                    <td>
+                        <?php foreach ($data['team-1']['refery'] as $referyKey => $ref): ?>
+                            <?= $ref . ',' ?>
+                        <?php endforeach; ?>
+                    </td>
+                <?php endif; ?>
+                    <td></td>
+                        <td></td>
+        </tr>
 
-</div>
+        <tr class="fozn">
+                <th>Судья</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>ТБ3.5</th>
+                <th>ТМ3.5</th>
+                <th>ТБ3.5-ласт</th>
+                <th>ТМ3.5-ласт</th>
+                <th></th>
+                <th></th>
+        </tr>
 
+                <tr>
+                    <td><?= $data['refery']['name'] ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><?= $data['refery']['tb35'] ?></td>
+                    <td><?= $data['refery']['tm35'] ?></td>
+                    <?php if (!empty($data['refery']['last-3'])): ?>
+                        <?php foreach ($data['refery']['last-3'] as $lastKey => $last): ?>
+                            <td><?= $last ?></td>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                            <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="13"></td>
+                </tr>
+    <?php endforeach; ?>
+</table>
+<table class="predxi b-table-sortlist table scrollabletable">
 
+</table>
 
-
-
-<!--echo '<table>';
-foreach ($rowData as $row => $tr) {
-    echo '<tr>'; 
-    foreach ($tr as $td)
-        echo '<td>' . $td .'</td>';
-    echo '</tr>';-->
-}

@@ -22,23 +22,301 @@ use darkdrim\simplehtmldom\SimpleHTMLDom;
 class BobController extends SiteController {
 
     public $userAgent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:54.0) Gecko/20100101 Firefox/54.0';
-    public $dataArray = [];
-    public $referylink = 'https://www.championat.com';
+    public $dataGlobalArray = [];
+    public $teamsArray = [];
+    public $referyArray = [];
+    public $referylink = '';
+    public $cardsPage = '';
+    public $referyPage = 'https://www.championat.com/football/_england/2214/referees.html';
+    public $layout = '/mylayout';
 
-    function getDataKeyFromHTML($html) {
-        preg_match('/data_key" : "(.*)"},/', $html, $matches);
-        return empty($matches[1]) ? false : $matches[1];
+    public function generateDataForArray() {
+        $this->referylink = 'https://www.championat.com';
+        $this->cardsPage = 'https://24scores.org/football/england/premier_league/2017-2018/regular_season/cards/';
+
+        $this->dataGlobalArray = [
+                [
+                'match' => 'Сток - Манчестер С',
+                'refery' => [
+                    'name' => 'Мосс'
+                ],
+            ],
+                [
+                'match' => 'Борнмут - Тоттенхэм',
+                'refery' => [
+                    'name' => 'Дин'
+                ],
+            ],
+                [
+                'match' => 'Арсенал - Уотфорд',
+                'refery' => [
+                    'name' => 'Аткинсон'
+                ],
+            ],
+                [
+                'match' => 'Челси - Кр. Пэлэс',
+                'refery' => [
+                    'name' => 'Тeйлор'
+                ],
+            ],
+                [
+                'match' => 'Эвертон - Брайтон',
+                'refery' => [
+                    'name' => 'Ист'
+                ],
+            ],
+                [
+                'match' => 'Хаддерсфилд - Суонси',
+                'refery' => [
+                    'name' => 'Оливер'
+                ],
+            ],
+                [
+                'match' => 'Ньюкасл - Саутгемптон',
+                'refery' => [
+                    'name' => 'Марринер'
+                ],
+            ],
+                [
+                'match' => 'Вест Хэм - Бернли',
+                'refery' => [
+                    'name' => 'Мэйсон'
+                ],
+            ],
+                [
+                'match' => 'Вест Бромвич - Лестер',
+                'refery' => [
+                    'name' => 'Мэдли'
+                ],
+            ],
+                [
+                'match' => 'Манчестер Ю - Ливерпуль',
+                'refery' => [
+                    'name' => 'Поусон'
+                ],
+            ]
+        ];
+
+        foreach ($this->dataGlobalArray as $key => $value) {
+            $this->dataGlobalArray[$key]['refery']['refery-link'] = null;
+            $this->dataGlobalArray[$key]['refery']['tb35'] = null;
+            $this->dataGlobalArray[$key]['refery']['tm35'] = null;
+            $this->dataGlobalArray[$key]['refery']['last-3']['tb35'] = null;
+            $this->dataGlobalArray[$key]['refery']['last-3']['tm35'] = null;
+            $teams = explode('-', $value['match']);
+            foreach ($teams as $keyt => $team) {
+                $this->dataGlobalArray[$key]['team-' . $keyt]['name'] = trim($team);
+                $this->dataGlobalArray[$key]['team-' . $keyt]['alias'] = $this->getAlias(trim($team));
+            }
+        }
     }
 
+    public function getAlias($name) {
+        $arr = [
+            'Манчестер С' => 'Манчестер Сити',
+            'Манчестер Ю' => 'Манчестер Юнайтед',
+            'Ливерпуль' => 'Ливерпуль',
+            'Тоттенхэм' => 'Тоттенхэм Хотспур',
+            'Челси' => 'Челси',
+            'Арсенал' => 'Арсенал',
+            'Бернли' => 'Бёрнли',
+            'Лестер' => 'Лестер Сити',
+            'Эвертон' => 'Эвертон',
+            'Борнмут' => 'Борнмут',
+            'Уотфорд' => 'Уотфорд',
+            'Брайтон' => 'Брайтон энд Хоув Альбион',
+            'Ньюкасл' => 'Ньюкасл Юнайтед',
+            'Суонси' => 'Суонси Сити',
+            'Хаддерсфилд' => 'Хаддерсфилд Таун',
+            'Кр. Пэлэс' => 'Кристал Пэлас',
+            'Вест Хэм' => 'Вест Хэм Юнайтед',
+            'Саутгемптон' => 'Саутгемптон',
+            'Сток' => 'Сток Сити',
+            'Вест Бромвич' => 'Вест Бромвич Альбион',
+        ];
+
+        if (!empty($arr[$name])) {
+            return $arr[$name];
+        }
+        return null;
+    }
+
+    public function translit($s) {
+        $s = (string) $s; // преобразуем в строковое значение
+        $s = strip_tags($s); // убираем HTML-теги
+        $s = str_replace(array("\n", "\r"), " ", $s); // убираем перевод каретки
+        $s = preg_replace("/\s+/", ' ', $s); // удаляем повторяющие пробелы
+        $s = trim($s); // убираем пробелы в начале и конце строки
+        $s = function_exists('mb_strtolower') ? mb_strtolower($s) : strtolower($s); // переводим строку в нижний регистр (иногда надо задать локаль)
+        $s = strtr($s, array('а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e', 'ё' => 'e', 'ж' => 'j', 'з' => 'z', 'и' => 'i', 'й' => 'y', 'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'shch', 'ы' => 'y', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya', 'ъ' => '', 'ь' => ''));
+        $s = preg_replace("/[^0-9a-z-_ ]/i", "", $s); // очищаем строку от недопустимых символов
+        $s = str_replace(" ", "-", $s); // заменяем пробелы знаком минус
+        return $s; // возвращаем результат
+    }
+
+    public function actionStats(){
+        return $this->render('stats');
+    }
+    
     public function actionIndex() {
+//        $start = microtime(true);
 
-        $dotaPage = $this->curlInit('https://24scores.org/football/england/premier_league/2017-2018/regular_season/cards/');
-        $homeTeam = 'Ньюкасл';
-        $guestsTeam = 'Челси';
-        $refery = 'Тейлор';
+        $this->generateDataForArray();
 
-        $data_key = $this->getDataKeyFromHTML($dotaPage);
-        preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $dotaPage, $matches);        // get cookie
+
+        $cardsPage = $this->curlInit($this->cardsPage);
+
+        $data_key = $this->getDataKeyFromHTML($cardsPage);
+
+        $coockie_str = $this->generateCookieStr($cardsPage);
+
+        $footPage = $this->curlInit('https://24scores.org/backend/load_page_data.php?data_key=' . $data_key, $coockie_str);
+
+
+        $html = SimpleHTMLDom::str_get_html($footPage);
+
+        if ($html) {
+            $this->getCardsDataFromPage($html);
+        }
+
+        $refPage = $this->curlInit($this->referyPage);
+        $refHtml = SimpleHTMLDom::str_get_html($refPage);
+
+        if ($refHtml) {
+
+            $this->getRefferyLinksFromPage($refHtml);
+        }
+
+        $this->getDataFromSingleReferyPage();
+//        $this->dataGlobalArray = [
+//            0 => [
+//                'match' => 'Вест Хэм - Сток',
+//                'refery' => [
+//                    'name' => 'Тейлор',
+//                    'refery-link' => 'https://www.championat.com/football/_england/2214/referee/985.html',
+//                    'tb35' => 11,
+//                    'tm35' => 11,
+//                    'last-3' => [
+//                        'tb35' => 0,
+//                        'tm35' => 3,
+//                    ]
+//                ],
+//                'team-0' => [
+//                    'name' => 'Вест Хэм',
+//                    'alias' => 'Вест Хэм Юнайтед',
+//                    'own' => [
+//                        'yc-average' => '2.2',
+//                        'yc-average-home' => '2.29',
+//                        'yc-average-guests' => '2.12',
+//                    ],
+//                    'tb35' => [
+//                        'yc-average%' => '50',
+//                        'yc-average-home%' => '50',
+//                        'yc-average-guests%' => '50',
+//                    ],
+//                    'game' => [
+//                        'yc-average' => '3.6',
+//                        'yc-average-home' => '3.64',
+//                        'yc-average-guests' => '3.56',
+//                    ],
+//                    'refery' => [
+//                        0 => '7',
+//                    ],
+//                ],
+//                'team-1' => [
+//                    'name' => 'Сток',
+//                    'alias' => 'Сток Сити',
+//                    'own' => [
+//                        'yc-average' => '1.35',
+//                        'yc-average-home' => '1.19',
+//                        'yc-average-guests' => '1.53',
+//                    ],
+//                    'tb35' => [
+//                        'yc-average%' => '32',
+//                        'yc-average-home%' => '25',
+//                        'yc-average-guests%' => '40',
+//                    ],
+//                    'game' => [
+//                        'yc-average' => '2.58',
+//                        'yc-average-home' => '2.25',
+//                        'yc-average-guests' => '2.93',
+//                    ],
+//                    'refery' => [
+//                        0 => '4',
+//                        1 => '6',
+//                        2 => '3',
+//                        3 => '1',
+//                    ]
+//                ]
+//            ],
+//            1 => [
+//                'match' => 'Вест Хэм - Сток',
+//                'refery' => [
+//                    'name' => 'Тейлор',
+//                    'refery-link' => 'https://www.championat.com/football/_england/2214/referee/985.html',
+//                    'tb35' => 11,
+//                    'tm35' => 11,
+//                    'last-3' => [
+//                        'tb35' => 0,
+//                        'tm35' => 3,
+//                    ]
+//                ],
+//                'team-0' => [
+//                    'name' => 'Вест Хэм',
+//                    'alias' => 'Вест Хэм Юнайтед',
+//                    'own' => [
+//                        'yc-average' => '2.2',
+//                        'yc-average-home' => '2.29',
+//                        'yc-average-guests' => '2.12',
+//                    ],
+//                    'tb35' => [
+//                        'yc-average%' => '50',
+//                        'yc-average-home%' => '50',
+//                        'yc-average-guests%' => '50',
+//                    ],
+//                    'game' => [
+//                        'yc-average' => '3.6',
+//                        'yc-average-home' => '3.64',
+//                        'yc-average-guests' => '3.56',
+//                    ],
+//                    'refery' => [
+//                        0 => '7',
+//                    ],
+//                ],
+//                'team-1' => [
+//                    'name' => 'Сток',
+//                    'alias' => 'Сток Сити',
+//                    'own' => [
+//                        'yc-average' => '1.35',
+//                        'yc-average-home' => '1.19',
+//                        'yc-average-guests' => '1.53',
+//                    ],
+//                    'tb35' => [
+//                        'yc-average%' => '32',
+//                        'yc-average-home%' => '25',
+//                        'yc-average-guests%' => '40',
+//                    ],
+//                    'game' => [
+//                        'yc-average' => '2.58',
+//                        'yc-average-home' => '2.25',
+//                        'yc-average-guests' => '2.93',
+//                    ],
+//                    'refery' => [
+//                        0 => '4',
+//                        1 => '6',
+//                        2 => '3',
+//                        3 => '1',
+//                    ]
+//                ]
+//            ],
+//        ];
+        return $this->render('index', [
+                    'dataGlobalArray' => $this->dataGlobalArray
+        ]);
+    }
+
+    function generateCookieStr($cardsPage) {
+        preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $cardsPage, $matches);        // get cookie
         $cookies = [];
         foreach ($matches[1] as $item) {
             parse_str($item, $cookie);
@@ -49,79 +327,85 @@ class BobController extends SiteController {
         foreach ($cookies as $key2 => $cook) {
             $coockie_str .= $key2 . '=' . $cook . ';';
         }
+        return $coockie_str;
+    }
 
-        $footPage = $this->curlInit('https://24scores.org/backend/load_page_data.php?data_key=' . $data_key, $coockie_str);
-        $html = SimpleHTMLDom::str_get_html($footPage);
+    function getDataKeyFromHTML($html) {
+        preg_match('/data_key" : "(.*)"},/', $html, $matches);
+        return empty($matches[1]) ? false : $matches[1];
+    }
 
-        if ($html) {
+    function getRefferyLinksFromPage($refHtml) {
+        $table = $refHtml->find('.b-table-sortlist', 0);
 
-            $this->generateMatchArray($html, $homeTeam, $guestsTeam);
-        }
+        foreach ($this->dataGlobalArray as $matchKey => $matches) {
 
+            foreach ($table->find('tr') as $key => $row) {
+                if ($key >= 1) {
 
-        $referyPage = $this->curlInit('https://www.championat.com/football/_england/2214/referees.html');
+                    if ($matches['refery']['name'] == $row->children(2)->sortorder && (int) $row->children(5)->text() > 0) {
 
-        
-
-        $refHtml = SimpleHTMLDom::str_get_html($referyPage);
-
-        if ($refHtml) {
-
-            $this->generateRefferyArray($refHtml,$refery);
+                        $this->dataGlobalArray[$matchKey]['refery']['refery-link'] = 'https://www.championat.com' . $row->children(2)->children(0)->href;
+                    }
+                }
+            }
         }
     }
 
-    function generateRefferyArray($refHtml,$refery) {
+    function getDataFromSingleReferyPage() {
+        foreach ($this->dataGlobalArray as $matchKey => $matches) {
+            if (!empty($matches['refery']['refery-link'])) {
+                $linkHtml = $this->curlInit($matches['refery']['refery-link']);
+                $html = SimpleHTMLDom::str_get_html($linkHtml);
+                $referyTable = $html->find('table', 1);
 
-        $table = $refHtml->find('.b-table-sortlist', 0);
+                $this->dataGlobalArray[$matchKey]['refery']['tb35'] = 0;
+                $this->dataGlobalArray[$matchKey]['refery']['tm35'] = 0;
+                $this->dataGlobalArray[$matchKey]['refery']['last-3']['tb35'] = 0;
+                $this->dataGlobalArray[$matchKey]['refery']['last-3']['tm35'] = 0;
 
-        foreach ($table->find('tr') as $key => $row) {
-            if ($key >= 1) {
-                
-                if ($refery == $row->children(2)->sortorder && (int)$row->children(5)->text() > 0) {
-                    
-                    $this->referylink .= $row->children(2)->children(0)->href;
-                    break;
-                    
-                    
-                            
+                $step = count($referyTable->find('tr')) - 3;
+
+
+                foreach ($referyTable->find('tr') as $key => $row) {
+
+                    if ($key >= 1) {
+
+                        if ((int) $row->children(4)->plaintext > 3.5) {
+                            $this->dataGlobalArray[$matchKey]['refery']['tb35'] = $this->dataGlobalArray[$matchKey]['refery']['tb35'] + 1;
+                        } else {
+                            $this->dataGlobalArray[$matchKey]['refery']['tm35'] = $this->dataGlobalArray[$matchKey]['refery']['tm35'] + 1;
+                        }
+
+
+                        $teamsArr = [];
+                        $teamsArr[] = $row->children(2)->children(0)->text();
+                        $teamsArr[] = $row->children(2)->children(1)->text();
+
+                        foreach ($teamsArr as $key4 => $teams) {
+
+                            if ($matches['team-0']['alias'] == $teams) {
+                                $this->dataGlobalArray[$matchKey]['team-0']['refery'][] = $row->children(4)->plaintext;
+                            }
+                            if ($matches['team-1']['alias'] == $teams) {
+                                $this->dataGlobalArray[$matchKey]['team-1']['refery'][] = $row->children(4)->plaintext;
+                            }
+                        }
+                    }
+                    if ($key >= $step) {
+                        if ((int) $row->children(4)->plaintext > 3.5) {
+                            $this->dataGlobalArray[$matchKey]['refery']['last-3']['tb35'] = $this->dataGlobalArray[$matchKey]['refery']['last-3']['tb35'] + 1;
+                        } else {
+                            $this->dataGlobalArray[$matchKey]['refery']['last-3']['tm35'] = $this->dataGlobalArray[$matchKey]['refery']['last-3']['tm35'] + 1;
+                        }
+                    }
                 }
             }
         }
-        
-        $linkHtml = $this->curlInit($this->referylink);
-        $html = SimpleHTMLDom::str_get_html($linkHtml);
-        $referyTable = $html->find('table',1);
-        $this->dataArray[$refery]['total35-more'] = 0;
-        $this->dataArray[$refery]['total35-less'] = 0;
-        $this->dataArray[$refery]['total35-more-last35'] = 0;
-        $this->dataArray[$refery]['total35-less-last35'] = 0;
-        $step = count($referyTable->find('tr')) - 3;
-        
-        foreach ($referyTable->find('tr') as $key => $row) {
-            if ($key >= 1) {
-                
-                if((int)$row->children(4)->plaintext > 3.5){
-                    $this->dataArray[$refery]['total35-more'] = $this->dataArray[$refery]['total35-more'] + 1;
-                }else{
-                    $this->dataArray[$refery]['total35-less'] = $this->dataArray[$refery]['total35-less'] + 1;
-                }
-                
-            }
-            if($key >= $step){
-                if((int)$row->children(4)->plaintext > 3.5){
-                    $this->dataArray[$refery]['total35-more-last35'] = $this->dataArray[$refery]['total35-more-last35'] + 1;
-                }else{
-                    $this->dataArray[$refery]['total35-less-last35'] = $this->dataArray[$refery]['total35-less-last35'] + 1;
-                }
-                
-            }
-        }
-        D($this->dataArray);
     }
 
     function curlInit($url, $coockie_str = false) {
-//        sleep(30);
+        sleep(1);
         $ch = curl_init();  //Инициализация сеанса
         if ($ch) {
             if ($coockie_str) {
@@ -146,48 +430,69 @@ class BobController extends SiteController {
         }
     }
 
-    function generateMatchArray($html, $homeTeam, $guestsTeam) {
-
-        $table = $html->find('table.t4');
+    function getCardsDataFromPage($html) {
+        $table = $html->find('table.t4', 0);
         $total35 = $html->find('div.total3', 0)->find('table', 0);
 
-        $key = [];
-        foreach ($table as $key => $tbl) {
 
-            if ($key == 0) {
+        foreach ($this->dataGlobalArray as $key => $matches) {
 
-                foreach ($tbl->find('tr') as $key2 => $row) {
-                    if ($key2 >= 2) {
+            foreach ($table->find('tr') as $key2 => $row) {
+                if ($key2 >= 2) {
+                    $i = 0;
+                    $team = $row->children(0)->plaintext;
 
-                        $team = $row->children(0)->plaintext;
-
-                        if ($team == $homeTeam || $team == $guestsTeam) {
-
-                            $this->dataArray[$team]['game'] = $row->children(1)->plaintext;
-                            $this->dataArray[$team]['yellow-card-average'] = $row->children(3)->plaintext;
-                            $this->dataArray[$team]['yellow-card-average-home'] = $row->children(7)->plaintext;
-                            $this->dataArray[$team]['yellow-card-average-guests'] = $row->children(11)->plaintext;
-
-                            continue;
-                        }
+                    if ($team == $matches['team-0']['name']) {
+                        $this->dataGlobalArray[$key]['team-0']['own']['yc-average'] = $row->children(3)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['own']['yc-average-home'] = $row->children(7)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['own']['yc-average-guests'] = $row->children(11)->plaintext;
+                        $i++;
+                        continue;
+                    } else if ($team == $matches['team-1']['name']) {
+                        $this->dataGlobalArray[$key]['team-1']['own']['yc-average'] = $row->children(3)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['own']['yc-average-home'] = $row->children(7)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['own']['yc-average-guests'] = $row->children(11)->plaintext;
+                        $i++;
+                        continue;
+                    }
+                    if ($i == 2) {
+                        break;
                     }
                 }
             }
-        }
 
-        foreach ($total35->find('tr') as $key3 => $row) {
+            foreach ($total35->find('tr') as $key3 => $row) {
 
-            if ($key2 >= 2) {
+                if ($key2 >= 2) {
+                    $i = 0;
+                    $team = $row->children(0)->plaintext;
 
-                $team = $row->children(0)->plaintext;
 
-                if ($team == $homeTeam || $team == $guestsTeam) {
+                    if ($team == $matches['team-0']['name']) {
+                        $this->dataGlobalArray[$key]['team-0']['tb35']['yc-average%'] = $row->children(4)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['tb35']['yc-average-home%'] = $row->children(9)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['tb35']['yc-average-guests%'] = $row->children(14)->plaintext;
 
-                    $this->dataArray[$team]['total35']['yellow-card-average'] = $row->children(4)->plaintext;
-                    $this->dataArray[$team]['total35']['yellow-card-average-home'] = $row->children(9)->plaintext;
-                    $this->dataArray[$team]['total35']['yellow-card-average-guests'] = $row->children(14)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['game']['yc-average'] = $row->children(1)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['game']['yc-average-home'] = $row->children(6)->plaintext;
+                        $this->dataGlobalArray[$key]['team-0']['game']['yc-average-guests'] = $row->children(11)->plaintext;
+                        $i++;
+                        continue;
+                    } else if ($team == $matches['team-1']['name']) {
 
-                    continue;
+                        $this->dataGlobalArray[$key]['team-1']['tb35']['yc-average%'] = $row->children(4)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['tb35']['yc-average-home%'] = $row->children(9)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['tb35']['yc-average-guests%'] = $row->children(14)->plaintext;
+
+                        $this->dataGlobalArray[$key]['team-1']['game']['yc-average'] = $row->children(1)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['game']['yc-average-home'] = $row->children(6)->plaintext;
+                        $this->dataGlobalArray[$key]['team-1']['game']['yc-average-guests'] = $row->children(11)->plaintext;
+                        $i++;
+                        continue;
+                    }
+                    if ($i == 2) {
+                        break;
+                    }
                 }
             }
         }
