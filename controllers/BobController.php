@@ -214,13 +214,20 @@ class BobController extends SiteController {
         return $s; // возвращаем результат
     }
 
-    public function actionStats(){
+    public function actionStats(){      
         return $this->render('stats');
     }
+    
+   
+    
     
     public function actionIndex() {
 //        $start = microtime(true);
 
+        
+        
+        
+        
         $this->generateDataForArray();
 
 
